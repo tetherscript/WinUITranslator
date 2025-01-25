@@ -200,6 +200,58 @@ To handle this, use the following hint tokens:
 - Enter the prompt corresponding to the hint token in the **Hints tab**.
 - These hints will then be accessible in the Translation Function.
 
+</br></br></br>
+
+# x:Uids's
+
+## Why Use x:Uid's?
+
+`x:Uid` properties are typically used to identify `.xaml` elements that require translation. In this Translator app, only elements with an `x:Uid` property and specified in `XamlElements.json` will be detected for translation. Additionally, suffixes like `_btn` are required.
+
+## Examples
+
+### 1. Same String: 'Close' but Different Element Types
+
+The suffixes like `_btn` and `_tb` are important because different element types use different properties for their text.  
+For example:
+
+- A `Button` uses the `Content` property.
+- A `TextBlock` uses the `Text` property.
+
+If you were to use `x:Uid="Close"` for both elements, the target app would fail to start. The suffix (e.g., `_btn`, `_bn`, `_bt`, `_button`) does not matter as long as it is consistent.
+
+**Important Note:**  
+- Do not use decimals (`.`) in the `x:Uid`.  
+  Example: `x:Uid="Close.btn"` will translate and cache successfully, but the target app will fail to show the translation.  
+  The `.` is used to denote the property of the element, and having more than one `.` will cause problems.
+
+#### Example Code:
+
+```
+<Button>
+  x:Uid="Close_btn"
+  Content="@Close"
+</Button>
+<TextBlock>
+  x:Uid="Close_tb"
+  Text="@Close"
+</TextBlock>
+```
+
+2) Same string but different length context and constraints.
+You can have the same strings ex. '@Enter your name here', '@@Enter your name here', '!Enter your name here' and '!!Enter your name here' if you need that kind of flexibility.
+
+```
+<TextBlock>
+  x:Uid="EnterYourNameHere_btn"
+  Content="@Enter your name here" //no size constraint
+</TextBlock>
+
+<TextBlock>
+  x:Uid="EnterYourNameHere_tb"
+  Text="@@Enter your name here" //size constrained
+</TextBlock>
+```
 
 
 
