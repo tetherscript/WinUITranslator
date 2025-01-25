@@ -127,6 +127,8 @@ You need to create a `/Translator` folder in the target project and add these fi
 
 When a scan is complete, you have found the things that need to be translated, but you have not actually translated anything yet.
 
+Here's what scanning the sample app Sample-Packaged looks like.
+
 <img alt="image" src="https://github.com/user-attachments/assets/2c72466e-6bd4-4224-a10d-6db3bc2b7c42" />
 
 <br/><br/><br/>
@@ -167,9 +169,9 @@ When a scan is complete, you have found the things that need to be translated, b
 - Your translations are complete, and `.resw` files are updated.
 - Start the target app, and you should see the translations.
 
+Here's what scanning the sample app Sample-Packaged looks like.
+
 <img alt="image" src="https://github.com/user-attachments/assets/fecfbfa6-1b4b-4580-a77b-e6f4f9eead3c" />
-
-
 
 </br></br></br>
 
