@@ -349,7 +349,8 @@ Call the TLocalized.GetSpecial("SettingsIcon") function to get the value that is
 
 <br/><br/><br/>
 
-#XamlElements
+# XamlElements
+
 ### Set the detectable xaml element and property types
 
 We can't know all the possible element types and properties to scan for, especially with third-party or custom controls. So you need to specify which elements can be detected during a scan.
