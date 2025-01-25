@@ -117,15 +117,15 @@ namespace Translator
 
         private void LogScan(string msg)
         {
-            tbScanLog.Text = tbScanLog.Text.Insert(0,
-                String.Format(@"{0}: {1}{2}", _logScanCounter.ToString(), msg, Environment.NewLine));
+            string s = String.Format(@"{0}: {1}{2}", _logScanCounter.ToString(), msg, Environment.NewLine);
+            tbScanLog.Text = tbScanLog.Text + s;
             _logScanCounter++;
         }
 
         private void LogTranslate(string msg)
         {
-            tbTranslateLog.Text = tbTranslateLog.Text.Insert(0,
-                String.Format(@"{0}: {1}{2}", _logTranslateCounter.ToString(), msg, Environment.NewLine));
+            string s = String.Format(@"{0}: {1}{2}", _logTranslateCounter.ToString(), msg, Environment.NewLine);
+            tbTranslateLog.Text = tbTranslateLog.Text + s;
             _logTranslateCounter++;
         }
 
@@ -142,6 +142,8 @@ namespace Translator
             public const string Path = "Path";
             public const string TranslationFunctionIndex = "TranslationFunctionIndex";
             public const string PivotIndex = "PivotIndex";
+            public const string ShowScanHelp = "ShowScanHelp";
+            public const string ShowTranslateHelp = "ShowScanHelp";
         }
 
         private void SaveWindowState(Window window)
@@ -162,6 +164,8 @@ namespace Translator
             appData.Values[WindowSettingsKeys.Path] = tbScanPath.Text;
             appData.Values[WindowSettingsKeys.TranslationFunctionIndex] = cbTranslationFunction.SelectedIndex;
             appData.Values[WindowSettingsKeys.PivotIndex] = pvtInfo.SelectedIndex;
+            appData.Values[WindowSettingsKeys.ShowScanHelp] = cbShowScanHelp.IsChecked;
+            appData.Values[WindowSettingsKeys.ShowTranslateHelp] = cbShowTranslateHelp.IsChecked;
         }
 
         private void RestoreWindowState(Window window)
@@ -181,6 +185,17 @@ namespace Translator
             {
                 tbScanPath.Text = "";
             }
+
+            bool? b = (appData.Values.ContainsKey(WindowSettingsKeys.ShowScanHelp)) ?
+               (bool)appData.Values[WindowSettingsKeys.ShowScanHelp] : true;
+            cbShowScanHelp.IsChecked = b ?? true;
+            rtbScanHelp.Visibility = ((bool)cbShowScanHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
+
+            bool? b1 = (appData.Values.ContainsKey(WindowSettingsKeys.ShowTranslateHelp)) ?
+               (bool)appData.Values[WindowSettingsKeys.ShowTranslateHelp] : true;
+            cbShowTranslateHelp.IsChecked = b ?? true;
+            rtbTranslateHelp.Visibility = ((bool)cbShowTranslateHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
+
 
             if (appData.Values.ContainsKey(WindowSettingsKeys.Left) &&
                 appData.Values.ContainsKey(WindowSettingsKeys.Top) &&
@@ -215,6 +230,16 @@ namespace Translator
                 appWindow.Move(new PointInt32 { X = 100, Y = 100 });
                 appWindow.Resize(new SizeInt32 { Width = 800, Height = 600 });
             }
+        }
+
+        private void CbShowScanHelp_Click(object sender, RoutedEventArgs e)
+        {
+            rtbScanHelp.Visibility = ((bool)cbShowScanHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
+        }
+
+        private void CbShowtranslateHelp_Click(object sender, RoutedEventArgs e)
+        {
+            rtbTranslateHelp.Visibility = ((bool)cbShowTranslateHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
         }
         #endregion
 
@@ -662,7 +687,8 @@ namespace Translator
             }
 
             doc.Save(path);
-            LogScan("Saved.");
+            LogScan("en-US/Resources.resw updated.");
+            LogScan("Scan complete.");
         }
         #endregion
 

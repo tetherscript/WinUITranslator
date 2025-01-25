@@ -300,91 +300,139 @@
             </PivotItem> <!--1. Target-->
             <PivotItem 
                 Header="2. Scan">
-                <ScrollViewer>
+
+                <Grid
+                    x:Name="grdScan"
+                    VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="*" />
+                    </Grid.RowDefinitions>
+
                     <StackPanel
+                        Grid.Row="0"
                         Margin="20 20 0 0"
-                        Spacing="20">
-                        <Button
-                            x:Name="btnScan"
-                            Click="btnScan_Click">Scan</Button>
-                        
+                        Spacing="10">
+                        <StackPanel 
+                            Spacing="50"
+                            Orientation="Horizontal">
+                            <Button
+                                x:Name="btnScan"
+                                Click="btnScan_Click">Scan</Button>
+                            <CheckBox
+                                x:Name="cbShowScanHelp"
+                                Click="CbShowScanHelp_Click"
+                                Content="Show Help" />
+                        </StackPanel>
+                            
                         <RichTextBlock
-                            TextIndent="0"
-                            LineHeight="20"
-                            SelectionHighlightColor="Green">
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">Scanning</Run>
-                                <Run>- Searches .xaml files used by the target project and detects any elements that have a x:Uid and are defined in XamlElements.json.
-                                    It combines this with the items in TLocalizedGets.json and Specials.json and updates the target/Strings/en-US/Resources.resw.  You put a blank Resources.resw there earlier, and it's data section has been replaced with the scan results.  This .resw is the 'truth' for what needs to be translated later.</Run>
-                            </Paragraph>
+                        x:Name="rtbScanHelp"
+                        TextIndent="0"
+                        LineHeight="20"
+                        SelectionHighlightColor="Green">
+                        <Paragraph
+                            Margin="0 0 0 10">
+                            <Run
+                                FontWeight="Bold">Scanning</Run>
+                            <Run>- Searches .xaml files used by the target project and detects any elements that have a x:Uid and are defined in XamlElements.json.
+                            It combines this with the items in TLocalizedGets.json and Specials.json and updates the target/Strings/en-US/Resources.resw.  You put a blank Resources.resw there earlier, and it's data section has been replaced with the scan results.  This .resw is the 'truth' for what needs to be translated later.</Run>
+                        </Paragraph>
 
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>In that Resources.resw file, you'll see that the hint token(@, @@, !, !!) have been placed in the comments field.  Don't edit this file.  No other .resw files have been touched.  That will happen when you translate.</Run>
-                            </Paragraph>
+                        <Paragraph
+                            Margin="0 0 0 10">
+                            <Run>In that Resources.resw file, you'll see that the hint token(@, @@, !, !!) have been placed in the comments field.  Don't edit this file.  No other .resw files have been touched.  That will happen when you translate.</Run>
+                        </Paragraph>
 
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>The contents of DetectedXamlElements.json have also been replaced.</Run>
-                            </Paragraph>
+                        <Paragraph
+                            Margin="0 0 0 10">
+                            <Run>The contents of DetectedXamlElements.json have also been replaced.</Run>
+                        </Paragraph>
 
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">Summary</Run>
-                                <Run>When a scan is complete, you have found the things that need to be translated, but you have not actually translated anything yet.</Run>
-                            </Paragraph>
+                        <Paragraph
+                            Margin="0 0 0 10">
+                            <Run
+                                FontWeight="Bold">Summary</Run>
+                            <Run>When a scan is complete, you have found the things that need to be translated, but you have not actually translated anything yet.</Run>
+                        </Paragraph>
 
-                        </RichTextBlock>
+                    </RichTextBlock>
 
-                        <TextBox
-                            x:Name="tbScanLog"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="NoWrap"
-                            FontWeight="Light"
-                            IsReadOnly="false"
-                            MaxHeight="1000"
-                            TextAlignment="Left"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
                     </StackPanel>
-                </ScrollViewer>
+
+                    <TextBox
+                        Grid.Row="1"
+                        x:Name="tbScanLog"
+                        Margin="20 10 0 20"
+                        FontFamily="Courier New"
+                        AcceptsReturn="True"
+                        TextWrapping="NoWrap"
+                        FontWeight="Light"
+                        IsReadOnly="false"
+                        TextAlignment="Left"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        IsTextPredictionEnabled="False">
+                    </TextBox>
+                        
+                </Grid>
+
+
 
             </PivotItem> <!--2. Scan-->
             <PivotItem
                 Header="3. Translate">
-                <ScrollViewer>
+                <Grid
+                    x:Name="grdTranslate"
+                    VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="*" />
+                    </Grid.RowDefinitions>
+
                     <StackPanel
-                        Margin="0 20 0 0"
-                        Spacing="20">
+                        Grid.Row="0"
+                        Margin="20 20 0 0"
+                        Spacing="10">
+
                         <StackPanel
-                            HorizontalAlignment="Left"
-                            Margin="20 0 0 0"
+                            Orientation="Horizontal"
+                            Margin="0 0 0 0"
                             Spacing="20">
                             <ComboBox
-                                x:Name="cbTranslationFunction"
-                                Header="Translation Function"
-                                Width="200">
-                                <x:String>OpenAI_API</x:String>
-                                <x:String>MyTranslationFunction</x:String>
-                             </ComboBox>
+                                Width="150"
+                                x:Name="cbTranslationFunction">
+                                    <x:String>OpenAI_API</x:String>
+                                    <x:String>MyTranslationFunction</x:String>
+                            </ComboBox>
                             <Button
                                 x:Name="btnTranslate"
                                 Click="btnTranslate_Click">Translate</Button>
                             <ProgressBar
                                 x:Name="pbTranslate"
-                                Width="500"
+                                Width="300"
                                 Minimum="0" />
+                            <CheckBox
+                                x:Name="cbShowTranslateHelp"
+                                Click="CbShowtranslateHelp_Click"
+                                Content="Show Help" />
                         </StackPanel>
-                        
+
                         <RichTextBlock
                             TextIndent="0"
                             LineHeight="20"
+                            x:Name="rtbTranslateHelp"
                             SelectionHighlightColor="Green">
                             <Paragraph
                                 Margin="20 0 0 10">
@@ -392,7 +440,8 @@
                                     FontWeight="Bold">Translating</Run>
                                 <Run>- Reads target\Strings\en-US\Resources.resw and calls a</Run>
                                 <Run
-                                    FontStyle="Italic" FontWeight="Bold">Translation Function</Run>
+                                    FontStyle="Italic"
+                                    FontWeight="Bold">Translation Function</Run>
                                 <Run>for each item.  It then saves the translation in the cache and other target\Strings\???\Resources.resw files, where ??? = de-DE, ar-SA etc.  It adds any required Specials too.</Run>
                             </Paragraph>
 
@@ -433,23 +482,55 @@
 
                         </RichTextBlock>
 
-                        <TextBox
-                            x:Name="tbTranslateLog"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="NoWrap"
-                            FontWeight="Light"
-                            IsReadOnly="False"
-                            TextAlignment="Left"
-                            Margin="20 0 20 20"
-                            MaxHeight="1000"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            IsTextPredictionEnabled="False">
-
-                        </TextBox>
                     </StackPanel>
-                </ScrollViewer>
+
+                    <TextBox
+                        Grid.Row="1"
+                        x:Name="tbTranslateLog"
+                        FontFamily="Courier New"
+                        AcceptsReturn="True"
+                        TextWrapping="NoWrap"
+                        FontWeight="Light"
+                        IsReadOnly="False"
+                        TextAlignment="Left"
+                        Margin="20 10 20 20"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        IsTextPredictionEnabled="False">
+
+                    </TextBox>
+
+                </Grid>
+                
+                <!--<ScrollViewer>
+                    <StackPanel
+                        Margin="0 20 0 0"
+                        Spacing="20">
+                        --><!--<StackPanel
+                            HorizontalAlignment="Left"
+                            Margin="20 0 0 0"
+                            Spacing="20">
+                            <ComboBox
+                                x:Name="cbTranslationFunction"
+                                Header="Translation Function"
+                                Width="200">
+                                <x:String>OpenAI_API</x:String>
+                                <x:String>MyTranslationFunction</x:String>
+                             </ComboBox>
+                            <Button
+                                x:Name="btnTranslate"
+                                Click="btnTranslate_Click">Translate</Button>
+                            <ProgressBar
+                                x:Name="pbTranslate"
+                                Width="500"
+                                Minimum="0" />
+                        </StackPanel>--><!--
+                        
+                     
+
+                        
+                    </StackPanel>
+                </ScrollViewer>-->
             </PivotItem> <!--3. Translate-->
             <PivotItem
                 Header="Hints">
