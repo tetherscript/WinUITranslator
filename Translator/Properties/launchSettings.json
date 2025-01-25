@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Translator (Package)": {
+      "commandName": "MsixPackage",
+      "alwaysReinstallApp": true
+    },
+    "Translator (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

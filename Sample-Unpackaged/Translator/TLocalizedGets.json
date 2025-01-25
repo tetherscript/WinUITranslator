@@ -1,0 +1,18 @@
+[
+  {
+    "Key": "LoadingFile",
+    "Value": "@Loading {0}}, please wait..."
+  },
+  {
+    "Key": "OpenAperture_Generic",
+    "Value": "@Open the aperture for a shallower depth of field."
+  },
+  {
+    "Key": "OpenAperture_MoreContext",
+    "Value": "!Open the aperture for a shallower depth of field."
+  },
+  {
+    "Key": "OpenAperture_MoreContext_Constrained",
+    "Value": "!!Open the aperture for a shallower depth of field."
+  }
+]

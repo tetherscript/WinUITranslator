@@ -1,0 +1,22 @@
+﻿[
+  {
+    "Key": "SettingsIcon",
+    "Value": "settings1.ico",
+    "Culture": "en-US"
+  },
+  {
+    "Key": "SettingsIcon",
+    "Value": "settings1.ico",
+    "Culture": "de-DE"
+  },
+  {
+    "Key": "SettingsIcon",
+    "Value": "settings1.ico",
+    "Culture": "fr-FR"
+  },
+  {
+    "Key": "SettingsIcon",
+    "Value": "settings2.ico",
+    "Culture": "ar-SA"
+  }
+]

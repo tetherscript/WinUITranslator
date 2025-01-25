@@ -1,0 +1,25 @@
+{
+  "Button": [
+    "Content"
+  ],
+  "TextBlock": [
+    "Text"
+  ],
+  "CheckBox": [
+    "Content"
+  ],
+  "ToggleSwitch": [
+    "Header",
+    "OffContent",
+    "OnContent"
+  ],
+  "RadioButtons": [
+    "Header"
+  ],
+  "RadioButton": [
+    "Content"
+  ],
+  "ToggleButton": [
+    "Content"
+  ]
+}

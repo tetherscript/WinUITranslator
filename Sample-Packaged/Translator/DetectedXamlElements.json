@@ -1,0 +1,70 @@
+[
+  {
+    "Key": "Aperture_tb.Text",
+    "Value": "!Aperture"
+  },
+  {
+    "Key": "EnterYourNameHere_tb.Text",
+    "Value": "@Enter your name here"
+  },
+  {
+    "Key": "EnterYourNameHere_short_tb.Text",
+    "Value": "@@Enter your name here"
+  },
+  {
+    "Key": "MissingHintToken_tb.Text",
+    "Value": "Missing a hint token!"
+  },
+  {
+    "Key": "Close_btn.Content",
+    "Value": "@Close"
+  },
+  {
+    "Key": "Lock_cb.Content",
+    "Value": "@@Lock"
+  },
+  {
+    "Key": "Zoom_rbs.Header",
+    "Value": "@Zoom"
+  },
+  {
+    "Key": "Zoom100_rb.Content",
+    "Value": "@100%"
+  },
+  {
+    "Key": "Zoom200_rb.Content",
+    "Value": "@200%"
+  },
+  {
+    "Key": "Browser_tgbtn.Content",
+    "Value": "!Image Browser"
+  },
+  {
+    "Key": "Connect_ts.Header",
+    "Value": "@Connection"
+  },
+  {
+    "Key": "Connect_ts.OffContent",
+    "Value": "@Disconnected"
+  },
+  {
+    "Key": "Connect_ts.OnContent",
+    "Value": "@Connected"
+  },
+  {
+    "Key": "LoadingFile",
+    "Value": "@Loading {0}}, please wait..."
+  },
+  {
+    "Key": "OpenAperture_Generic",
+    "Value": "@Open the aperture for a shallower depth of field."
+  },
+  {
+    "Key": "OpenAperture_MoreContext",
+    "Value": "!Open the aperture for a shallower depth of field."
+  },
+  {
+    "Key": "OpenAperture_MoreContext_Constrained",
+    "Value": "!!Open the aperture for a shallower depth of field."
+  }
+]

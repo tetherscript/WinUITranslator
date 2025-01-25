@@ -1,0 +1,1210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Translator.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Translator"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid
+        x:Name="grdMain"
+        VerticalAlignment="Stretch"
+        MinHeight="100"
+        MinWidth="100"
+        Loaded="GrdMain_Loaded"
+        Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--TITLE-->
+        <TextBlock
+            Grid.Column="0"
+            Grid.Row="0"
+            Opacity="0.55"
+            x:Name="tbTitle"
+            Margin="10 5 10 5"
+            VerticalAlignment="Center" />
+
+        <Pivot
+            Margin="20 0 20 0"
+            Grid.Column="0"
+            Grid.Row="1"
+            x:Name="pvtInfo">
+            <PivotItem
+                Header="Intro">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0"
+                        Spacing="20"
+                        Orientation="Vertical">
+
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">The Requirements</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>I am building an app and will be translating it to other languages, and:</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>1) I want to translate certain .xaml elements and dynamically generated text to varying physical lengths.</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>2) I will not change languages while the app is running and expect to see the changes before restarting the app.</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>3) I don't want to introduce additional code dependencies or trimming constraints.</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>4) Translation changes must be diff-able in Git.</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>5) It needs to be able to translate Packaged or Unpackaged apps.</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>6) No additional runtimes or packages will be required for publishing the app.</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>7) I need to specify certain icons and colors for certain languages.</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 20">
+                                <Run>8) I need to literally be able to add several new languages TODAY, press a few buttons and it's translated and releaseable TODAY.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 20">
+                                <Run>This Translator app can do that.  Even #8.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Solution</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>1) In your app to be translated (the 'target'), add a \Translator folder and some files.  Adjust your .xaml elements and dynamic text as shown in the x:Uid's and TLocalized.Get() tabs.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>2) In this translator app, set the target to that app, scan, then translate.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 20">
+                                <Run>3) Build and run the target app.  Run it. The translations are now visible.</Run>
+                            </Paragraph>
+
+
+                            
+                           
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Try it with the sample apps</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>1) Run the packaged or unpackaged sample app in VS2022.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>2) Run this translator app in another instance of VS2022, or just run the deployed version from the start menu.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 20">
+                                <Run>3) The sample app is ready to convert.  Target, scan and translate, then run the sample app to see the changes.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Ideal Real-World Usage</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>1) Continue developing and debugging your app.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>2) When you are ready to translate, run this translator app, then run your app again to see the changes.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 30">
+                                <Run>3) Tweak your app code, translate, tweak code, translate.  Rinse.  Repeat until it is fully translated.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">My Best Advice</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>If you are creating an app that will need to be translated, you need to set it up and test the translation on day one of development.  Put a hello world button, a dynamic text message and define several languages.  Translate it.  Test the translations under different languages.  Understand how it works.  Then you'll know what you need to do to make your app localized.  It will affect your decisions on layouts, text length and spacing that are difficult to fix later.
+                                </Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Starting this process of adding x:Uid's, .Get()'s and running the translator app after your app is already big is a pain.  I know this.  Best to start translating on day 1.
+                                </Run>
+                            </Paragraph>
+
+
+                        </RichTextBlock>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem> <!--Intro-->
+            <PivotItem
+                Header="1. Target">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0 "
+                        Orientation="Vertical"
+                        Spacing="10">
+                        <TextBox
+                            Header="Target Project Root Path"
+                            x:Name="tbScanPath"
+                            Width="600"
+                            IsReadOnly="False"
+                            HorizontalAlignment="Left"
+                            PlaceholderText="C:\Repo\WinUITranslator\Sample-Packaged"
+                            TextAlignment="Left">
+                        </TextBox>
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">1)</Run>
+                                <Run>Make sure you have added a \Translator folder to your target project.  This folder will hold translation info unique to that target project.  Do not include this folder and it's files in target project builds or publishing (build action = none, do not copy).</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">2)</Run>
+                                <Run>Try targetting one of the sample apps - they already have the folder and files.  Once you scan, then translate, then restart the sample app, you'll see the translations there.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">\Translator contents</Run>
+                                <Run></Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontStyle="Italic"
+                                    FontWeight="Bold">Cache.json</Run>
+                                <Run>- Caches translations to save translation costs/latency.  Translating will add items to the cache.  It won't update existing items.  The translated .resw's (non us-EN) are rebuilt from this cache.  You can edit this file if you need to adjust a translation manually or clear the cache.  Your edits will persist.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontStyle="Italic"
+                                    FontWeight="Bold">Hints.json</Run>
+                                <Run>- Defines the prompts sent to the translator (OpenAI API in this case).  Edit this in the Hints tab.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontStyle="Italic"
+                                    FontWeight="Bold">Resources.resw</Run>
+                                <Run>- A blank (no data entries) resource file.  Don't edit this blank file. You'll be copying this blank file initially to the /Strings/???/ folders in your target project (???=en-US or de-DE).  When you add a new language, create a new folder and add this blank file.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontStyle="Italic"
+                                    FontWeight="Bold">Specials.json</Run>
+                                <Run>- Contains non-translatable items like icons, colors and things that may need to change for some cultures.  These are not translated and are added to the necessary Resources.Resw files when you Translate.  You can edit this file.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontStyle="Italic"
+                                    FontWeight="Bold">DetectedXamlElements.json</Run>
+                                <Run>- When you do a scan, info about all detected xaml element types defined in XamlElement.json will be added here.  This is informational only, and is not used by Translator once the scan is complete.  It is useful for viewing/troubleshooting for when an element is not translated.  If it isn't in this file, then the scanner did not pick it up.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontStyle="Italic"
+                                    FontWeight="Bold">TLocalizedGets.json</Run>
+                                <Run>- When you use the included static class TLocalized.Get() with the debugger attached, an entry is created in this file for each unique .Get().  When you do a Scan, the detected .xaml element info will be merged with these .Get()'s to produce the \Strings\en-US\Resources.resw file.  You can edit this file, but should not need to.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 30">
+                                <Run
+                                    FontStyle="Italic"
+                                    FontWeight="Bold">XamlElements.json</Run>
+                                <Run>- These are the xaml elements and properties that can be detected when scanned.  If it isn't on this list, scanning won't find it.  You must edit this file.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">Summary</Run>
+                                <Run>You need to create a /Translator folder in the target project, and add these files to it.</Run>
+                            </Paragraph>
+
+                        </RichTextBlock>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem> <!--1. Target-->
+            <PivotItem 
+                Header="2. Scan">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0"
+                        Spacing="20">
+                        <Button
+                            x:Name="btnScan"
+                            Click="btnScan_Click">Scan</Button>
+                        
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">Scanning</Run>
+                                <Run>- Searches .xaml files used by the target project and detects any elements that have a x:Uid and are defined in XamlElements.json.
+                                    It combines this with the items in TLocalizedGets.json and Specials.json and updates the target/Strings/en-US/Resources.resw.  You put a blank Resources.resw there earlier, and it's data section has been replaced with the scan results.  This .resw is the 'truth' for what needs to be translated later.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>In that Resources.resw file, you'll see that the hint token(@, @@, !, !!) have been placed in the comments field.  Don't edit this file.  No other .resw files have been touched.  That will happen when you translate.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>The contents of DetectedXamlElements.json have also been replaced.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">Summary</Run>
+                                <Run>When a scan is complete, you have found the things that need to be translated, but you have not actually translated anything yet.</Run>
+                            </Paragraph>
+
+                        </RichTextBlock>
+
+                        <TextBox
+                            x:Name="tbScanLog"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="NoWrap"
+                            FontWeight="Light"
+                            IsReadOnly="false"
+                            MaxHeight="1000"
+                            TextAlignment="Left"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                    </StackPanel>
+                </ScrollViewer>
+
+            </PivotItem> <!--2. Scan-->
+            <PivotItem
+                Header="3. Translate">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="0 20 0 0"
+                        Spacing="20">
+                        <StackPanel
+                            HorizontalAlignment="Left"
+                            Margin="20 0 0 0"
+                            Spacing="20">
+                            <ComboBox
+                                x:Name="cbTranslationFunction"
+                                Header="Translation Function"
+                                Width="200">
+                                <x:String>OpenAI_API</x:String>
+                                <x:String>MyTranslationFunction</x:String>
+                             </ComboBox>
+                            <Button
+                                x:Name="btnTranslate"
+                                Click="btnTranslate_Click">Translate</Button>
+                            <ProgressBar
+                                x:Name="pbTranslate"
+                                Width="500"
+                                Minimum="0" />
+                        </StackPanel>
+                        
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="20 0 0 10">
+                                <Run
+                                    FontWeight="Bold">Translating</Run>
+                                <Run>- Reads target\Strings\en-US\Resources.resw and calls a</Run>
+                                <Run
+                                    FontStyle="Italic" FontWeight="Bold">Translation Function</Run>
+                                <Run>for each item.  It then saves the translation in the cache and other target\Strings\???\Resources.resw files, where ??? = de-DE, ar-SA etc.  It adds any required Specials too.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 10">
+                                <Run>Translations are cached in Cache.json for re-use.  If one of those translations is bad and the Translation Function won't return a good result, you can manually edit the Cache.json file with your own translation.  This edit will persist and be used when you click Translate next time.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Translation Hell</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 10">
+                                <Run>In this Translator app, being 2025 with AI everywhere, we'll default to sending the translations to the OpenAI API.  In a actual small commercial app, this cost around $5 USD in API credits (as of Jan 2025) to translate.  By the time you test translations, re-translate, screw-up etc, it might cost you $20.  The cache.json prevents re-translating the same thing over and over so that reduces cost.  There is room for optimization, probably using an Assistant or batch approach to reduce cost and latency.  For now, it just sends a full prompt for each translation item.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 10">
+                                <Run>You can also run translations locally and for free, depending on the model/API/hardware.  AI API specs/prompt design are wildly non-standard and changing frequently as of this time, so we'll leave the code in this app flexible so you can add your own Translator Function using the API of your choice.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 10">
+                                <Run
+                                    FontWeight="Bold">Translator Functions</Run>
+                                <Run>- Check the source and find the Translator Function section.  Use the OpenAI Translator Function as an example. Add an item to the function picklist.  Tweak the code to select which function to use based on the picklist item selected.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 10">
+                                <Run
+                                    FontWeight="Bold">Summary</Run>
+                                <Run>- Your translations are complete and .resw's are updated.  Start the target app and you should see the translations.</Run>
+                            </Paragraph>
+
+                        </RichTextBlock>
+
+                        <TextBox
+                            x:Name="tbTranslateLog"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="NoWrap"
+                            FontWeight="Light"
+                            IsReadOnly="False"
+                            TextAlignment="Left"
+                            Margin="20 0 20 20"
+                            MaxHeight="1000"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            IsTextPredictionEnabled="False">
+
+                        </TextBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem> <!--3. Translate-->
+            <PivotItem
+                Header="Hints">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0"
+                        Spacing="20">
+
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Giving a Hint</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Let's say we are translating for a photography-related app.  When we send string ex:'Aperture' to a Translation Function, do we mean Aperture like in photography, or an Aperture as in an opening of some kind? 
+                                    We need to give the function a hint to get the best translation results. With human translators, we might have included context in the .resw comments.
+                                    But in this translator app, we'll use the following hint tokens:</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Accuracy vs Cost</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">@</Run>
+                                <Run>- a normal, generic translation. '@Aperture' may be translated as an opening of some kind.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">!</Run>
+                                <Run>- a translation with extra context. '!Aperture' is more likely to be translated in a photography context.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>So why not use ! every time?  Longer prompts cost more, so if a generic @ prompt works, use that instead.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Length Constraints</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Most of the time, we only have a limited amount of screen space to display a string, such as the header above a combobox control.  It looks good in en-US, but when you translate it the length of the string may be too long, throwing off the layout and making it look bad.  Let's use these hints:</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">@@</Run>
+                                <Run>- a normal, generic translation, but where we want the translation to be of similar or less length.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">!!</Run>
+                                <Run>- a translation with extra context, but where we want the translation to be of similar or less length.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">How to create the prompts with these hints?</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Enter the prompt that corresponds to the hint token in the Hints tab.  Then you can access these hints in the Translation Function.</Run>
+                            </Paragraph>
+
+
+                        </RichTextBlock>
+
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Placeholders</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>The {0} placeholder is required.  This holds the 'de-DE' or 'ar-SA' language identifier that is being translated into.</Run>
+                            </Paragraph>
+
+
+                        </RichTextBlock>
+
+                        <TextBox
+                            Header="@ Hint (No context)"
+                            Margin="0 0 20 0"
+                            x:Name="tb1"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            FontWeight="Light"
+                            TextAlignment="Left"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                        <TextBox
+                            Header="@@ Hint (No context but length constrained)"
+                            Margin="0 0 20 0"
+                            x:Name="tb2"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            FontWeight="Light"
+                            TextAlignment="Left"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                        <TextBox
+                            Header="! Hint (Special context)"
+                            Margin="0 0 20 0"
+                            x:Name="tb3"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            FontWeight="Light"
+                            TextAlignment="Left"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                        <TextBox
+                            Header="!! Hint (Special context and length constrained)"
+                            Margin="0 0 20 0"
+                            x:Name="tb4"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            FontWeight="Light"
+                            TextAlignment="Left"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                        <Button
+                            x:Name="btnSaveHints"
+                            Content="Save Hints"
+                            Click="BtnSaveHints_Click"
+                            Margin="0 0 0 30">
+                        </Button>
+
+
+                    </StackPanel>
+                </ScrollViewer>
+
+            </PivotItem> <!--Hints-->
+            <PivotItem
+                Header="x:Uid's">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0"
+                        Spacing="20"
+                        Orientation="Vertical">
+
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Why x:Uid's?</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>x:Uid's are typically used to identify .xaml elements that require translation.  
+                                    So in this translator app, only those elements that have a x:Uid property, 
+                                    and are specified in XamlElements.json  will be detected for translation.  And ex '_btn' suffixes are required.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">Examples</Run>
+                            </Paragraph>
+
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">1) Same string 'Close' but different element types.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>The _btn and _tb is important here since one uses a Content property and the other uses a Text property.
+                                     If you just used x:Uid="Close" for both of them, the target app would fail to start.  
+                                    The suffix ex _btn could have _bn or _bt or _button, it does't matter, as long as it is consistent.
+                                </Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">Note: Do not use decimals (periods) ex: '.'</Run>
+                                <Run>in the x:Uid.  x:Uid="Close.btn" will translate and be cached, 
+                                    but the target app will not show the translation.  The periods '.' denote the property of the element. 
+                                    More than one '.' will cause problems.  There's an elemnent with this in the Samples tab.
+                                </Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>&lt;Button&gt;</Run>
+                            </Paragraph>
+                            
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run>x:Uid="Close_btn"</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run>  Content="@Close"</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>&lt;/Button&gt;</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>&lt;TextBlock&gt;</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run>x:Uid="Close_tb"</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run>Text="@Close"</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 40">
+                                <Run>&lt;/TextBlock&gt;</Run>
+                            </Paragraph>
+
+                            
+                            
+                            
+                            
+                            
+                            
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">2) Same string but different length context and constraints.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>You can have the same strings ex. '@Enter your name here', '@@Enter your name here',  
+                                    '!Enter your name here' and '!!Enter your name here' if you need that kind of flexibility.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>&lt;TextBlock&gt;</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run>x:Uid="EnterYourNameHere_btn"</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run>Content="@Enter your name here"</Run> //no size constraint
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>&lt;/TextBlock&gt;</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>&lt;TextBlock&gt;</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run>x:Uid="EnterYourNameHere_tb"</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="20 0 0 0">
+                                <Run>Text="@@Enter your name here"</Run> //size constrained
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 30">
+                                <Run>&lt;/TextBlock&gt;</Run>
+                            </Paragraph>
+
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">See the Samples tab and corresponing .xaml for more examples.</Run>
+                            </Paragraph>
+
+
+
+
+                        </RichTextBlock>
+
+                    
+
+
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem> <!--x:Uid's-->
+            <PivotItem
+                Header="TLocalized.Get()">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0"
+                        Spacing="20"
+                        Orientation="Vertical">
+
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Translating dynamic text (non x:Uid)</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>How do we translate this status message:'</Run>
+                                <Run
+                                    FontWeight="Bold">'Loading myfile.txt, please wait...'</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Solution</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontStyle="Italic">TLocalized.Get(string name, string hint, string value);</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Dynamic text can't be found in a scan since the text to be translated may be generated at runtime.  If the debugger is attached to the target app, the TLocalized class 
+                                    loads \Translator\LocalizedGets.json at target app startup, adds any requested translations via .Get()'s, and saves the text when the app shuts down. 
+                                    This file is later used in the Translation process.  Once the translation is complete, this same .Get() call will return the translated text.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Example</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>string translatedText = TLocalized.Get("LoadingFile", "@", "Loading {0}, please wait..."); //In en-DE (German), this call would return "Lade {0}, bitte warten..."</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run>string displayText = String.Format(translatedText, "myFile.text"); //here we fill in the placeholder with a filename</Run>
+                            </Paragraph>
+                           
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>The {0} is a placeholder for a parameter in a String.Format() call.  OpenAI returns the placeholder in
+                                    the correct location, though you may need to adjust the hint to let it know what to do with placeholders.
+                                    You can use the same hint tokens as with .xaml elements.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 20">
+                                <Run>The .Get() name parameter has strict a format definition as describled in TLocalizedDef.IsValidXamlIdentifier().  So you can't use periods in the name, for example.</Run>
+                            </Paragraph>
+                            
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Using the class in the target project</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>You can find \Common\TLocalized.cs in this Translator app and copy it or link to it in your target app.
+                                    It has a TeeLocalized namespace.  The names are weird to hopefully avoid naming collisions when
+                                    you include this class in your target project.</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 20">
+                                <Run>It's named TLocalized instead of Localized because that's how it should be - at least in the old Delphi days,
+                                    which ironically was written by the same guy who made c#.  Small world.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">More examples</Run>
+                            </Paragraph>
+                            
+                            <Paragraph
+                                Margin="0 0 0 20">
+                                <Run>In the sample apps, there are calls to TLocalized.Get() that dumps the results to the log.</Run>
+                            </Paragraph>
+                            
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Is TLocalized Trimming-compatible?</Run>
+                            </Paragraph>
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Yes, is is compatible with trimming since it does not use reflection for it's JSON calls.</Run>
+                            </Paragraph>
+
+
+                        </RichTextBlock>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem> <!--TLocalized.Get()-->
+            <PivotItem
+                Header="Specials">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0"
+                        Spacing="20"
+                        Orientation="Vertical">
+
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Handling icons, colors and other non-translatables</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Your app could run in languages where ex. an icon, color or other item needs to be different from other languages.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>A classic example is using white as a “safe” or “neutral” color in an interface. In many Western cultures, white is associated with cleanliness, simplicity, and purity. However, in several East Asian cultures (such as in China), white is traditionally linked to mourning and death, making it an unappealing choice in certain contexts.</Run>
+                            </Paragraph>
+
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Similarly, a well-known icon example is the thumbs-up gesture. While it’s widely seen as a positive “like” or “approval” symbol in much of the world, it can carry offensive or vulgar connotations in some Middle Eastern and West African cultures.</Run>
+                            </Paragraph>
+
+
+                            <Paragraph
+                                Margin="0 0 0 30">
+                                <Run>In both cases, it’s worth doing a bit of research or user testing for each target market to avoid introducing symbols or colors that may come across as inappropriate or off-putting.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Solution</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Add these items to \Translator\Specials.json, with one entry for each item and language.  These items will be copies into the correct Resource.resw's when you do a Translate.</Run>
+                            </Paragraph>
+
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Example: You have four languages, but ar-SA should have a different icon.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">\Translator\Specials.json</Run>
+                            </Paragraph>
+                            
+                            <Paragraph
+                                FontFamily="Consolas"
+                                Margin="0 0 0 30"
+                                FontSize="14">
+                                <Run
+                                    Text="[" />
+                                <LineBreak />
+                                <!-- First object -->
+                                <Run
+                                    Text="  {" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Key&quot;: &quot;SettingsIcon&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Value&quot;: &quot;settings1.ico&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;culture&quot;: &quot;en-US&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  }," />
+                                <LineBreak />
+
+                                <!-- Second object -->
+                                <Run
+                                    Text="  {" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Key&quot;: &quot;SettingsIcon&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Value&quot;: &quot;settings1.ico&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;culture&quot;: &quot;de-DE&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  }," />
+                                <LineBreak />
+
+                                <!-- Third object -->
+                                <Run
+                                    Text="  {" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Key&quot;: &quot;SettingsIcon&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Value&quot;: &quot;settings1.ico&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;culture&quot;: &quot;fr-FR&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  }," />
+                                <LineBreak />
+
+                                <!-- Fourth object -->
+                                <Run
+                                    Text="  {" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Key&quot;: &quot;SettingsIcon&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Value&quot;: &quot;settings2.ico&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;culture&quot;: &quot;ar-SA&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  }" />
+                                <LineBreak />
+
+                                <Run
+                                    Text="]" />
+                            </Paragraph>
+
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Accessing in Code</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Call the TLocalized.GetSpecial("SettingsIcon") function to get the value that is appropriate for the current culture.</Run>
+                            </Paragraph>
+
+
+
+                        </RichTextBlock>
+                        
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem> <!--Specials-->
+            <PivotItem
+                Header="XamlElements">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0"
+                        Spacing="20"
+                        Orientation="Vertical">
+
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Set the detectable xaml element and property types</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>We can't know all the possible element types and properties to scan for, especially with third-party or custom controls.  So you need to specify which elements can be detected during a scan.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 30">
+                                <Run>This is stored in the \Translator\XamlElement.json.  You can edit this file.</Run>
+                            </Paragraph>
+
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">\Translator\XamlElement.json</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Note: When using a .xaml reference like 'xmlns:ctWuiControls="using:CommunityToolkit.WinUI.Controls' for '&lt;ctWuiControls:SettingsExpander...&gt;', enter it as shown on the first element below.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0"
+                                FontFamily="Consolas"
+                                FontSize="14">
+                                <Run>{</Run>
+                                     
+                                <LineBreak />
+
+                                <Run
+                                    Text="  &quot;using:CommunityToolkit.WinUI.Controls:SettingsExpander&quot;: [" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Header&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  ]," />
+                                <LineBreak />
+
+                                <Run
+                                    Text="  &quot;Button&quot;: [" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Content&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  ]," />
+                                <LineBreak />
+                                <Run
+                                    Text="  &quot;TextBlock&quot;: [" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Text&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  ]," />
+                                <LineBreak />
+                                <Run
+                                    Text="  &quot;CheckBox&quot;: [" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Content&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  ]," />
+                                <LineBreak />
+                                <Run
+                                    Text="  &quot;ToggleSwitch&quot;: [" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Header&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;OffContent&quot;," />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;OnContent&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  ]," />
+                                <LineBreak />
+                                <Run
+                                    Text="  &quot;RadioButtons&quot;: [" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Header&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  ]," />
+                                <LineBreak />
+                                <Run
+                                    Text="  &quot;RadioButton&quot;: [" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Content&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  ]," />
+                                <LineBreak />
+                                <Run
+                                    Text="  &quot;ToggleButton&quot;: [" />
+                                <LineBreak />
+                                <Run
+                                    Text="    &quot;Content&quot;" />
+                                <LineBreak />
+                                <Run
+                                    Text="  ]" />
+                                <LineBreak />
+                                <Run
+                                    Text="}" />
+                            </Paragraph>
+                            
+                        </RichTextBlock>
+
+
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem> <!--XamlElements-->
+        </Pivot>
+
+    </Grid>
+
+</Window>
+
+    
+    
