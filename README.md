@@ -1,7 +1,10 @@
 # WinUITranslator
 ## Translate your WinappSDK Apps.
 
-- This Visual Studeio 2022 solution contains a Translator app that translates your WinAppSDK WinUI project to the languages of your choice.  It will scan your project, create the necesary translations, and update your Resource.resw files.
+> [!NOTE]
+> Requires Visual Studio 2022 with .Net 8 and WinAppSDK 1.6
+
+- This Visual Studio 2022 solution contains a Translator app that translates your WinAppSDK WinUI project to the languages of your choice.  It will scan your project, create the necesary translations, and update your Resource.resw files.
 - An OpenAI API translation function is included.  You can translate an app for under $5 USD.
 - You can also create your own translation function to call whatever translation service you want, including local and free models!
 - Run the included sample apps.  They have already been translated from en-US to de-DE, fr-FR and ar-SA.  You can modify these and re-translate them to see how it works.
@@ -9,7 +12,6 @@
 - You only need to include the TLocalized static class in your project.  It allows dynamic text translations, like for a 'Loading {0}, please wait...' status message.  It also allows the retrieval of non-translated resources, such as icon files, colors etc.
 - No third party packages or libraries are used.
 - Trimming is supported.
-- This is built using Visual Studio 2022 with .Net 8 and WinAppSDK 1.6.
 
 > [!NOTE]
 > You use the Translator app to translate your target app.
