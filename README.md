@@ -1,5 +1,5 @@
 # WinUITranslator
-## Translate your WinappSDK Apps.
+## Translate your WinappSDK WinUI Apps.
 
 > [!NOTE]
 > Requires Visual Studio 2022 with .Net 8 and WinAppSDK 1.6
