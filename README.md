@@ -15,7 +15,6 @@
 
 > [!NOTE]
 > You use the Translator app to translate your target app.
-![Translator1](https://github.com/user-attachments/assets/9f5d726a-eb8f-4212-af8a-c6b4103506d5)
 
 # Why Does this Exist?
 I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package tools, but realized that I really don't understand how the resources/translation/localization thing works.  I figured if I made my own tool that can meet the requirements listed below, I would understand.  I posted this as a public repository to share it, and see what ideas/insights other devs may have.
@@ -128,6 +127,10 @@ You need to create a `/Translator` folder in the target project and add these fi
 
 When a scan is complete, you have found the things that need to be translated, but you have not actually translated anything yet.
 
+Here's what scanning the sample app Sample-Packaged looks like.
+
+<img alt="image" src="https://github.com/user-attachments/assets/2c72466e-6bd4-4224-a10d-6db3bc2b7c42" />
+
 <br/><br/><br/>
 
 # Translating
@@ -165,6 +168,10 @@ When a scan is complete, you have found the things that need to be translated, b
 
 - Your translations are complete, and `.resw` files are updated.
 - Start the target app, and you should see the translations.
+
+Here's what translating the sample app Sample-Packaged looks like.
+
+<img alt="image" src="https://github.com/user-attachments/assets/fecfbfa6-1b4b-4580-a77b-e6f4f9eead3c" />
 
 </br></br></br>
 
