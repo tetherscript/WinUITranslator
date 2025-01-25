@@ -22,6 +22,9 @@ I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package 
 
 Now that AI is everywhere, I set out to use AI to do the translations, and it works really well.  Really nice.
 
+> [!TIP]
+> Take a close look at the packaged and unpackaged sample apps.  It helps clarify the obscure and somewhat undocumented process of setting the language and testing with RTL languages.
+
 <br/><br/><br/>
 
 Note: the following is also displayed in the tabs in the Translator app.
