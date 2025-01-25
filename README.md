@@ -11,11 +11,8 @@
 - Trimming is supported.
 - This is built using Visual Studio 2022 with .Net 8 and WinAppSDK 1.6.
 
----
-
-So, you use the Translator app to translate your target app.
-
----
+> [!NOTE]
+> YUou use the Translator app to translate your target app.
 
 # Why Does this Exist?
 I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package tools, but realized that I really don't understand how the resources/translation/localization thing works.  I figured if I made my own tool that can meet the requirements listed below, I would understand.  I posted this as a public repository to share it, and see what ideas/insights other devs may have.
@@ -65,8 +62,8 @@ This Translator app can do that. Even #8.
 > [!TIP]
 > If you are creating an app that will need to be translated, **you need to set it up and test the translation on day one of development.**
 > Put a Hello World button, a dynamic text message, and define several languages.
-> Translate it. Test the translations under different languages.
-> Understand how it works. Then you'll know what you need to do to make your app localized. It will affect your decisions on layouts, text length, and spacing that are difficult to fix later.
+> Translate it. Test the translations under different languages. Understand how it works.>><br/>><br/>
+> Then you'll know what you need to do to make your app localized. It will affect your decisions on layouts, text length, and spacing that are difficult to fix later.
 > Starting this process of adding `x:Uid`'s, `.Get()`'s, and running the Translator app **after your app is already big is a pain.**
 > I know this. Best to start translating on day 1.
 
@@ -74,7 +71,8 @@ This Translator app can do that. Even #8.
 
 # The Target
 
-You have an app project that you want to translate.  That's the Target.
+> [!NOTE]
+> You have an app project that you want to translate.  That's the Target.
 
 1. Make sure you have added a `\Translator` folder to your target project. This folder will hold translation info unique to that target project. **Do not include this folder and its files in target project builds or publishing** (`build action = none, do not copy`).
 
@@ -117,6 +115,8 @@ You need to create a `/Translator` folder in the target project and add these fi
 - In that `Resources.resw` file, you'll see that the hint token (`@`, `@@`, `!`, `!!`) have been placed in the comments field. **Don't edit this file.** 
 - No other `.resw` files have been touched. That will happen when you translate.
 - The contents of `DetectedXamlElements.json` have also been replaced.
+> [!NOTE]
+> Scanning is the greatest timesaver over other translation methods. You don't need to manually add items the the .resw files.  That is huge.
 
 ## Summary
 
