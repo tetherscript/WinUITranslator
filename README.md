@@ -136,8 +136,6 @@ When a scan is complete, you have found the things that need to be translated, b
 - If one of those translations is bad and the Translation Function won't return a good result, you can manually edit the `Cache.json` file with your own translation.  
   - This edit will persist and be used when you click Translate next time.
 
----
-
 ## Translation Hell
 
 - In this Translator app, being 2025 with AI everywhere, translations are **defaulted to the OpenAI API.**
@@ -148,18 +146,14 @@ When a scan is complete, you have found the things that need to be translated, b
 - There is room for optimization, likely by using an Assistant or batch approach to reduce cost and latency.  
   For now, the app sends a **full prompt for each translation item.**
 
-- You can also run translations locally and for free, depending on the model/API/hardware you use.  
-  **AI API specs/prompt designs are wildly non-standard and changing frequently** as of this time, so the app's code is flexible, allowing you to add your own Translator Function using the API of your choice.
-
----
+> [!IMPORTANT]
+> You can also run translations locally and for free, depending on the model/API/hardware you use.  **AI API specs/prompt designs are wildly non-standard and changing frequently** as of this time, so the app's code is flexible, allowing you to add your own Translator Function using the API of your choice.
 
 ## Translator Functions
 
 - Check the source and locate the **Translator Function** section.
 - Use the OpenAI Translator Function as an example.
 - Add an item to the function picklist and tweak the code to select which function to use based on the selected picklist item.
-
----
 
 ## Summary
 
