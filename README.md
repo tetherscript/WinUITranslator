@@ -127,7 +127,7 @@ You need to create a `/Translator` folder in the target project and add these fi
 
 When a scan is complete, you have found the things that need to be translated, but you have not actually translated anything yet.
 
-<img width="558" alt="image" src="https://github.com/user-attachments/assets/2c72466e-6bd4-4224-a10d-6db3bc2b7c42" />
+<img alt="image" src="https://github.com/user-attachments/assets/2c72466e-6bd4-4224-a10d-6db3bc2b7c42" />
 
 <br/><br/><br/>
 
