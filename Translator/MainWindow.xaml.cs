@@ -928,33 +928,3 @@ namespace Translator
 
     }
 }
-
-//TODO: Update the unpackaged sample app.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

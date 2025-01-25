@@ -770,15 +770,6 @@
                             </Paragraph>
 
 
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">See the Samples tab and corresponing .xaml for more examples.</Run>
-                            </Paragraph>
-
-
-
-
                         </RichTextBlock>
 
                     
