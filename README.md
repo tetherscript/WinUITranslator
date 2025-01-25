@@ -306,6 +306,7 @@ Yes, it is compatible with trimming since it does not use reflection for its JSO
 > [!CAUTION]
 > Your app could run in languages where, for example, an icon, color, or other item needs to be different from other languages.
 > A classic example is using white as a “safe” or “neutral” color in an interface. In many Western cultures, white is associated with cleanliness, simplicity, and purity. However, in several East Asian cultures (such as in China), white is traditionally linked to mourning and death, making it an unappealing choice in certain contexts.
+> </br>
 > Similarly, a well-known icon example is the thumbs-up gesture. While it’s widely seen as a positive “like” or “approval” symbol in much of the world, it can carry offensive or vulgar connotations in some Middle Eastern and West African cultures.
 > In both cases, it’s worth doing a bit of research or user testing for each target market to avoid introducing symbols or colors that may come across as inappropriate or off-putting.
 
