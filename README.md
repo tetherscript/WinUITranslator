@@ -24,8 +24,6 @@ Now that AI is everywhere, I set out to use AI to do the translations, and it wo
 
 <br/><br/><br/>
 
----
-
 Note: the following is also displayed in the tabs in the Translator app.
 
 # Introduction
@@ -45,15 +43,11 @@ I am building an app and will be translating it to other languages, and:
 
 This Translator app can do that. Even #8.
 
----
-
 ## Solution
 
 1. In your app to be translated (the "target"), add a `\Translator` folder and some files. Adjust your `.xaml` elements and dynamic text as shown in the `x:Uid`'s and `TLocalized.Get()` tabs.
 2. In this Translator app, set the target to that app, scan, then translate.
 3. Build and run the target app. The translations are now visible.
-
----
 
 ## Try it with the Sample Apps
 
@@ -61,7 +55,6 @@ This Translator app can do that. Even #8.
 2. Run this Translator app in another instance of VS2022, or just run the deployed version from the start menu.
 3. The sample app is ready to convert. Target, scan, and translate, then run the sample app to see the changes.
 
----
 
 ## Ideal Real-World Usage
 
@@ -69,19 +62,13 @@ This Translator app can do that. Even #8.
 2. When you are ready to translate, run this Translator app, then run your app again to see the changes.
 3. Tweak your app code, translate, tweak code, translate. Rinse. Repeat until it is fully translated.
 
----
-
-## My Best Advice
-
-If you are creating an app that will need to be translated, **you need to set it up and test the translation on day one of development.**  
-- Put a Hello World button, a dynamic text message, and define several languages.
-- Translate it. Test the translations under different languages.
-- Understand how it works.
-
-Then you'll know what you need to do to make your app localized. It will affect your decisions on layouts, text length, and spacing that are difficult to fix later.
-
-Starting this process of adding `x:Uid`'s, `.Get()`'s, and running the Translator app **after your app is already big is a pain.**  
-I know this. Best to start translating on day 1.
+> [!TIP]
+> If you are creating an app that will need to be translated, **you need to set it up and test the translation on day one of development.**
+> Put a Hello World button, a dynamic text message, and define several languages.
+> Translate it. Test the translations under different languages.
+> Understand how it works. Then you'll know what you need to do to make your app localized. It will affect your decisions on layouts, text length, and spacing that are difficult to fix later.
+> Starting this process of adding `x:Uid`'s, `.Get()`'s, and running the Translator app **after your app is already big is a pain.**
+> I know this. Best to start translating on day 1.
 
 <br/><br/><br/>
 
@@ -179,7 +166,39 @@ When a scan is complete, you have found the things that need to be translated, b
 - Your translations are complete, and `.resw` files are updated.
 - Start the target app, and you should see the translations.
 
+</br></br></br>
 
+# Hints
+
+Let's say we are translating for a photography-related app.  When we send a string like `'Aperture'` to a Translation Function, do we mean aperture as in photography, or aperture as in an opening of some kind?  We need to give the function a **hint** to get the best translation results. 
+
+With human translators, we might have included context in the `.resw` comments. But in this Translator app, we'll use the following **hint tokens**:
+
+## Accuracy vs Cost
+
+- **`@`** - A normal, generic translation.  
+  Example: `'@Aperture'` may be translated as an opening of some kind.
+
+- **`!`** - A translation with extra context.  
+  Example: `'!Aperture'` is more likely to be translated in a photography context.
+
+### Why not always use `!`?
+- Longer prompts cost more.  
+- If a generic `@` prompt works, use that instead to save costs.
+
+## Length Constraints
+
+Often, we have limited screen space to display a string, such as the header above a combobox control. It looks good in `en-US`, but translating it may make the string too long, affecting the layout and making it look bad.
+
+To handle this, use the following hint tokens:
+
+- **`@@`** - A normal, generic translation, but where we want the translation to be of similar or shorter length.
+- **`!!`** - A translation with extra context, but where we want the translation to be of similar or shorter length.
+
+## How to Create Prompts with These Hints?
+
+- Enter the prompt corresponding to the hint token in the **Hints tab**.
+- These hints will then be accessible in the Translation Function.
 
 
 
