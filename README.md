@@ -283,9 +283,11 @@ The `.Get()` name parameter has a strict format definition as described in `TLoc
 
 ### Using the class in the target project
 
-You can find `\Common\TLocalized.cs` in this Translator app and copy it or link to it in your target app. It has a `TeeLocalized` namespace. The names are weird to hopefully avoid naming collisions when you include this class in your target project.
+You can find `\Common\TLocalized.cs` in this Translator app and copy it or link to it in your target app. It has a `TeeLocalized` namespace. 
 
-It's named `TLocalized` instead of `Localized` because that's how it should be—at least in the old Delphi days, which ironically was written by the same guy who made C#. Small world.
+> [!NOTE]
+> The names are weird to hopefully avoid naming collisions when you include this class in your target project.
+> It's named `TLocalized` instead of `Localized` because that's how it should be—at least in the old Delphi days, which ironically was written by the same guy who made C#. Small world.
 
 ### More examples
 
@@ -301,13 +303,11 @@ Yes, it is compatible with trimming since it does not use reflection for its JSO
 
 ## Handling icons, colors and other non-translatables
 
-Your app could run in languages where, for example, an icon, color, or other item needs to be different from other languages.
-
-A classic example is using white as a “safe” or “neutral” color in an interface. In many Western cultures, white is associated with cleanliness, simplicity, and purity. However, in several East Asian cultures (such as in China), white is traditionally linked to mourning and death, making it an unappealing choice in certain contexts.
-
-Similarly, a well-known icon example is the thumbs-up gesture. While it’s widely seen as a positive “like” or “approval” symbol in much of the world, it can carry offensive or vulgar connotations in some Middle Eastern and West African cultures.
-
-In both cases, it’s worth doing a bit of research or user testing for each target market to avoid introducing symbols or colors that may come across as inappropriate or off-putting.
+> [!CAUTION]
+> Your app could run in languages where, for example, an icon, color, or other item needs to be different from other languages.
+> A classic example is using white as a “safe” or “neutral” color in an interface. In many Western cultures, white is associated with cleanliness, simplicity, and purity. However, in several East Asian cultures (such as in China), white is traditionally linked to mourning and death, making it an unappealing choice in certain contexts.
+> Similarly, a well-known icon example is the thumbs-up gesture. While it’s widely seen as a positive “like” or “approval” symbol in much of the world, it can carry offensive or vulgar connotations in some Middle Eastern and West African cultures.
+> In both cases, it’s worth doing a bit of research or user testing for each target market to avoid introducing symbols or colors that may come across as inappropriate or off-putting.
 
 ### Solution
 
@@ -356,8 +356,6 @@ Call the TLocalized.GetSpecial("SettingsIcon") function to get the value that is
 We can't know all the possible element types and properties to scan for, especially with third-party or custom controls. So you need to specify which elements can be detected during a scan.
 
 This is stored in the `\Translator\XamlElement.json`. You can edit this file.
-
----
 
 ### `\Translator\XamlElement.json`
 
