@@ -167,7 +167,8 @@ When a scan is complete, you have found the things that need to be translated, b
 - Your translations are complete, and `.resw` files are updated.
 - Start the target app, and you should see the translations.
 
-<img alt="image" src="https://github.com/user-attachments/assets/ce02787c-6feb-412c-a16a-deba851f06eb" />
+<img alt="image" src="https://github.com/user-attachments/assets/fecfbfa6-1b4b-4580-a77b-e6f4f9eead3c" />
+
 
 
 </br></br></br>
