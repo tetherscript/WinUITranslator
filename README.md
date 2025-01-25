@@ -169,7 +169,7 @@ Here's what scanning the sample app Sample-Packaged looks like.
 - Your translations are complete, and `.resw` files are updated.
 - Start the target app, and you should see the translations.
 
-Here's what scanning the sample app Sample-Packaged looks like.
+Here's what translating the sample app Sample-Packaged looks like.
 
 <img alt="image" src="https://github.com/user-attachments/assets/fecfbfa6-1b4b-4580-a77b-e6f4f9eead3c" />
 
