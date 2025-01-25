@@ -12,7 +12,7 @@
 - This is built using Visual Studio 2022 with .Net 8 and WinAppSDK 1.6.
 
 > [!NOTE]
-> YUou use the Translator app to translate your target app.
+> You use the Translator app to translate your target app.
 
 # Why Does this Exist?
 I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package tools, but realized that I really don't understand how the resources/translation/localization thing works.  I figured if I made my own tool that can meet the requirements listed below, I would understand.  I posted this as a public repository to share it, and see what ideas/insights other devs may have.
