@@ -22,6 +22,8 @@ I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package 
 
 Now that AI is everywhere, I set out to use AI to do the translations, and it works really well.  Really nice.
 
+<br/><br/><br/>
+
 ---
 
 Note: the following is also displayed in the tabs in the Translator app.
@@ -81,6 +83,7 @@ Then you'll know what you need to do to make your app localized. It will affect 
 Starting this process of adding `x:Uid`'s, `.Get()`'s, and running the Translator app **after your app is already big is a pain.**  
 I know this. Best to start translating on day 1.
 
+<br/><br/><br/>
 
 # The Target
 
@@ -117,6 +120,7 @@ You have an app project that you want to translate.  That's the Target.
 
 You need to create a `/Translator` folder in the target project and add these files to it.
 
+<br/><br/><br/>
 
 # Scanning
 
@@ -131,6 +135,49 @@ You need to create a `/Translator` folder in the target project and add these fi
 
 When a scan is complete, you have found the things that need to be translated, but you have not actually translated anything yet.
 
+<br/><br/><br/>
+
+# Translating
+
+- Reads `target\Strings\en-US\Resources.resw` and calls a **Translation Function** for each item.
+- Saves the translation in the cache and other `target\Strings\???\Resources.resw` files, where `??? = de-DE, ar-SA`, etc.
+- Adds any required Specials as well.
+
+## Caching Translations
+
+- Translations are cached in `Cache.json` for re-use. 
+- If one of those translations is bad and the Translation Function won't return a good result, you can manually edit the `Cache.json` file with your own translation.  
+  - This edit will persist and be used when you click Translate next time.
+
+---
+
+## Translation Hell
+
+- In this Translator app, being 2025 with AI everywhere, translations are **defaulted to the OpenAI API.**
+  - For a small commercial app, this costs around **$5 USD in API credits** (as of Jan 2025) to translate.
+  - By the time you test translations, re-translate, and fix issues, it might cost around **$20 USD.**
+  - The `Cache.json` prevents re-translating the same items repeatedly, reducing costs.
+
+- There is room for optimization, likely by using an Assistant or batch approach to reduce cost and latency.  
+  For now, the app sends a **full prompt for each translation item.**
+
+- You can also run translations locally and for free, depending on the model/API/hardware you use.  
+  **AI API specs/prompt designs are wildly non-standard and changing frequently** as of this time, so the app's code is flexible, allowing you to add your own Translator Function using the API of your choice.
+
+---
+
+## Translator Functions
+
+- Check the source and locate the **Translator Function** section.
+- Use the OpenAI Translator Function as an example.
+- Add an item to the function picklist and tweak the code to select which function to use based on the selected picklist item.
+
+---
+
+## Summary
+
+- Your translations are complete, and `.resw` files are updated.
+- Start the target app, and you should see the translations.
 
 
 
