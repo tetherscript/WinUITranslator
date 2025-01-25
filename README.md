@@ -5,10 +5,15 @@
 - An OpenAI API translation function is included.  You can translate an app for under $5 USD.
 - You can also create your own translation function to call whatever translation service you want, including local and free models!
 - Run the included sample apps.  They have already been translated from en-US to de-DE, fr-FR and ar-SA.  You can modify these and re-translate them to see how it works.
-- Explore the included static class TLocalized and Resource.resw files that are the only things that you deploy with your project.
+- Explore the included static class TLocalized and updated Resource.resw files.
+- You only need to include the TLocalized static class in your project.  It allows dynamic text translations, like for a 'Loading {0}, please wait...' status message.  It also allows the retrieval of non-translated resources, such as icon files, colors etc.
 - No third party packages or libraries are used.
 - Trimming is supported.
 - This is built using Visual Studio 2022 with .Net 8 and WinAppSDK 1.6.
+
+---
+
+So, you use the Translator app to translate your target app.
 
 ---
 
