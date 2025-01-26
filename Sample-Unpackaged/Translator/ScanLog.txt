@@ -1,0 +1,43 @@
+****************
+Summary: 18 translateable items found
+****************
+Scanning...
+---------------------------------------
+Scanning target project: E:\Code\VS\TranslatorNet8\Sample-UnPackaged
+Found: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\App.xaml
+Found: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\MainWindow.xaml
+  ***Rejected E:\Code\VS\TranslatorNet8\Sample-UnPackaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
+Checking .csproj for linked .xaml's...
+Merging E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Translator\TLocalizedGets.json...
+Found 4 mergeable entries.
+  Merged LoadingFile: @Loading {0}}, please wait...
+  Merged OpenAperture_Generic: @Open the aperture for a shallower depth of field.
+  Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
+  Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
+Merge complete.
+Updated: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Strings\en-US\Resources.resw
+Updated: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Translator\DetectedXamlElements.json
+Updating E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Strings\en-US\Resources.resw
+Clearing old entries from en-US/Resources.resw...
+Adding entries to en-US/Resources.resw...
+  Added Aperture_tb.Text
+  Added EnterYourNameHere_tb.Text
+  Added EnterYourNameHere_short_tb.Text
+  Added MissingHintToken_tb.Text
+  Added Close_btn.Content
+  Added Lock_cb.Content
+  Added Zoom_rbs.Header
+  Added Zoom100_rb.Content
+  Added Zoom200_rb.Content
+  Added Browser_tgbtn.Content
+  Added Connect_ts.Header
+  Added Connect_ts.OffContent
+  Added Connect_ts.OnContent
+  Added LoadingFile
+  Added OpenAperture_Generic
+  Added OpenAperture_MoreContext
+  Added OpenAperture_MoreContext_Constrained
+Checking for specials...
+Adding special: SettingsIcon=settings1.ico
+en-US/Resources.resw updated.
+Scan complete.

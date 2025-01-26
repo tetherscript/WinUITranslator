@@ -1,0 +1,66 @@
+********** SUMMARY **********
+The 18 translateable items in en-US\Resources.resw were translated to 3 languages with 48 cache hits and 0 misses.
+*****************************
+Translating...
+Translation function: OpenAI_API
+Cache initialized.
+Found 4 Resources.resw files.
+Processing ar-SA...
+  Cache hit: ar-SA:!:Aperture
+  Cache hit: ar-SA:@:Enter your name here
+  Cache hit: ar-SA:@@:Enter your name here
+  Cache hit: ar-SA:@:Close
+  Cache hit: ar-SA:@@:Lock
+  Cache hit: ar-SA:@:Zoom
+  Cache hit: ar-SA:@:100%
+  Cache hit: ar-SA:@:200%
+  Cache hit: ar-SA:!:Image Browser
+  Cache hit: ar-SA:@:Connection
+  Cache hit: ar-SA:@:Disconnected
+  Cache hit: ar-SA:@:Connected
+  Cache hit: ar-SA:@:Loading {0}}, please wait...
+  Cache hit: ar-SA:@:Open the aperture for a shallower depth of field.
+  Cache hit: ar-SA:!:Open the aperture for a shallower depth of field.
+  Cache hit: ar-SA:!!:Open the aperture for a shallower depth of field.
+  Checking for specials...
+  Adding special: SettingsIcon=settings2.ico
+Processing de-DE...
+  Cache hit: de-DE:!:Aperture
+  Cache hit: de-DE:@:Enter your name here
+  Cache hit: de-DE:@@:Enter your name here
+  Cache hit: de-DE:@:Close
+  Cache hit: de-DE:@@:Lock
+  Cache hit: de-DE:@:Zoom
+  Cache hit: de-DE:@:100%
+  Cache hit: de-DE:@:200%
+  Cache hit: de-DE:!:Image Browser
+  Cache hit: de-DE:@:Connection
+  Cache hit: de-DE:@:Disconnected
+  Cache hit: de-DE:@:Connected
+  Cache hit: de-DE:@:Loading {0}}, please wait...
+  Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
+  Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
+  Cache hit: de-DE:!!:Open the aperture for a shallower depth of field.
+  Checking for specials...
+  Adding special: SettingsIcon=settings1.ico
+Processing fr-FR...
+  Cache hit: fr-FR:!:Aperture
+  Cache hit: fr-FR:@:Enter your name here
+  Cache hit: fr-FR:@@:Enter your name here
+  Cache hit: fr-FR:@:Close
+  Cache hit: fr-FR:@@:Lock
+  Cache hit: fr-FR:@:Zoom
+  Cache hit: fr-FR:@:100%
+  Cache hit: fr-FR:@:200%
+  Cache hit: fr-FR:!:Image Browser
+  Cache hit: fr-FR:@:Connection
+  Cache hit: fr-FR:@:Disconnected
+  Cache hit: fr-FR:@:Connected
+  Cache hit: fr-FR:@:Loading {0}}, please wait...
+  Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
+  Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
+  Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
+  Checking for specials...
+  Adding special: SettingsIcon=settings1.ico
+*****************************
+Translation complete.

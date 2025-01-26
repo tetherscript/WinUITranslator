@@ -200,7 +200,8 @@
                         <TextBox
                             Header="Target Project Root Path"
                             x:Name="tbScanPath"
-                            Width="600"
+                            Width="800"
+                            LostFocus="TbScanPath_LostFocus"
                             IsReadOnly="False"
                             HorizontalAlignment="Left"
                             PlaceholderText="C:\Repo\WinUITranslator\Sample-Packaged"
@@ -320,11 +321,14 @@
                         Margin="20 20 0 0"
                         Spacing="10">
                         <StackPanel 
-                            Spacing="50"
+                            Spacing="20"
                             Orientation="Horizontal">
                             <Button
                                 x:Name="btnScan"
                                 Click="btnScan_Click">Scan</Button>
+                            <ProgressRing
+                                x:Name="prScan"
+                                IsActive="False"/>
                             <CheckBox
                                 x:Name="cbShowScanHelp"
                                 Click="CbShowScanHelp_Click"
@@ -371,7 +375,7 @@
                         Margin="20 10 0 20"
                         FontFamily="Courier New"
                         AcceptsReturn="True"
-                        TextWrapping="NoWrap"
+                        TextWrapping="Wrap"
                         FontWeight="Light"
                         IsReadOnly="false"
                         TextAlignment="Left"
@@ -381,9 +385,6 @@
                     </TextBox>
                         
                 </Grid>
-
-
-
             </PivotItem> <!--2. Scan-->
             <PivotItem
                 Header="3. Translate">
@@ -411,18 +412,30 @@
                             Margin="0 0 0 0"
                             Spacing="20">
                             <ComboBox
-                                Width="150"
+                                Width="250"
                                 x:Name="cbTranslationFunction">
                                     <x:String>OpenAI_API</x:String>
                                     <x:String>MyTranslationFunction</x:String>
                             </ComboBox>
                             <Button
                                 x:Name="btnTranslate"
-                                Click="btnTranslate_Click">Translate</Button>
+                                Visibility="Collapsed"
+                                >Start</Button>
+                            <Button
+                                x:Name="btnTranslateStart"
+                                Click="BtnTranslateStart_Click">Start</Button>
+                            <ProgressRing
+                                x:Name="prTranslate"
+                                IsActive="False" />
                             <ProgressBar
                                 x:Name="pbTranslate"
-                                Width="300"
-                                Minimum="0" />
+                                Maximum="100"
+                                Minimum="0"
+                                Width="200">
+                            </ProgressBar>
+                            <Button
+                                x:Name="btnTranslateStop"
+                                Click="BtnTranslateStop_Click">Stop</Button>
                             <CheckBox
                                 x:Name="cbShowTranslateHelp"
                                 Click="CbShowtranslateHelp_Click"
@@ -489,7 +502,7 @@
                         x:Name="tbTranslateLog"
                         FontFamily="Courier New"
                         AcceptsReturn="True"
-                        TextWrapping="NoWrap"
+                        TextWrapping="Wrap"
                         FontWeight="Light"
                         IsReadOnly="False"
                         TextAlignment="Left"
@@ -497,44 +510,208 @@
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                         IsTextPredictionEnabled="False">
-
                     </TextBox>
 
                 </Grid>
-                
-                <!--<ScrollViewer>
-                    <StackPanel
-                        Margin="0 20 0 0"
-                        Spacing="20">
-                        --><!--<StackPanel
-                            HorizontalAlignment="Left"
-                            Margin="20 0 0 0"
-                            Spacing="20">
-                            <ComboBox
-                                x:Name="cbTranslationFunction"
-                                Header="Translation Function"
-                                Width="200">
-                                <x:String>OpenAI_API</x:String>
-                                <x:String>MyTranslationFunction</x:String>
-                             </ComboBox>
-                            <Button
-                                x:Name="btnTranslate"
-                                Click="btnTranslate_Click">Translate</Button>
-                            <ProgressBar
-                                x:Name="pbTranslate"
-                                Width="500"
-                                Minimum="0" />
-                        </StackPanel>--><!--
-                        
-                     
-
-                        
-                    </StackPanel>
-                </ScrollViewer>-->
             </PivotItem> <!--3. Translate-->
             <PivotItem
                 Header="Hints">
-                <ScrollViewer>
+                <Grid
+                    x:Name="grdHints"
+                    VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel
+                        Grid.Row="0"
+                        Margin="20 20 0 0"
+                        Spacing="10">
+
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0 0 0 0"
+                            Spacing="20">
+                            <ComboBox
+                                Width="250"
+                                SelectionChanged="CbTranslationFunction2_SelectionChanged"
+                                x:Name="cbTranslationFunction2">
+                                    <x:String>OpenAI_API</x:String>
+                                    <x:String>MyTranslationFunction</x:String>
+                            </ComboBox>
+                            <CheckBox
+                                x:Name="cbShowHintsHelp"
+                                Click="CbShowHintsHelp_Click"
+                                Content="Show Help" />
+                        </StackPanel>
+
+
+                        <RichTextBlock
+                            x:Name="rtbHintsHelp"
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Giving a Hint</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Let's say we are translating for a photography-related app.  When we send string ex:'Aperture' to a Translation Function, do we mean Aperture like in photography, or an Aperture as in an opening of some kind? 
+                                    We need to give the function a hint to get the best translation results. With human translators, we might have included context in the .resw comments.
+                                    But in this translator app, we'll use the following hint tokens:</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Accuracy vs Cost</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">@</Run>
+                                <Run>- a normal, generic translation. '@Aperture' may be translated as an opening of some kind.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">!</Run>
+                                <Run>- a translation with extra context. '!Aperture' is more likely to be translated in a photography context.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>So why not use ! every time?  Longer prompts cost more, so if a generic @ prompt works, use that instead.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Length Constraints</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Most of the time, we only have a limited amount of screen space to display a string, such as the header above a combobox control.  It looks good in en-US, but when you translate it the length of the string may be too long, throwing off the layout and making it look bad.  Let's use these hints:</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">@@</Run>
+                                <Run>- a normal, generic translation, but where we want the translation to be of similar or less length.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run
+                                    FontWeight="Bold">!!</Run>
+                                <Run>- a translation with extra context, but where we want the translation to be of similar or less length.</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">How to create the prompts with these hints?</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>Enter the prompt that corresponds to the hint token in the Hints tab.  Then you can access these hints in the Translation Function.</Run>
+                            </Paragraph>
+
+                        </RichTextBlock>
+
+                        <RichTextBlock
+                            TextIndent="0"
+                            LineHeight="20"
+                            SelectionHighlightColor="Green">
+
+                            <Paragraph
+                                Margin="0 0 0 0">
+                                <Run
+                                    FontWeight="Bold">Placeholders</Run>
+                            </Paragraph>
+
+                            <Paragraph
+                                Margin="0 0 0 10">
+                                <Run>The {0} placeholder is required.  This holds the 'de-DE' or 'ar-SA' language identifier that is being translated into.</Run>
+                            </Paragraph>
+
+
+                        </RichTextBlock>
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Margin="20 20 0 0"
+                        Spacing="10">
+                        <TextBox
+                            Header="@ Hint (No context)"
+                            Margin="0 0 20 0"
+                            x:Name="tb1"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            FontWeight="Light"
+                            TextAlignment="Left"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                        <TextBox
+                            Header="@@ Hint (No context but length constrained)"
+                            Margin="0 0 20 0"
+                            x:Name="tb2"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            FontWeight="Light"
+                            TextAlignment="Left"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                        <TextBox
+                            Header="! Hint (Special context)"
+                            Margin="0 0 20 0"
+                            x:Name="tb3"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            FontWeight="Light"
+                            TextAlignment="Left"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                        <TextBox
+                            Header="!! Hint (Special context and length constrained)"
+                            Margin="0 0 20 0"
+                            x:Name="tb4"
+                            FontFamily="Courier New"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            FontWeight="Light"
+                            TextAlignment="Left"
+                            IsTextPredictionEnabled="False">
+                        </TextBox>
+                        <Button
+                            x:Name="btnSaveHints"
+                            Content="Save Hints"
+                            Click="BtnSaveHints_Click"
+                            Margin="0 0 0 30">
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <!--<ScrollViewer>
                     <StackPanel
                         Margin="20 20 0 0"
                         Spacing="20">
@@ -692,7 +869,7 @@
 
 
                     </StackPanel>
-                </ScrollViewer>
+                </ScrollViewer>-->
 
             </PivotItem> <!--Hints-->
             <PivotItem

@@ -178,7 +178,7 @@
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">
-    <value>افتح الفتحة للحصول على عمق ميدان أقل.</value>
+    <value>افتح الفتحة للحصول على عمق مجال أقل.</value>
     <comment>!!</comment>
   </data>
   <data name="SettingsIcon" xml:space="preserve">
