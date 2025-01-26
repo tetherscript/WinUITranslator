@@ -131,7 +131,8 @@ When a scan is complete, you have found the things that need to be translated, b
 
 Here's what scanning the sample app Sample-Packaged looks like.
 
-<img alt="image" src="https://github.com/user-attachments/assets/2c72466e-6bd4-4224-a10d-6db3bc2b7c42" />
+<img alt="image" src="https://github.com/user-attachments/assets/48c07526-6ae5-462e-81b4-159ab56bb794" />
+
 
 <br/><br/><br/>
 
@@ -173,7 +174,7 @@ Here's what scanning the sample app Sample-Packaged looks like.
 
 Here's what translating the sample app Sample-Packaged looks like.
 
-<img alt="image" src="https://github.com/user-attachments/assets/fecfbfa6-1b4b-4580-a77b-e6f4f9eead3c" />
+<img alt="image" src="https://github.com/user-attachments/assets/ee9c1fec-2ff6-4fb0-84de-a22dc7b0fc52" />
 
 </br></br></br>
 
