@@ -210,6 +210,10 @@ To handle this, use the following hint tokens:
 - Enter the prompt corresponding to the hint token in the **Hints tab**.
 - These hints will then be accessible in the Translation Function.
 
+Here are the hints for the OpenAI API.
+
+<img alt="image" src="https://github.com/user-attachments/assets/42fbeb0c-6603-402e-b7f3-0dcd539fc8c3" />
+
 </br></br></br>
 
 # x:Uids's
