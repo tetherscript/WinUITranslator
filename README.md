@@ -21,14 +21,14 @@
 # Why Does this Exist?
 I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package tools, but realized that I really don't understand how the resources/translation/localization thing works.  I figured if I made my own tool that can meet the requirements listed below, I would understand.  I posted this as a public repository to share it, and see what ideas/insights other devs may have.
 
-Now that AI is everywhere, I set out to use AI to do the translations, and it works really well.  Really nice.
+Now that AI is everywhere, I set out to use AI to do the translations, and it works really well.
 
 > [!TIP]
 > Take a close look at the packaged and unpackaged sample apps.  It helps clarify the obscure and somewhat undocumented process of setting the language and testing with RTL languages.
 
 <br/><br/><br/>
 
-Note: the following is also displayed in the tabs in the Translator app.
+Note: the following info is also displayed in the tabs in the Translator app.
 
 # Introduction
 
