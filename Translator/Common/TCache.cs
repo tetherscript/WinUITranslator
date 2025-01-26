@@ -8,34 +8,30 @@ using Windows.Storage;
 
 namespace Translator
 {
-    public class Entry
+    public static class TCache
     {
-        [JsonPropertyName("key")]
-        public string Key { get; set; }
 
-        [JsonPropertyName("value")]
-        public string Value { get; set; }
-    }
-
-    public class JsonDatabase
-    {
-        private const string FileName = "cache.json";
-        private Dictionary<string, string> _entries; // Using Dictionary for efficient lookups and uniqueness
-        private readonly StorageFolder _folder;
-        private StorageFile _file;
-
-        // Constructor
-        public JsonDatabase(StorageFolder folder = null)
+        public class Entry
         {
-            _folder = folder ?? ApplicationData.Current.LocalFolder;
-            _entries = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase); // Case-insensitive keys
+            [JsonPropertyName("key")]
+            public string Key { get; set; }
+
+            [JsonPropertyName("value")]
+            public string Value { get; set; }
         }
 
-        /// <summary>
-        /// Initializes the database by loading existing entries or creating a new file.
-        /// Ensures no duplicate keys are present.
-        /// </summary>
-        public async Task InitializeAsync()
+        private const string FileName = "Cache.json";
+        private static Dictionary<string, string> _entries;
+        private static StorageFolder _folder;
+        private static StorageFile _file;
+
+        public static void Init(StorageFolder folder = null)
+        {
+            _folder = folder ?? ApplicationData.Current.LocalFolder;
+            _entries = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase); 
+        }
+
+        public static async Task InitializeAsync()
         {
             try
             {
@@ -43,7 +39,7 @@ namespace Translator
                 string json = await FileIO.ReadTextAsync(_file, Windows.Storage.Streams.UnicodeEncoding.Utf8);
                 if (json != "")
                 {
-               
+
                     var entryList = JsonSerializer.Deserialize<List<Entry>>(json) ?? new List<Entry>();
 
                     // Populate the dictionary, ensuring no duplicates
@@ -71,13 +67,7 @@ namespace Translator
             }
         }
 
-        /// <summary>
-        /// Adds a new entry to the database.
-        /// Throws an exception if the key already exists.
-        /// </summary>
-        /// <param name="key">The key for the entry.</param>
-        /// <param name="value">The value for the entry.</param>
-        public async Task AddEntryAsync(string key, string value)
+         public static async Task AddEntryAsync(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -95,13 +85,7 @@ namespace Translator
             await SaveAsync();
         }
 
-        /// <summary>
-        /// Retrieves a value based on the provided key.
-        /// Returns null if the key does not exist.
-        /// </summary>
-        /// <param name="key">The key to search for.</param>
-        /// <returns>The corresponding value if found; otherwise, null.</returns>
-        public string GetValue(string key)
+        public static string GetValue(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -112,13 +96,7 @@ namespace Translator
             return value;
         }
 
-        /// <summary>
-        /// Updates an existing entry's value.
-        /// Throws an exception if the key does not exist.
-        /// </summary>
-        /// <param name="key">The key of the entry to update.</param>
-        /// <param name="newValue">The new value for the entry.</param>
-        public async Task UpdateEntryAsync(string key, string newValue)
+        public static async Task UpdateEntryAsync(string key, string newValue)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -134,12 +112,7 @@ namespace Translator
             await SaveAsync();
         }
 
-        /// <summary>
-        /// Removes an entry from the database.
-        /// Returns true if the entry was removed; otherwise, false.
-        /// </summary>
-        /// <param name="key">The key of the entry to remove.</param>
-        public async Task<bool> RemoveEntryAsync(string key)
+        public static async Task<bool> RemoveEntryAsync(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -155,18 +128,12 @@ namespace Translator
             return removed;
         }
 
-        /// <summary>
-        /// Retrieves all entries as a list.
-        /// </summary>
-        public List<Entry> GetAllEntries()
+        public static List<Entry> GetAllEntries()
         {
             return _entries.Select(kvp => new Entry { Key = kvp.Key, Value = kvp.Value }).ToList();
         }
 
-        /// <summary>
-        /// Saves the current state of the database to the JSON file.
-        /// </summary>
-        private async Task SaveAsync()
+        private static async Task SaveAsync()
         {
             try
             {
@@ -183,9 +150,7 @@ namespace Translator
                 // Handle exceptions (e.g., log them)
                 System.Diagnostics.Debug.WriteLine($"Error saving database: {ex.Message}");
             }
+
         }
     }
 }
-
-
-

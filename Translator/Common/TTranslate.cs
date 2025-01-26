@@ -58,11 +58,9 @@ namespace Translator
             ProgressPerc = 0;
 
             #region CACHE
-            JsonDatabase cache;
             StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
-            cache = null;
-            cache = new(x);
-            await cache.InitializeAsync();
+            TCache.Init(x);
+            await TCache.InitializeAsync();
             TLog.Log("Cache initialized.");
             #endregion
 
@@ -143,7 +141,7 @@ namespace Translator
                         else
                         {
                             string cacheKey = String.Format("{0}:{1}:{2}", culture_Name, translationHint, originalText);
-                            string cachedData = cache.GetValue(cacheKey);
+                            string cachedData = TCache.GetValue(cacheKey);
                             if (cachedData != null)
                             {
                                 translatedText = cachedData;
@@ -164,7 +162,7 @@ namespace Translator
                                     TLog.Log("Failed translation function call.", true);
                                     continue;
                                 }
-                                await cache.AddEntryAsync(cacheKey, translatedText);
+                                await TCache.AddEntryAsync(cacheKey, translatedText);
                             }
                             var desDocDataElement = new XElement("data",
                                 new XAttribute("name", item.Attribute("name").Value),
