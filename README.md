@@ -69,7 +69,7 @@ This Translator app can do that. Even #8.
 > [!TIP]
 > If you are creating an app that will need to be translated, **you need to set it up and test the translation on day one of development.**
 > Put a Hello World button, a dynamic text message, and define several languages.
-> Translate it. Test the translations under different languages. Understand how it works.>><br/>><br/>
+> Translate it. Test the translations under different languages. Understand how it works.<br/>><br/>
 > Then you'll know what you need to do to make your app localized. It will affect your decisions on layouts, text length, and spacing that are difficult to fix later.
 > Starting this process of adding `x:Uid`'s, `.Get()`'s, and running the Translator app **after your app is already big is a pain.**
 > I know this. Best to start translating on day 1.
