@@ -234,6 +234,10 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\TransFuncs\Sample\" />
+    <Folder Include="Common\TransFuncs\OpenAI_2\" />
+  </ItemGroup>
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution

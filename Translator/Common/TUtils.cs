@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
@@ -21,6 +17,8 @@ namespace Translator
         public static string TargetStrings_enUS_Path = string.Empty;
         public static string TargetScanLogPath = string.Empty;
         public static string TargetTranslateLogPath = string.Empty;
+
+        public static bool Debug = false;
 
         public static bool CalcPaths(string targetRootPath)
         {

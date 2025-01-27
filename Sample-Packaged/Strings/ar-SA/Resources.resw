@@ -154,11 +154,11 @@
     <comment>!</comment>
   </data>
   <data name="Connect_ts.Header" xml:space="preserve">
-    <value>اتصال</value>
+    <value>الاتصال</value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OffContent" xml:space="preserve">
-    <value>غير متصل</value>
+    <value>منقطع الاتصال</value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OnContent" xml:space="preserve">

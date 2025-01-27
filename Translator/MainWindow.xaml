@@ -39,8 +39,9 @@
             Margin="20 0 20 0"
             Grid.Column="0"
             Grid.Row="1"
-            x:Name="pvtInfo">
+            x:Name="pvtMain">
             <PivotItem
+                x:Name="piInfo"
                 Header="Intro">
                 <ScrollViewer>
                     <StackPanel
@@ -436,10 +437,6 @@
                             <Button
                                 x:Name="btnTranslateStop"
                                 Click="BtnTranslateStop_Click">Stop</Button>
-                            <CheckBox
-                                x:Name="cbShowTranslateHelp"
-                                Click="CbShowtranslateHelp_Click"
-                                Content="Show Help" />
                         </StackPanel>
 
                         <RichTextBlock
@@ -514,364 +511,6 @@
 
                 </Grid>
             </PivotItem> <!--3. Translate-->
-            <PivotItem
-                Header="Hints">
-                <Grid
-                    x:Name="grdHints"
-                    VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition
-                            Height="Auto" />
-                        <RowDefinition
-                            Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <StackPanel
-                        Grid.Row="0"
-                        Margin="20 20 0 0"
-                        Spacing="10">
-
-                        <StackPanel
-                            Orientation="Horizontal"
-                            Margin="0 0 0 0"
-                            Spacing="20">
-                            <ComboBox
-                                Width="250"
-                                SelectionChanged="CbTranslationFunction2_SelectionChanged"
-                                x:Name="cbTranslationFunction2">
-                                    <x:String>OpenAI_API</x:String>
-                                    <x:String>MyTranslationFunction</x:String>
-                            </ComboBox>
-                            <CheckBox
-                                x:Name="cbShowHintsHelp"
-                                Click="CbShowHintsHelp_Click"
-                                Content="Show Help" />
-                        </StackPanel>
-
-
-                        <RichTextBlock
-                            x:Name="rtbHintsHelp"
-                            TextIndent="0"
-                            LineHeight="20"
-                            SelectionHighlightColor="Green">
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">Giving a Hint</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>Let's say we are translating for a photography-related app.  When we send string ex:'Aperture' to a Translation Function, do we mean Aperture like in photography, or an Aperture as in an opening of some kind? 
-                                    We need to give the function a hint to get the best translation results. With human translators, we might have included context in the .resw comments.
-                                    But in this translator app, we'll use the following hint tokens:</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">Accuracy vs Cost</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">@</Run>
-                                <Run>- a normal, generic translation. '@Aperture' may be translated as an opening of some kind.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">!</Run>
-                                <Run>- a translation with extra context. '!Aperture' is more likely to be translated in a photography context.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>So why not use ! every time?  Longer prompts cost more, so if a generic @ prompt works, use that instead.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">Length Constraints</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>Most of the time, we only have a limited amount of screen space to display a string, such as the header above a combobox control.  It looks good in en-US, but when you translate it the length of the string may be too long, throwing off the layout and making it look bad.  Let's use these hints:</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">@@</Run>
-                                <Run>- a normal, generic translation, but where we want the translation to be of similar or less length.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">!!</Run>
-                                <Run>- a translation with extra context, but where we want the translation to be of similar or less length.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">How to create the prompts with these hints?</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>Enter the prompt that corresponds to the hint token in the Hints tab.  Then you can access these hints in the Translation Function.</Run>
-                            </Paragraph>
-
-                        </RichTextBlock>
-
-                        <RichTextBlock
-                            TextIndent="0"
-                            LineHeight="20"
-                            SelectionHighlightColor="Green">
-
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">Placeholders</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>The {0} placeholder is required.  This holds the 'de-DE' or 'ar-SA' language identifier that is being translated into.</Run>
-                            </Paragraph>
-
-
-                        </RichTextBlock>
-
-                    </StackPanel>
-
-                    <StackPanel
-                        Grid.Row="1"
-                        Margin="20 20 0 0"
-                        Spacing="10">
-                        <TextBox
-                            Header="@ Hint (No context)"
-                            Margin="0 0 20 0"
-                            x:Name="tb1"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            FontWeight="Light"
-                            TextAlignment="Left"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
-                        <TextBox
-                            Header="@@ Hint (No context but length constrained)"
-                            Margin="0 0 20 0"
-                            x:Name="tb2"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            FontWeight="Light"
-                            TextAlignment="Left"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
-                        <TextBox
-                            Header="! Hint (Special context)"
-                            Margin="0 0 20 0"
-                            x:Name="tb3"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            FontWeight="Light"
-                            TextAlignment="Left"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
-                        <TextBox
-                            Header="!! Hint (Special context and length constrained)"
-                            Margin="0 0 20 0"
-                            x:Name="tb4"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            FontWeight="Light"
-                            TextAlignment="Left"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
-                        <Button
-                            x:Name="btnSaveHints"
-                            Content="Save Hints"
-                            Click="BtnSaveHints_Click"
-                            Margin="0 0 0 30">
-                        </Button>
-                    </StackPanel>
-                </Grid>
-                <!--<ScrollViewer>
-                    <StackPanel
-                        Margin="20 20 0 0"
-                        Spacing="20">
-
-                        <RichTextBlock
-                            TextIndent="0"
-                            LineHeight="20"
-                            SelectionHighlightColor="Green">
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">Giving a Hint</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>Let's say we are translating for a photography-related app.  When we send string ex:'Aperture' to a Translation Function, do we mean Aperture like in photography, or an Aperture as in an opening of some kind? 
-                                    We need to give the function a hint to get the best translation results. With human translators, we might have included context in the .resw comments.
-                                    But in this translator app, we'll use the following hint tokens:</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">Accuracy vs Cost</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">@</Run>
-                                <Run>- a normal, generic translation. '@Aperture' may be translated as an opening of some kind.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">!</Run>
-                                <Run>- a translation with extra context. '!Aperture' is more likely to be translated in a photography context.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>So why not use ! every time?  Longer prompts cost more, so if a generic @ prompt works, use that instead.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">Length Constraints</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>Most of the time, we only have a limited amount of screen space to display a string, such as the header above a combobox control.  It looks good in en-US, but when you translate it the length of the string may be too long, throwing off the layout and making it look bad.  Let's use these hints:</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">@@</Run>
-                                <Run>- a normal, generic translation, but where we want the translation to be of similar or less length.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run
-                                    FontWeight="Bold">!!</Run>
-                                <Run>- a translation with extra context, but where we want the translation to be of similar or less length.</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">How to create the prompts with these hints?</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>Enter the prompt that corresponds to the hint token in the Hints tab.  Then you can access these hints in the Translation Function.</Run>
-                            </Paragraph>
-
-
-                        </RichTextBlock>
-
-                        <RichTextBlock
-                            TextIndent="0"
-                            LineHeight="20"
-                            SelectionHighlightColor="Green">
-
-                            <Paragraph
-                                Margin="0 0 0 0">
-                                <Run
-                                    FontWeight="Bold">Placeholders</Run>
-                            </Paragraph>
-
-                            <Paragraph
-                                Margin="0 0 0 10">
-                                <Run>The {0} placeholder is required.  This holds the 'de-DE' or 'ar-SA' language identifier that is being translated into.</Run>
-                            </Paragraph>
-
-
-                        </RichTextBlock>
-
-                        <TextBox
-                            Header="@ Hint (No context)"
-                            Margin="0 0 20 0"
-                            x:Name="tb1"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            FontWeight="Light"
-                            TextAlignment="Left"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
-                        <TextBox
-                            Header="@@ Hint (No context but length constrained)"
-                            Margin="0 0 20 0"
-                            x:Name="tb2"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            FontWeight="Light"
-                            TextAlignment="Left"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
-                        <TextBox
-                            Header="! Hint (Special context)"
-                            Margin="0 0 20 0"
-                            x:Name="tb3"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            FontWeight="Light"
-                            TextAlignment="Left"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
-                        <TextBox
-                            Header="!! Hint (Special context and length constrained)"
-                            Margin="0 0 20 0"
-                            x:Name="tb4"
-                            FontFamily="Courier New"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            FontWeight="Light"
-                            TextAlignment="Left"
-                            IsTextPredictionEnabled="False">
-                        </TextBox>
-                        <Button
-                            x:Name="btnSaveHints"
-                            Content="Save Hints"
-                            Click="BtnSaveHints_Click"
-                            Margin="0 0 0 30">
-                        </Button>
-
-
-                    </StackPanel>
-                </ScrollViewer>-->
-
-            </PivotItem> <!--Hints-->
             <PivotItem
                 Header="x:Uid's">
                 <ScrollViewer>
@@ -1449,6 +1088,30 @@
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem> <!--XamlElements-->
+
+            <PivotItem
+                Header="Settings">
+                <ScrollViewer>
+                    <StackPanel
+                        Margin="20 20 0 0"
+                        Spacing="20"
+                        Orientation="Vertical">
+
+                        <CheckBox
+                            x:Name="cbShowHelp"
+                            Click="CbShowHelp_Click"
+                            Content="Show Help" />
+                        <CheckBox
+                            x:Name="cbShowDebug"
+                            Click="CbShowDebug_Click"
+                            Content="Show Debug Info" />
+
+
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
+            <!--XamlElements-->
+            
         </Pivot>
 
     </Grid>

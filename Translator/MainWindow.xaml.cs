@@ -1,17 +1,16 @@
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Devices.AllJoyn;
 using Windows.Graphics;
 using Windows.Storage;
+
 
 namespace Translator
 {
@@ -55,7 +54,7 @@ namespace Translator
             }
 
             FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
-            tbTitle.Text = "Translator " + versionInfo.FileVersion;
+            tbTitle.Text = "WinUITranslator";
 
             TranslationStatusTimer = new(interval: 1000);
             TranslationStatusTimer.Stop();
@@ -87,7 +86,6 @@ namespace Translator
         {
             grdMain.FlowDirection = (App.IsRTL ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
             RestoreWindowState(this);
-            LoadHints();
         }
         #endregion
 
@@ -102,9 +100,8 @@ namespace Translator
             public const string Path = "Path";
             public const string TranslationFunctionIndex = "TranslationFunctionIndex";
             public const string PivotIndex = "PivotIndex";
-            public const string ShowScanHelp = "ShowScanHelp";
-            public const string ShowTranslateHelp = "ShowScanHelp";
-            public const string ShowHintsHelp = "ShowHintsHelp";
+            public const string ShowHelp = "ShowHelp";
+            public const string ShowDebug = "ShowDebug";
         }
 
         private void SaveWindowState(Window window)
@@ -124,10 +121,9 @@ namespace Translator
             appData.Values[WindowSettingsKeys.Scale] = grdMain.XamlRoot.RasterizationScale;
             appData.Values[WindowSettingsKeys.Path] = tbScanPath.Text;
             appData.Values[WindowSettingsKeys.TranslationFunctionIndex] = cbTranslationFunction.SelectedIndex;
-            appData.Values[WindowSettingsKeys.PivotIndex] = pvtInfo.SelectedIndex;
-            appData.Values[WindowSettingsKeys.ShowScanHelp] = cbShowScanHelp.IsChecked;
-            appData.Values[WindowSettingsKeys.ShowTranslateHelp] = cbShowTranslateHelp.IsChecked;
-            appData.Values[WindowSettingsKeys.ShowHintsHelp] = cbShowHintsHelp.IsChecked;
+            appData.Values[WindowSettingsKeys.PivotIndex] = pvtMain.SelectedIndex;
+            appData.Values[WindowSettingsKeys.ShowHelp] = cbShowHelp.IsChecked;
+            appData.Values[WindowSettingsKeys.ShowDebug] = cbShowDebug.IsChecked;
         }
 
         private void RestoreWindowState(Window window)
@@ -136,20 +132,17 @@ namespace Translator
 
             //appData.Values.Clear(); //wipe settings in case it gets messed up
 
-            pvtInfo.SelectedIndex = (appData.Values.ContainsKey(WindowSettingsKeys.PivotIndex)) ?
+            pvtMain.SelectedIndex = (appData.Values.ContainsKey(WindowSettingsKeys.PivotIndex)) ?
                (int)appData.Values[WindowSettingsKeys.PivotIndex] : 0;
 
             cbTranslationFunction.Items.Clear();
-            cbTranslationFunction2.Items.Clear();
             foreach (var item in TTransFunc.Types)
             {
                 cbTranslationFunction.Items.Add(item);
-                cbTranslationFunction2.Items.Add(item);
             }
 
             cbTranslationFunction.SelectedIndex = (appData.Values.ContainsKey(WindowSettingsKeys.TranslationFunctionIndex)) ?
                 (int)appData.Values[WindowSettingsKeys.TranslationFunctionIndex] : 0;
-            cbTranslationFunction2.SelectedIndex = cbTranslationFunction.SelectedIndex;
 
             tbScanPath.Text = (string)appData.Values[WindowSettingsKeys.Path];
             if (!Directory.Exists(tbScanPath.Text))
@@ -161,20 +154,15 @@ namespace Translator
                 TUtils.CalcPaths(tbScanPath.Text);
             }
 
-            bool? b = (appData.Values.ContainsKey(WindowSettingsKeys.ShowScanHelp)) ?
-               (bool)appData.Values[WindowSettingsKeys.ShowScanHelp] : true;
-            cbShowScanHelp.IsChecked = b ?? true;
-            rtbScanHelp.Visibility = ((bool)cbShowScanHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
+            bool b1 = (appData.Values.ContainsKey(WindowSettingsKeys.ShowHelp)) ?
+               (bool)appData.Values[WindowSettingsKeys.ShowHelp] : true;
+            cbShowHelp.IsChecked = b1;
+            AdjustHelp(b1);
 
-            bool? b1 = (appData.Values.ContainsKey(WindowSettingsKeys.ShowTranslateHelp)) ?
-               (bool)appData.Values[WindowSettingsKeys.ShowTranslateHelp] : true;
-            cbShowTranslateHelp.IsChecked = b ?? true;
-            rtbTranslateHelp.Visibility = ((bool)cbShowTranslateHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
-
-            bool? b2 = (appData.Values.ContainsKey(WindowSettingsKeys.ShowHintsHelp)) ?
-                (bool)appData.Values[WindowSettingsKeys.ShowHintsHelp] : true;
-            cbShowHintsHelp.IsChecked = b ?? true;
-            rtbHintsHelp.Visibility = ((bool)cbShowHintsHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
+            bool? b2 = (appData.Values.ContainsKey(WindowSettingsKeys.ShowDebug)) ?
+               (bool)appData.Values[WindowSettingsKeys.ShowDebug] : true;
+            cbShowDebug.IsChecked = b2 ?? true;
+            TUtils.Debug = ((bool)cbShowDebug.IsChecked ? true : false);
 
             if (appData.Values.ContainsKey(WindowSettingsKeys.Left) &&
                 appData.Values.ContainsKey(WindowSettingsKeys.Top) &&
@@ -218,125 +206,27 @@ namespace Translator
             rtbScanHelp.Visibility = ((bool)cbShowScanHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
         }
 
-        private void CbShowtranslateHelp_Click(object sender, RoutedEventArgs e)
+        private void CbShowHelp_Click(object sender, RoutedEventArgs e)
         {
-            rtbTranslateHelp.Visibility = ((bool)cbShowTranslateHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
+            rtbTranslateHelp.Visibility = ((bool)cbShowHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
         }
 
-        private void CbShowHintsHelp_Click(object sender, RoutedEventArgs e)
+        private void AdjustHelp(bool val)
         {
-            rtbHintsHelp.Visibility = ((bool)cbShowHintsHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
-        }
+            Visibility v = (val ? Visibility.Visible : Visibility.Collapsed);
+            rtbScanHelp.Visibility = v;
+            rtbTranslateHelp.Visibility = v;
 
+        }
+    
         private void TbScanPath_LostFocus(object sender, RoutedEventArgs e)
         {
             TUtils.CalcPaths(tbScanPath.Text.Trim());
-            LoadHints();
-        }
-        #endregion
-
-        #region HINTS
-        private Dictionary<string, string> Hints = new Dictionary<string, string>();
-
-        private void CbTranslationFunction2_SelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
-        {
-            LoadHints();
         }
 
-        public void LoadHints()
+        private void CbShowDebug_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(TUtils.TargetTranslatorHintsPath))
-            {
-                if (cbTranslationFunction2.SelectedValue != null)
-                {
-                    string type = cbTranslationFunction2.SelectedValue.ToString();
-
-                    string loadedJson = File.ReadAllText(TUtils.TargetTranslatorHintsPath);
-                    // Deserialize to a list of LocalizedEntry
-                    var newEntries = JsonSerializer.Deserialize<List<TUtils.HintKeyValEntry>>(
-                        loadedJson,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                    );
-                    foreach (var entry in newEntries)
-                    {
-                        Hints[entry.Key] = entry.Value;
-                    }
-
-                    if (Hints.ContainsKey(type + ":@"))
-                    {
-                        tb1.Text = Hints[type + ":@"];
-                    }
-                    else 
-                    {
-                        tb1.Text = "";
-                    }
-
-                    if (Hints.ContainsKey(type + ":@@"))
-                    {
-                        tb2.Text = Hints[type + ":@@"];
-                    }
-                    else
-                    {
-                        tb2.Text = "";
-                    }
-
-                    if (Hints.ContainsKey(type + ":!"))
-                    {
-                        tb3.Text = Hints[type + ":!"];
-                    }
-                    else
-                    {
-                        tb3.Text = "";
-                    }
-
-                    if (Hints.ContainsKey(type + ":!!"))
-                    {
-                        tb4.Text = Hints[type + ":!!"];
-                    }
-                    else
-                    {
-                        tb4.Text = "";
-                    }
-
-                }
-                else
-                {
-                    tb1.Text = "";
-                    tb2.Text = "";
-                    tb3.Text = "";
-                    tb4.Text = "";
-                }
-            }
-        }
-
-        private void BtnSaveHints_Click(object sender, RoutedEventArgs e)
-        {
-            SaveHints(TUtils.TargetTranslatorHintsPath);
-        }
-
-        public void SaveHints(string path)
-        {
-            if (File.Exists(TUtils.TargetTranslatorHintsPath))
-            {
-                if (cbTranslationFunction2.SelectedValue != null)
-                {
-                    string type = cbTranslationFunction2.SelectedValue.ToString();
-
-                    Hints[type + ":@"] = tb1.Text;
-                    Hints[type + ":@@"] = tb2.Text;
-                    Hints[type + ":!"] = tb3.Text;
-                    Hints[type + ":!!"] = tb4.Text;
-
-                    var entries = Hints.Select(kvp => new TUtils.HintKeyValEntry
-                    {
-                        Key = kvp.Key,
-                        Value = kvp.Value
-                    }).ToList();
-                    var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
-                    string jsonOutput = JsonSerializer.Serialize(entries, jsonOptions);
-                    File.WriteAllText(path, jsonOutput);
-                }
-            }
+            TUtils.Debug = ((bool)cbShowDebug.IsChecked ? true : false);
         }
         #endregion
 
@@ -351,7 +241,7 @@ namespace Translator
 
             if (TUtils.CalcPaths(tbScanPath.Text.Trim()))
             {
-                await TScan.Start(TUtils.TargetRootPath, Hints);
+                await TScan.Start(TUtils.TargetRootPath);
             }
             else
             {
@@ -380,8 +270,8 @@ namespace Translator
 
                 if (TUtils.CalcPaths(tbScanPath.Text.Trim()))
                 {
-                    string mode = cbTranslationFunction.SelectedValue.ToString();
-                    await TTranslate.Start(TUtils.TargetRootPath, mode, Hints);
+                    string translationFunction = cbTranslationFunction.SelectedValue.ToString();
+                    await TTranslate.Start(TUtils.TargetRootPath, translationFunction);
                 }
                 else
                 {

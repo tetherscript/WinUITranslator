@@ -13,6 +13,9 @@ namespace Translator
     {
         public static int ProgressPerc = 0;
         public static bool IsCancelled = false;
+        private static string _tsDown = new string('┬', 30);
+        private static string _tsNeutral = new string('━', 30);
+        private static string _tsUp = new string('┴', 30);
 
         public class SpecialItem
         {
@@ -21,7 +24,7 @@ namespace Translator
             public string Culture { get; set; }
         }
 
-        public static async Task Start(string targetRootPath, string translationFunction, Dictionary<string, string> hints)
+        public static async Task Start(string targetRootPath, string translationFunction)
         {
             IsCancelled = false;
             TLog.Reset();
@@ -31,8 +34,7 @@ namespace Translator
             {
                 await TranslateAsync(
                     translationFunction,
-                    targetRootPath,
-                    hints);
+                    targetRootPath);
 
                 // Once the operation finishes, you can update UI accordingly
                 TLog.Log("Translation complete.");
@@ -51,11 +53,24 @@ namespace Translator
 
         public static async Task TranslateAsync(
           string translationFunction,
-          string targetRootPath,
-          Dictionary<string, string> hints)
+          string targetRootPath)
         {
             TUtils.CalcPaths(targetRootPath);
             ProgressPerc = 0;
+
+            string fromCulture = "en-US";
+
+            if (!TTransFunc.InitGlobal(translationFunction, fromCulture))
+            {
+                TLog.Log(String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}",
+                    translationFunction, fromCulture), true);
+                return;
+            }
+
+            TLog.Log(_tsNeutral);
+            TLog.Log("TRANSLATION FUNCTION DETAILS");
+            TLog.Log(TTransFunc.GetDescription(translationFunction));
+            TLog.Log(_tsNeutral);
 
             #region CACHE
             StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
@@ -96,15 +111,17 @@ namespace Translator
 
             int _translateableCount = 0;
 
+            bool hasAlreadyInittedThisCulture = false;
             foreach (var destDocFilePath in reswFiles)
             {
-                string culture_Name = Path.GetFileName(Path.GetDirectoryName(destDocFilePath)); //en-US, ar-SA etc
-                if (culture_Name != "en-US")
+                string toCulture = Path.GetFileName(Path.GetDirectoryName(destDocFilePath)); //en-US, ar-SA etc
+                if (toCulture != "en-US")
                 {
                     _nonEnUSLanguages++;
+                    hasAlreadyInittedThisCulture = false;
 
                     XDocument destDoc = XDocument.Load(destDocFilePath);
-                    TLog.Log(String.Format("Processing {0}...", culture_Name));
+                    TLog.Log(String.Format("Processing {0}...", toCulture));
 
                     //reset destDoc
                     destDoc.Descendants("data")
@@ -128,38 +145,45 @@ namespace Translator
                         //get translation from cache or call api
                         string translatedText = string.Empty;
                         string cacheIndicator = string.Empty;
-                        string originalText = item.Element("value").Value;
-                        string translationHint = item.Element("comment").Value;
+                        string textToTranslate = item.Element("value").Value;
+                        string hintToken = item.Element("comment").Value;
 
                         //reject names with periods in it 'close.btn' or 'loading....';
 
-                        if ((translationHint != "!") && (translationHint != "@") && (translationHint != "@@") && (translationHint != "!!"))
+                        if ((hintToken != "!") && (hintToken != "@") && (hintToken != "@@") && (hintToken != "!!"))
                         {
                             //if there's a x:Uid, we usuall expect hint tokens
                             //if translationHint is not !, !!, @ or @@ prefix, so we won't translate or cache it
                         }
                         else
                         {
-                            string cacheKey = String.Format("{0}:{1}:{2}", culture_Name, translationHint, originalText);
+                            string cacheKey = String.Format("{0}:{1}:{2}", toCulture, hintToken, textToTranslate);
                             string cachedData = TCache.GetValue(cacheKey);
                             if (cachedData != null)
                             {
                                 translatedText = cachedData;
-                                TLog.Log(String.Format("  Cache hit: {0}:{1}:{2}", culture_Name, translationHint, originalText));
+                                TLog.Log(String.Format("  Cache hit: {0}:{1}:{2}", toCulture, hintToken, textToTranslate));
                                 _cacheHitCounter++;
                             }
                             else
                             {
                                 _cacheMissCounter++;
-                                translatedText = TTransFunc.Translate(hints, translationFunction, originalText, culture_Name, translationHint);
-                                TLog.Log(String.Format("  Cache miss: {0}:{1}:{2} --> Translated", culture_Name, translationHint, originalText));
+
+                                if (!hasAlreadyInittedThisCulture)
+                                {
+                                    TTransFunc.InitPerCulture(translationFunction, fromCulture, toCulture);
+                                    hasAlreadyInittedThisCulture = true;
+                                }
+
+                                translatedText = TTransFunc.Translate(translationFunction, fromCulture, toCulture, textToTranslate, hintToken);
+                                TLog.Log(String.Format("  Cache miss: {0}:{1}:{2} --> {3}", toCulture, hintToken, textToTranslate, translatedText));
                                 if (translatedText == null)
                                 {
                                     //null returned, so skip it - could be a bad translation or critical failed attempt?
-                                    //it is important to know of these, as it could be a missing translation like on an obscure control on a seldom-used page.
                                     _failedTranslationCounter++;
-                                    //have the translation function add diagnostics to log
-                                    TLog.Log("Failed translation function call.", true);
+                                    TLog.Log(String.Format("TTransFunc.Translate failed: translationFunction={0}, fromCulture={1}," +
+                                        "toCulture={2}, hintToken={3}, textToTranslate={4}",
+                                        translationFunction, fromCulture, toCulture, hintToken, textToTranslate), true);
                                     continue;
                                 }
                                 await TCache.AddEntryAsync(cacheKey, translatedText);
@@ -187,7 +211,7 @@ namespace Translator
 
                     //add the specials
                     TLog.Log("  Checking for specials...");
-                    foreach (var item in SpecialItems.Where(item => item.Culture == culture_Name))
+                    foreach (var item in SpecialItems.Where(item => item.Culture == toCulture))
                     {
                         TLog.Log("  Adding special: " + item.Key.ToString() + "=" + item.Value.ToString());
 
@@ -204,20 +228,10 @@ namespace Translator
 
                 }
             }
-            TLog.Log("*****************************");
-            
-            TLog.LogInsert("*****************************");
 
-            //TLog.LogInsert(String.Format(@"Summary: {0} translateable items found in en-US\Resources.resw", _translateableCount));
-            //TLog.LogInsert(String.Format("Summary: translated to {0} non-en-US languages", _nonEnUSLanguages));
-            //TLog.LogInsert(String.Format("Summary: {0} cache hits", _cacheHitCounter));
-            //TLog.LogInsert(String.Format("Summary: {0} cache misses", _cacheMissCounter));
-            //TLog.LogInsert(String.Format("Summary: {0} failed translations", _failedTranslationCounter));
-            //if (_failedTranslationCounter > 0)
-            //{
-            //    TLog.LogInsert("Some translations have failed: Examine log closely to troubleshoot.", true);
-            //}
-            //TLog.LogInsert("****************");
+            TLog.Log(_tsNeutral);
+
+            TLog.LogInsert(_tsNeutral);
 
             string smx = string.Empty;
             string sm = "The {0} translateable items in en-US\\Resources.resw were translated to {1} languages with {2} cache hits and {3} misses.";
@@ -245,7 +259,8 @@ namespace Translator
             {
                 TLog.LogInsert("Some translations have failed: Examine log closely to troubleshoot.", true);
             }
-            TLog.LogInsert("********** SUMMARY **********");
+            TLog.LogInsert("SUMMARY");
+            TLog.LogInsert(_tsNeutral);
 
             #endregion
 

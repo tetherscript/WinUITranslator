@@ -37,7 +37,7 @@ namespace Translator
             //{ "ToggleButton", new[] { "Content" } }
         };
 
-        public static async Task Start(string targetRootPath, Dictionary<string, string> hints)
+        public static async Task Start(string targetRootPath)
         {
             IsCancelled = false;
             TLog.ClearAllFiles();
