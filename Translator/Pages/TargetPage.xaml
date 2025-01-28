@@ -7,8 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <converters:InvBoolConv
@@ -83,17 +82,17 @@
                     <StackPanel>
                         <TextBlock
                             TextWrapping="WrapWholeWords"
-                            Text="\Strings\en-US\Resources.resw">
+                            Text="\Strings\en-US\Resources.resw  -- this is the 'fromCulture'">
                         </TextBlock>
 
                         <TextBlock
                             TextWrapping="WrapWholeWords"
-                            Text="\Strings\fr-FR\Resources.resw">
+                            Text="\Strings\fr-FR\Resources.resw -- this is a 'toCulture'">
                         </TextBlock>
 
                         <TextBlock
                             TextWrapping="WrapWholeWords"
-                            Text="\Strings\ar-SA\Resources.resw">
+                            Text="\Strings\ar-SA\Resources.resw -- this is a 'toCulture'">
                         </TextBlock>
 
                         <TextBlock

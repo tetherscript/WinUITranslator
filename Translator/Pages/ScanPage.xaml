@@ -7,8 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <converters:InvBoolConv
@@ -54,7 +53,7 @@
             </StackPanel>
             <TextBlock
                 TextWrapping="WrapWholeWords"
-                Text="The scan will search the target project for translateable items.  These items are .xaml elements with a x:Uid and Hint Token as well as the history of any TLocalized.Get() calls.">
+                Text="The scan searches the target project for translatable elements, including .xaml elements with x:Uid and Hint Token prefixes, as well as any historical TLocalized.Get() calls. These items are then saved to the \Strings\en-US\Resources.resw file.">
             </TextBlock>
 
         </StackPanel>

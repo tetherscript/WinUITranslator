@@ -2,13 +2,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media.Animation;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using Windows.Devices.AllJoyn;
 using Windows.Graphics;
 using Windows.Storage;
 
@@ -17,7 +11,6 @@ namespace Translator
 {
     public sealed partial class MainWindow : Window
     {
-        #region LIFECYCLE
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
@@ -27,9 +20,6 @@ namespace Translator
         private const int WM_SETICON = 0x0080;
         private const uint IMAGE_ICON = 1;
         private const uint LR_LOADFROMFILE = 0x00000010;
-
-        private SynchronizationContext callersCtx;
-        private System.Timers.Timer TranslationStatusTimer;
 
         private readonly TVm _vm = App.Vm;
         public TVm Vm { get => _vm; }
@@ -50,8 +40,6 @@ namespace Translator
 
             TSettings.Load();
 
-            callersCtx = SynchronizationContext.Current;
-
             nint MainWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(this);
             ExtendsContentIntoTitleBar = true;
 
@@ -65,160 +53,19 @@ namespace Translator
                 SendMessage(MainWindowHandle, WM_SETICON, new IntPtr(1), hIcon); // Large icon
             }
 
-            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
-            tbTitle.Text = "WinUITranslator";
-
-            TranslationStatusTimer = new(interval: 1000);
-            TranslationStatusTimer.Stop();
-            TranslationStatusTimer.AutoReset = false;
-            TranslationStatusTimer.Elapsed += (sender, e) => TranslationStatusTimerElapsed();
-
-
-
             frMainPage.Navigate(typeof(MainPage), null, new SuppressNavigationTransitionInfo());
-        }
-
-        private void TranslationStatusTimerElapsed()
-        {
-            TranslationStatusTimer.Stop();
-            callersCtx?.Post(new SendOrPostCallback((_) => UpdateTranslateStatus()), null);
-            TranslationStatusTimer.Start();
-        }
-
-        private void UpdateTranslateStatus()
-        {
-            //tbTranslateLog.Text = TLog.Text;
-            //pbTranslate.Value = TTranslate.ProgressPerc;
         }
 
         private void GrdMain_Loaded(object sender, RoutedEventArgs e)
         {
             grdMain.FlowDirection = (App.IsRTL ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
-
             RestoreWindowSizePos(this);
-
-
-
         }
 
         private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
         {
-            TranslationStatusTimer.Stop();
             SaveWindowSizePos(this);
             TSettings.Save();
-        }
-        #endregion
-
-        #region SETTINGS
-        public static class WindowSettingsKeys
-        {
-            public const string Left = "WindowLeft";
-            public const string Top = "WindowTop";
-            public const string Width = "WindowWidth";
-            public const string Height = "WindowHeight";
-            public const string Scale = "WindowScale";
-            public const string Target = "Target";
-            public const string TranslationFunctionIndex = "TranslationFunctionIndex";
-            public const string PivotIndex = "PivotIndex";
-            public const string ShowHelp = "ShowHelp";
-            public const string ShowDebug = "ShowDebug";
-        }
-
-        private void SaveWindowState(Window window)
-        {
-            var appData = ApplicationData.Current.LocalSettings;
-            var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
-            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
-            var appWindow = AppWindow.GetFromWindowId(windowId);
-
-            var size = appWindow.Size;
-            var position = appWindow.Position;
-
-            appData.Values[WindowSettingsKeys.Left] = position.X;
-            appData.Values[WindowSettingsKeys.Top] = position.Y;
-            appData.Values[WindowSettingsKeys.Width] = size.Width;
-            appData.Values[WindowSettingsKeys.Height] = size.Height;
-            appData.Values[WindowSettingsKeys.Scale] = grdMain.XamlRoot.RasterizationScale;
-            appData.Values[WindowSettingsKeys.Target] = tbScanPath.Text;
-            appData.Values[WindowSettingsKeys.TranslationFunctionIndex] = cbTranslationFunction.SelectedIndex;
-            appData.Values[WindowSettingsKeys.PivotIndex] = pvtMain.SelectedIndex;
-            appData.Values[WindowSettingsKeys.ShowHelp] = cbShowHelp.IsChecked;
-            appData.Values[WindowSettingsKeys.ShowDebug] = cbShowDebug.IsChecked;
-        }
-
-        private void RestoreWindowState(Window window)
-        {
-            var appData = ApplicationData.Current.LocalSettings;
-
-            //appData.Values.Clear(); //wipe settings in case it gets messed up
-
-            pvtMain.SelectedIndex = (appData.Values.ContainsKey(WindowSettingsKeys.PivotIndex)) ?
-               (int)appData.Values[WindowSettingsKeys.PivotIndex] : 0;
-
-            cbTranslationFunction.Items.Clear();
-            foreach (var item in TTransFunc.Types)
-            {
-                cbTranslationFunction.Items.Add(item);
-            }
-
-            cbTranslationFunction.SelectedIndex = (appData.Values.ContainsKey(WindowSettingsKeys.TranslationFunctionIndex)) ?
-                (int)appData.Values[WindowSettingsKeys.TranslationFunctionIndex] : 0;
-
-            tbScanPath.Text = (string)appData.Values[WindowSettingsKeys.Target];
-            if (!Directory.Exists(tbScanPath.Text))
-            {
-                tbScanPath.Text = "";
-            }
-            else
-            {
-                TUtils.CalcPaths(tbScanPath.Text);
-            }
-
-            bool b1 = (appData.Values.ContainsKey(WindowSettingsKeys.ShowHelp)) ?
-               (bool)appData.Values[WindowSettingsKeys.ShowHelp] : true;
-            cbShowHelp.IsChecked = b1;
-            AdjustHelp(b1);
-
-            bool? b2 = (appData.Values.ContainsKey(WindowSettingsKeys.ShowDebug)) ?
-               (bool)appData.Values[WindowSettingsKeys.ShowDebug] : true;
-            cbShowDebug.IsChecked = b2 ?? true;
-            TUtils.Debug = ((bool)cbShowDebug.IsChecked ? true : false);
-
-            if (appData.Values.ContainsKey(WindowSettingsKeys.Left) &&
-                appData.Values.ContainsKey(WindowSettingsKeys.Top) &&
-                appData.Values.ContainsKey(WindowSettingsKeys.Width) &&
-                appData.Values.ContainsKey(WindowSettingsKeys.Height) &&
-                appData.Values.ContainsKey(WindowSettingsKeys.Scale))
-            {
-                var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
-                var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
-                var appWindow = AppWindow.GetFromWindowId(windowId);
-
-                var left = (int)appData.Values[WindowSettingsKeys.Left];
-                var top = (int)appData.Values[WindowSettingsKeys.Top];
-                var width = (int)appData.Values[WindowSettingsKeys.Width];
-                var height = (int)appData.Values[WindowSettingsKeys.Height];
-                var scale = (double)appData.Values[WindowSettingsKeys.Scale];
-
-                double InitialRasterizationScale = grdMain.XamlRoot.RasterizationScale;
-                double InitialScaleFactor = InitialRasterizationScale / scale;
-
-                appWindow.Move(new PointInt32 { X = left, Y = top });
-                appWindow.Resize(new SizeInt32
-                {
-                    Width = (int)Math.Truncate(width * InitialScaleFactor),
-                    Height = (int)Math.Truncate(height * InitialScaleFactor)
-                });
-            }
-            else
-            {
-                // Set default size and position if no settings are found
-                var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
-                var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
-                var appWindow = AppWindow.GetFromWindowId(windowId);
-                appWindow.Move(new PointInt32 { X = 100, Y = 100 });
-                appWindow.Resize(new SizeInt32 { Width = 800, Height = 600 });
-            }
         }
 
         private void RestoreWindowSizePos(Window window)
@@ -246,7 +93,6 @@ namespace Translator
 
         private void SaveWindowSizePos(Window window)
         {
-
             var appData = ApplicationData.Current.LocalSettings;
             var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
             var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
@@ -260,100 +106,6 @@ namespace Translator
             TSettings.WindowWidth = size.Width;
             TSettings.WindowHeight = size.Height;
             TSettings.WindowScale = grdMain.XamlRoot.RasterizationScale;
-        }
-
-
-        private void CbShowScanHelp_Click(object sender, RoutedEventArgs e)
-        {
-            rtbScanHelp.Visibility = ((bool)cbShowScanHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
-        }
-
-        private void CbShowHelp_Click(object sender, RoutedEventArgs e)
-        {
-            rtbTranslateHelp.Visibility = ((bool)cbShowHelp.IsChecked ? Visibility.Visible : Visibility.Collapsed);
-        }
-
-        private void AdjustHelp(bool val)
-        {
-            Visibility v = (val ? Visibility.Visible : Visibility.Collapsed);
-            rtbScanHelp.Visibility = v;
-            rtbTranslateHelp.Visibility = v;
-
-        }
-    
-        private void TbScanPath_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TUtils.CalcPaths(tbScanPath.Text.Trim());
-        }
-
-        private void CbShowDebug_Click(object sender, RoutedEventArgs e)
-        {
-            TUtils.Debug = ((bool)cbShowDebug.IsChecked ? true : false);
-        }
-        #endregion
-
-        //SCAN
-        private async void btnScan_Click(object sender, RoutedEventArgs e)
-        {
-            TLog.Reset();
-            btnScan.IsEnabled = false;
-            tbScanLog.IsEnabled = false;
-            prScan.IsActive = true;
-            await Task.Delay(1000);
-
-            if (TUtils.CalcPaths(tbScanPath.Text.Trim()))
-            {
-                await TScan.Start(TUtils.TargetRootPath);
-            }
-            else
-            {
-                TLog.Log("Target root path does not exist: " + tbScanPath.Text.Trim(), true);
-            }
-
-            tbScanLog.Text = TLog.Text;
-            prScan.IsActive = false;
-            tbScanLog.IsEnabled = true;
-            btnScan.IsEnabled = true;
-        }
-
-        //TRANSLATE
-        private async void BtnTranslateStart_Click(object sender, RoutedEventArgs e)
-        {
-            if (cbTranslationFunction.SelectedValue != null)
-            {
-                TLog.Reset();
-                btnTranslateStart.IsEnabled = false;
-                btnTranslateStop.IsEnabled = true;
-                cbTranslationFunction.IsEnabled = false;
-                tbTranslateLog.IsEnabled = false;
-                prTranslate.IsActive = true;
-                //pbTranslate.Value = TTranslate.ProgressPerc;
-                TranslationStatusTimer.Start();
-
-                if (TUtils.CalcPaths(tbScanPath.Text.Trim()))
-                {
-                    string translationFunction = cbTranslationFunction.SelectedValue.ToString();
-                    await TTranslate.Start(TUtils.TargetRootPath, translationFunction);
-                }
-                else
-                {
-                    TLog.Log("Target root path does not exist: " + tbScanPath.Text.Trim(), true);
-                }
-                tbTranslateLog.Text = TLog.Text;
-
-                TranslationStatusTimer.Stop();
-                btnTranslateStart.IsEnabled = true;
-                btnTranslateStop.IsEnabled = false;
-                cbTranslationFunction.IsEnabled = true;
-                tbTranslateLog.IsEnabled = true;
-                prTranslate.IsActive = false;
-                //pbTranslate.Value = TTranslate.ProgressPerc;
-            }
-        }
-
-        private void BtnTranslateStop_Click(object sender, RoutedEventArgs e)
-        {
-            TTranslate.Stop();
         }
 
     }

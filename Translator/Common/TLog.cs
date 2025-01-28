@@ -9,18 +9,34 @@ namespace Translator
         public enum eMode { scan, translate, system }
 
         private static int _logCounter = 0;
+        private static int _errorCounter = 0;
+        public static int ErrorCounter { 
+            get
+            {
+                return _errorCounter;
+            }
+        }
+
+        public static string TsDown = new string('▼', 30);
+        public static string TsNeutral = new string('━', 60);
+        public static string TsUp = new string('▲', 30);
+
         public static string Text = string.Empty;
         public static eMode Mode = eMode.system;
 
         public static void Log(string msg, bool isError = false)
         {
-            string s = string.Empty;
             if (isError)
             {
-                s = ">>>>>> ";
+                Text = Text + TsDown + Environment.NewLine;
+                Text = Text + "ERROR" + Environment.NewLine;
+                _errorCounter++;
             }
-            s = s + String.Format(@"{0}{1}", msg, Environment.NewLine);
-            Text = Text + s;
+            Text = Text + String.Format(@"{0}{1}", msg, Environment.NewLine);
+            if (isError)
+            {
+                Text = Text + TsUp + Environment.NewLine;
+            }
             if (Mode == eMode.scan)
             {
                 App.Vm.ScanLog = Text;
@@ -30,8 +46,6 @@ namespace Translator
             {
                 App.Vm.TranslateLog = Text;
             }
-
-
             _logCounter++;
         }
 
@@ -41,6 +55,7 @@ namespace Translator
             if (isError)
             {
                 s = ">>>>>> ";
+                _errorCounter++;
 
             }
             s = s + String.Format(@"{0}{1}", msg, Environment.NewLine);
@@ -60,6 +75,7 @@ namespace Translator
         public static void Reset()
         {
             _logCounter = 0;
+            _errorCounter = 0;
             Text = "";
         }
 

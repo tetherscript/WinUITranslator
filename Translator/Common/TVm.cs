@@ -1,12 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace Translator
 {
@@ -17,7 +13,6 @@ namespace Translator
             public string Display { get; set; } = display;
             public string Value { get; set; } = name;
         }
-
 
         private nint _mainWindowHandle;
         public nint MainWindowHandle
@@ -32,7 +27,8 @@ namespace Translator
         private string[] _arguments = arguments;
         public string[] Arguments { get => _arguments; set => _arguments = value; }
 
-
+        [ObservableProperty]
+        private string _title = "Translator";
 
         [ObservableProperty]
         private ElementTheme _theme;
@@ -54,19 +50,17 @@ namespace Translator
             TUtils.Debug = newValue;
         }
 
-
         [ObservableProperty]
         private bool _isBusy = false;
 
         [ObservableProperty]
         private string _target;
 
-
-
-        #region SCANNING
+        #region SCAN
         [RelayCommand]
         private async Task StartScan()
         {
+            TLog.Reset();
             TLog.Mode = TLog.eMode.scan;
             if (TUtils.CalcPaths(Target))
             {
@@ -91,10 +85,6 @@ namespace Translator
         private string _scanLog;
         #endregion
 
-
-
-
-
         #region TRANSLATE
         [ObservableProperty]
         List<TTransFuncName> _translationFunctions = new();
@@ -106,6 +96,7 @@ namespace Translator
         private async Task StartTranslate()
         {
             TLog.Mode = TLog.eMode.translate;
+            TLog.Reset();
             if (TUtils.CalcPaths(Target))
             {
                 IsBusy = true;

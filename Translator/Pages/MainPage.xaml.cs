@@ -1,19 +1,6 @@
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Microsoft.UI.Xaml.Media.Animation;
-using System.Runtime.CompilerServices;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Translator
 {
@@ -32,12 +19,7 @@ namespace Translator
         {
             this.InitializeComponent();
             DataContext = this;
-
             PopulateNavigationViewHeader(Symbol.Home, "Home");
-
-            
-
-
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -108,7 +90,7 @@ namespace Translator
             switch (tag)
             {
                 case "Settings":
-                    PopulateNavigationViewHeader(Symbol.Help, "Introduction");
+                    PopulateNavigationViewHeader(Symbol.Setting, "Settings");
                     frMain.Navigate(typeof(SettingsPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
             }

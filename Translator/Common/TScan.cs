@@ -85,7 +85,7 @@ namespace Translator
             }
 
 
-            TLog.Log("---------------------------------------");
+            TLog.Log(TLog.TsNeutral);
             TLog.Log("Scanning target project: " + targetRootPath);
 
             var entriesMap = new Dictionary<string, string>();
@@ -252,7 +252,7 @@ namespace Translator
                     //reject items that have invalid XAM/ c# identifiers in the key as this will cause app start fails
                     if (!TLocalized.IsValidXamlIdentifier(uid))
                     {
-                        TLog.Log(String.Format("  ***Rejected {0}:x:Uid='{1}' as it is an invalid XAML/C# resource identifier.", filePath, uid));
+                        TLog.Log(String.Format("Rejected {0}:x:Uid='{1}' as it is an invalid XAML/C# resource identifier.", filePath, uid), true);
                         continue;
                         //// XAML/C# rules: The first character must be a letter or underscore.
                         ///// Subsequent characters can be letters, digits, or underscores.
@@ -395,10 +395,9 @@ namespace Translator
             doc.Save(path);
             TLog.Log("en-US/Resources.resw updated.");
 
-            TLog.LogInsert("****************");
+            TLog.LogInsert(String.Format("Summary: {0} errors", TLog.ErrorCounter));
             TLog.LogInsert(String.Format("Summary: {0} translateable items found", _counter));
-            TLog.LogInsert("****************");
-
+            TLog.LogInsert(TLog.TsNeutral);
         }
 
     }

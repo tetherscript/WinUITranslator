@@ -36,6 +36,8 @@
         x:Name="nvMain"
         HeaderTemplate="{StaticResource HeaderTemplate}"
         IsBackButtonVisible="Collapsed"
+        IsTabStop="False"
+        OpenPaneLength="250"
         SelectionChanged="NvMain_SelectionChanged"
         AlwaysShowHeader="True">
         

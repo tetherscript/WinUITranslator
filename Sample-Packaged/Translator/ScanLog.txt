@@ -1,11 +1,14 @@
-****************
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Summary: 18 translateable items found
-****************
----------------------------------------
+Summary: 1 errors
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Scanning target project: E:\Code\VS\TranslatorNet8\Sample-Packaged
 Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\App.xaml
 Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml
-  ***Rejected E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
+▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+ERROR
+Rejected E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
+▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 Checking .csproj for linked .xaml's...
 Merging E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\TLocalizedGets.json...
 Found 4 mergeable entries.

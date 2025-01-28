@@ -7,8 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <converters:InvBoolConv
@@ -72,7 +71,7 @@
             </StackPanel>
             <TextBlock
                 TextWrapping="WrapWholeWords"
-                Text="The scan will search the target project for translateable items.  These items are .xaml elements with a x:Uid and Hint Token as well as the history of any TLocalized.Get() calls.">
+                Text="For each language listed in the target project's \Strings folder, excluding en-US, every translatable item is sent to the selected Translation Function for processing. The resulting translations are then stored in their corresponding Resources.resw files.  When complete, run the target project and you should see the translations.  See the sample app code for language testing tips.">
             </TextBlock>
 
         </StackPanel>
