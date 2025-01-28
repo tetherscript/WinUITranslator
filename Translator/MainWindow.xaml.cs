@@ -5,7 +5,8 @@ using System;
 using System.Runtime.InteropServices;
 using Windows.Graphics;
 using Windows.Storage;
-
+using WinRT.Interop;
+using System.Diagnostics;
 
 namespace Translator
 {
@@ -17,12 +18,21 @@ namespace Translator
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr LoadImage(IntPtr hInstance, string lpIconName, uint uType, int cxDesired, int cyDesired, uint fuLoad);
 
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        // Constants for showing/hiding
+        private const int SW_HIDE = 0;
+        private const int SW_SHOW = 5;
+
         private const int WM_SETICON = 0x0080;
         private const uint IMAGE_ICON = 1;
         private const uint LR_LOADFROMFILE = 0x00000010;
 
         private readonly TVm _vm = App.Vm;
         public TVm Vm { get => _vm; }
+
+        private IntPtr _hWnd;
 
         public MainWindow()
         {
@@ -37,7 +47,6 @@ namespace Translator
             {
                 Vm.TranslationFunctions.Add(new TVm.TTransFuncName(item, item));
             }
-
             TSettings.Load();
 
             nint MainWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(this);
@@ -60,12 +69,32 @@ namespace Translator
         {
             grdMain.FlowDirection = (App.IsRTL ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
             RestoreWindowSizePos(this);
+            IntPtr hWnd = WindowNative.GetWindowHandle(this);
+            ShowWindow(hWnd, SW_SHOW);
         }
 
+        private bool _firstActivation = true;
+        private void Window_Activated(object sender, WindowActivatedEventArgs args)
+        {
+            IntPtr hWnd = WindowNative.GetWindowHandle(this);
+
+            // Hide
+            if (_firstActivation)
+            {
+                _firstActivation = false;
+                ShowWindow(hWnd, SW_HIDE);
+            }
+        }
+            
         private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
         {
             SaveWindowSizePos(this);
             TSettings.Save();
+        }
+
+        private void LogWin(int width, float scale)
+        {
+            Debug.WriteLine(width.ToString(), scale.ToString());
         }
 
         private void RestoreWindowSizePos(Window window)
@@ -79,16 +108,38 @@ namespace Translator
             var width = TSettings.WindowWidth;
             var height = TSettings.WindowHeight;
             var scale = TSettings.WindowScale;
-
+            LogWin(width, (float)scale);
             double InitialRasterizationScale = grdMain.XamlRoot.RasterizationScale;
-            double InitialScaleFactor = InitialRasterizationScale / scale;
+            double InitialScaleFactor;
 
+            if (InitialRasterizationScale <= scale)
+            {
+                InitialScaleFactor = scale / InitialRasterizationScale;
+            }
+            else
+            {
+                InitialScaleFactor = InitialRasterizationScale / scale;
+            }
+            InitialScaleFactor = scale;
+
+            InitialScaleFactor = 1.0f;
+            if (TSettings.IsMaximized)
+            {
+                OverlappedPresenter presenter = (OverlappedPresenter)appWindow.Presenter;
+                appWindow.Move(new PointInt32 { X = left, Y = top });
+                presenter.Maximize();
+            }
+            else
+            {
             appWindow.Move(new PointInt32 { X = left, Y = top });
             appWindow.Resize(new SizeInt32
             {
                 Width = (int)Math.Truncate(width * InitialScaleFactor),
                 Height = (int)Math.Truncate(height * InitialScaleFactor)
             });
+
+            }
+
         }
 
         private void SaveWindowSizePos(Window window)
@@ -106,6 +157,12 @@ namespace Translator
             TSettings.WindowWidth = size.Width;
             TSettings.WindowHeight = size.Height;
             TSettings.WindowScale = grdMain.XamlRoot.RasterizationScale;
+
+            LogWin(size.Width, (float)grdMain.XamlRoot.RasterizationScale);
+
+
+            OverlappedPresenter presenter = (OverlappedPresenter)appWindow.Presenter;
+            TSettings.IsMaximized = (presenter.State == OverlappedPresenterState.Maximized);
         }
 
     }

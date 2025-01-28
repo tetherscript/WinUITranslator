@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.VoiceCommands;
-using Windows.Storage;
+﻿using Windows.Storage;
 
 namespace Translator
 {
     public static class TSettings
     {
-        public static int WindowLeft = 100;
-        public static int WindowTop = 100;
-        public static int WindowWidth = 800;
-        public static int WindowHeight = 600;
-        public static double WindowScale = 1.0f;
-        public static string LastNavItemTag = "Target";
+        public static int WindowLeft;
+        public static int WindowTop;
+        public static int WindowWidth;
+        public static int WindowHeight;
+        public static double WindowScale;
+        public static string LastNavItemTag;
+        public static bool IsMaximized;
 
         public static class AppSettingsKeys
         {
+            public const string IsMaximized = "IsMaximized";
             public const string WindowLeft = "WindowLeft";
             public const string WindowTop = "WindowTop";
             public const string WindowWidth = "WindowWidth";
@@ -52,6 +48,9 @@ namespace Translator
             LastNavItemTag = (appData.Values.ContainsKey(AppSettingsKeys.LastNavItemTag)) ?
                 (string)appData.Values[AppSettingsKeys.LastNavItemTag] : "Target";
 
+            IsMaximized = (appData.Values.ContainsKey(AppSettingsKeys.IsMaximized)) ?
+                (bool)appData.Values[AppSettingsKeys.IsMaximized] : false;
+
             WindowLeft = (appData.Values.ContainsKey(AppSettingsKeys.WindowLeft)) ?
                 (int)appData.Values[AppSettingsKeys.WindowLeft] : 100;
 
@@ -78,14 +77,13 @@ namespace Translator
             appData.Values[AppSettingsKeys.Target] = App.Vm.Target;
             appData.Values[AppSettingsKeys.SelectedTranslationFunction] = App.Vm.SelectedTranslationFunction;
 
+            appData.Values[AppSettingsKeys.IsMaximized] = IsMaximized;
             appData.Values[AppSettingsKeys.WindowLeft] = WindowLeft;
             appData.Values[AppSettingsKeys.WindowTop] = WindowTop;
             appData.Values[AppSettingsKeys.WindowWidth] = WindowWidth;
             appData.Values[AppSettingsKeys.WindowHeight] = WindowHeight;
             appData.Values[AppSettingsKeys.WindowScale] = WindowScale;
             appData.Values[AppSettingsKeys.LastNavItemTag] = LastNavItemTag;
-
-
         }
 
     }
