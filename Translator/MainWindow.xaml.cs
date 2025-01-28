@@ -92,11 +92,6 @@ namespace Translator
             TSettings.Save();
         }
 
-        private void LogWin(int width, float scale)
-        {
-            Debug.WriteLine(width.ToString(), scale.ToString());
-        }
-
         private void RestoreWindowSizePos(Window window)
         {
             var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
@@ -108,21 +103,8 @@ namespace Translator
             var width = TSettings.WindowWidth;
             var height = TSettings.WindowHeight;
             var scale = TSettings.WindowScale;
-            LogWin(width, (float)scale);
             double InitialRasterizationScale = grdMain.XamlRoot.RasterizationScale;
-            double InitialScaleFactor;
-
-            if (InitialRasterizationScale <= scale)
-            {
-                InitialScaleFactor = scale / InitialRasterizationScale;
-            }
-            else
-            {
-                InitialScaleFactor = InitialRasterizationScale / scale;
-            }
-            InitialScaleFactor = scale;
-
-            InitialScaleFactor = 1.0f;
+            double InitialScaleFactor = InitialRasterizationScale / scale; 
             if (TSettings.IsMaximized)
             {
                 OverlappedPresenter presenter = (OverlappedPresenter)appWindow.Presenter;
@@ -139,7 +121,6 @@ namespace Translator
             });
 
             }
-
         }
 
         private void SaveWindowSizePos(Window window)
@@ -157,9 +138,6 @@ namespace Translator
             TSettings.WindowWidth = size.Width;
             TSettings.WindowHeight = size.Height;
             TSettings.WindowScale = grdMain.XamlRoot.RasterizationScale;
-
-            LogWin(size.Width, (float)grdMain.XamlRoot.RasterizationScale);
-
 
             OverlappedPresenter presenter = (OverlappedPresenter)appWindow.Presenter;
             TSettings.IsMaximized = (presenter.State == OverlappedPresenterState.Maximized);
