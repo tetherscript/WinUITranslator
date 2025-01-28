@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Translator.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Translator"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <Thickness
+            x:Key="NavigationViewHeaderMargin">10,20,0,20</Thickness>
+
+        <!-- DataTemplate for NavigationViewItem Header -->
+        <DataTemplate
+            x:Key="HeaderTemplate">
+            <StackPanel
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                Margin="0">
+                <SymbolIcon
+                    Symbol="{Binding NavIcon}"
+                    Width="24"
+                    Height="24"
+                    Margin="0,0,10,0" />
+                <TextBlock
+                    Text="{Binding NavLabel}"
+                    Style="{StaticResource SubtitleTextBlockStyle}" />
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    
+    <NavigationView
+        x:Name="nvMain"
+        HeaderTemplate="{StaticResource HeaderTemplate}"
+        IsBackButtonVisible="Collapsed"
+        SelectionChanged="NvMain_SelectionChanged"
+        AlwaysShowHeader="True">
+        
+        <NavigationView.MenuItems>
+            <NavigationViewItem
+                x:Name="nviTarget"
+                Icon="Folder"
+                Content="1. Target a Project"
+                Tag="Target" />
+            <NavigationViewItem
+                x:Name="nviScan"
+                Icon="Find"
+                Content="2. Scan Target Project"
+                Tag="Scan" />
+            <NavigationViewItem
+                x:Name="nviTranslate"
+                Icon="Globe"
+                Content="3. Translate Scan Results"
+                Tag="Translate" />
+
+        </NavigationView.MenuItems>
+        <Frame
+            x:Name="frMain" />
+    </NavigationView>
+</Page>

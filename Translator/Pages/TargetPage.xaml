@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Translator.TargetPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Translator"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Translator"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <converters:InvBoolConv
+            x:Key="InvBoolConv" />
+    </Page.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer
+            Grid.Row="0">
+            <StackPanel
+                Spacing="20"
+                Margin="10,10,10,10">
+
+                <TextBlock
+                    TextWrapping="WrapWholeWords"
+                    Text="This is the project you want to translate.">
+                </TextBlock>
+
+                <StackPanel
+                    Spacing="20">
+                    <StackPanel
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                       
+                        <TextBox
+                            Header="Target Project Root Path"
+                            x:Name="tbScanPath"
+                            Width="800"
+                            IsReadOnly="False"
+                            HorizontalAlignment="Left"
+                            Text="{x:Bind Vm.Target, Mode=TwoWay}"
+                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                            PlaceholderText="C:\Repo\WinUITranslator\Sample-Packaged"
+                            TextAlignment="Left">
+                        </TextBox>
+
+                    </StackPanel>
+                
+                    <TextBlock
+                        Text="ex: C:\Repo\WinUITranslator\Sample-Packaged">
+                    </TextBlock>
+
+                    <TextBlock
+                        TextWrapping="WrapWholeWords"
+                        Text="Note: The Target Root Path must contain the target .csproj file.">
+                    </TextBlock>
+
+                    <TextBlock
+                        TextWrapping="WrapWholeWords"
+                        Text="Note: Create a \Translator folder in the target root folder and copy all contents from thisApp\Target\Translator into it. This setup only needs to be done once.  Do not deploy or publish the contents of this folder or include it in builds  (build action = none, do not copy).">
+                    </TextBlock>
+
+                    <TextBlock
+                        TextWrapping="WrapWholeWords"
+                        Text="Note: If the target project needs to do any dynamic translation (like a status message that you compose programmatically), you must include thisApp\Target\Translator\TLocalized.cs.  You can copy it to the target project, or link to it (recommended).">
+                    </TextBlock>
+
+                    <TextBlock
+                        TextWrapping="WrapWholeWords"
+                        Text="Note: For each desired language, make sure the target project has a \Strings folder with a culture subfolder.  Copy the \Translator\Resources.resw to the subfolders.  It should look like:">
+                    </TextBlock>
+
+                    <StackPanel>
+                        <TextBlock
+                            TextWrapping="WrapWholeWords"
+                            Text="\Strings\en-US\Resources.resw">
+                        </TextBlock>
+
+                        <TextBlock
+                            TextWrapping="WrapWholeWords"
+                            Text="\Strings\fr-FR\Resources.resw">
+                        </TextBlock>
+
+                        <TextBlock
+                            TextWrapping="WrapWholeWords"
+                            Text="\Strings\ar-SA\Resources.resw">
+                        </TextBlock>
+
+                        <TextBlock
+                            TextWrapping="WrapWholeWords"
+                            Text="etc...">
+                        </TextBlock>
+                    </StackPanel>
+
+
+                    <StackPanel>
+                        <TextBlock
+                            TextWrapping="WrapWholeWords"
+                            Text="Definitions ex. en-US">
+                        </TextBlock>
+                        <StackPanel>
+                            <TextBlock
+                                TextWrapping="WrapWholeWords"
+                                Text="  en is the Language">
+                            </TextBlock>
+
+                            <TextBlock
+                                TextWrapping="WrapWholeWords"
+                                Text="  US is the Culture">
+                            </TextBlock>
+
+                            <TextBlock
+                                TextWrapping="WrapWholeWords"
+                                Text="  en-US is also considered the 'Culture'">
+                            </TextBlock>
+
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

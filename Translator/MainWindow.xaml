@@ -14,6 +14,7 @@
         MinHeight="100"
         MinWidth="100"
         Loaded="GrdMain_Loaded"
+        RequestedTheme="{x:Bind Vm.Theme, Mode=TwoWay}"
         Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
@@ -22,6 +23,8 @@
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="Auto" />
+            <RowDefinition
+                Height="500" />
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
@@ -1113,6 +1116,11 @@
             <!--XamlElements-->
             
         </Pivot>
+
+        <Frame
+            x:Name="frMainPage"
+            Grid.Row="2"
+            Margin="0,0,0,0" />
 
     </Grid>
 

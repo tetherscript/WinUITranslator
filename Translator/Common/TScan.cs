@@ -13,6 +13,7 @@ namespace Translator
     {
         public static int ProgressPerc = 0;
         public static bool IsCancelled = false;
+        private static int _delay = 500;
 
         private class PageInfo
         {
@@ -42,7 +43,6 @@ namespace Translator
             IsCancelled = false;
             TLog.ClearAllFiles();
             TLog.Reset();
-            TLog.Log("Scanning...");
             try
             {
                 await ScanAsync(
@@ -100,6 +100,8 @@ namespace Translator
                     ProcessXamlFile(filePath, entriesMap);
                 }
             }
+
+            await Task.Delay(_delay);
 
             //----------------------------------------------------
             //Add linked project files, like a .xaml that exists in a /common folder not under the project folder
@@ -169,6 +171,7 @@ namespace Translator
                 ProcessXamlFile(physicalPath, entriesMap);
             }
 
+            await Task.Delay(_delay);
 
             //merge with manual entries
             TLog.Log("Merging " + TUtils.TargetTranslatorTLocalizedGetsPath + "...");
@@ -216,10 +219,14 @@ namespace Translator
             }
 
             SaveAsJson(TUtils.TargetTranslatorDetectedXamlElementsPath, entriesMap);
+
+            await Task.Delay(_delay);
+
+            UpdateEnUSReswFile(entriesMap, TUtils.TargetStrings_enUS_Path);
+
             TLog.Log("Updated: " + TUtils.TargetStrings_enUS_Path);
             TLog.Log("Updated: " + TUtils.TargetTranslatorDetectedXamlElementsPath);
 
-            UpdateEnUSReswFile(entriesMap, TUtils.TargetStrings_enUS_Path);
         }
 
         private static void ProcessXamlFile(string filePath, Dictionary<string, string> entriesMap)

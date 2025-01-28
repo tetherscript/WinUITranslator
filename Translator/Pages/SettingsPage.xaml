@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Translator.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Translator"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer
+            Grid.Row="0">
+            <StackPanel
+                Spacing="20"
+                Margin="10,10,10,10">
+
+
+                <RadioButtons
+                    x:Name="rbTheme"
+                    IsTabStop="False"
+                    Header="Theme"
+                    MaxColumns="3"
+                    SelectedIndex="{x:Bind Vm.ThemeIndex, Mode=TwoWay}">
+                    <RadioButton
+                        x:Uid="Default_rb"
+                        Content="Default" />
+                    <RadioButton
+                        x:Uid="Light_rb"
+                        Content="Light" />
+                    <RadioButton
+                        x:Uid="Dark_rb"
+                        Content="Dark" />
+                </RadioButtons>
+
+                <StackPanel
+                    Orientation="Horizontal">
+                    <ToggleSwitch
+                        Header="Debug Mode"
+                        OffContent="Off"
+                        OnContent="On"
+                        IsOn="{x:Bind Vm.Debug, Mode=TwoWay}" />
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

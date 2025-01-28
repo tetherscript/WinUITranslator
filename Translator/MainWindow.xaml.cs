@@ -1,5 +1,6 @@
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media.Animation;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -30,6 +31,9 @@ namespace Translator
         private SynchronizationContext callersCtx;
         private System.Timers.Timer TranslationStatusTimer;
 
+        private readonly TVm _vm = App.Vm;
+        public TVm Vm { get => _vm; }
+
         public MainWindow()
         {
             this.InitializeComponent();
@@ -37,6 +41,14 @@ namespace Translator
             var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
             var appWindow = AppWindow.GetFromWindowId(windowId);
             appWindow.Closing += AppWindow_Closing;
+
+            Vm.TranslationFunctions.Clear();
+            foreach (var item in TTransFunc.Types)
+            {
+                Vm.TranslationFunctions.Add(new TVm.TTransFuncName(item, item));
+            }
+
+            TSettings.Load();
 
             callersCtx = SynchronizationContext.Current;
 
@@ -61,6 +73,9 @@ namespace Translator
             TranslationStatusTimer.AutoReset = false;
             TranslationStatusTimer.Elapsed += (sender, e) => TranslationStatusTimerElapsed();
 
+
+
+            frMainPage.Navigate(typeof(MainPage), null, new SuppressNavigationTransitionInfo());
         }
 
         private void TranslationStatusTimerElapsed()
@@ -72,20 +87,25 @@ namespace Translator
 
         private void UpdateTranslateStatus()
         {
-            tbTranslateLog.Text = TLog.Text;
-            pbTranslate.Value = TTranslate.ProgressPerc;
-        }
-
-        private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
-        {
-            TranslationStatusTimer.Stop();
-            SaveWindowState(this);
+            //tbTranslateLog.Text = TLog.Text;
+            //pbTranslate.Value = TTranslate.ProgressPerc;
         }
 
         private void GrdMain_Loaded(object sender, RoutedEventArgs e)
         {
             grdMain.FlowDirection = (App.IsRTL ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
-            RestoreWindowState(this);
+
+            RestoreWindowSizePos(this);
+
+
+
+        }
+
+        private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
+        {
+            TranslationStatusTimer.Stop();
+            SaveWindowSizePos(this);
+            TSettings.Save();
         }
         #endregion
 
@@ -97,7 +117,7 @@ namespace Translator
             public const string Width = "WindowWidth";
             public const string Height = "WindowHeight";
             public const string Scale = "WindowScale";
-            public const string Path = "Path";
+            public const string Target = "Target";
             public const string TranslationFunctionIndex = "TranslationFunctionIndex";
             public const string PivotIndex = "PivotIndex";
             public const string ShowHelp = "ShowHelp";
@@ -119,7 +139,7 @@ namespace Translator
             appData.Values[WindowSettingsKeys.Width] = size.Width;
             appData.Values[WindowSettingsKeys.Height] = size.Height;
             appData.Values[WindowSettingsKeys.Scale] = grdMain.XamlRoot.RasterizationScale;
-            appData.Values[WindowSettingsKeys.Path] = tbScanPath.Text;
+            appData.Values[WindowSettingsKeys.Target] = tbScanPath.Text;
             appData.Values[WindowSettingsKeys.TranslationFunctionIndex] = cbTranslationFunction.SelectedIndex;
             appData.Values[WindowSettingsKeys.PivotIndex] = pvtMain.SelectedIndex;
             appData.Values[WindowSettingsKeys.ShowHelp] = cbShowHelp.IsChecked;
@@ -144,7 +164,7 @@ namespace Translator
             cbTranslationFunction.SelectedIndex = (appData.Values.ContainsKey(WindowSettingsKeys.TranslationFunctionIndex)) ?
                 (int)appData.Values[WindowSettingsKeys.TranslationFunctionIndex] : 0;
 
-            tbScanPath.Text = (string)appData.Values[WindowSettingsKeys.Path];
+            tbScanPath.Text = (string)appData.Values[WindowSettingsKeys.Target];
             if (!Directory.Exists(tbScanPath.Text))
             {
                 tbScanPath.Text = "";
@@ -200,6 +220,48 @@ namespace Translator
                 appWindow.Resize(new SizeInt32 { Width = 800, Height = 600 });
             }
         }
+
+        private void RestoreWindowSizePos(Window window)
+        {
+            var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
+            var appWindow = AppWindow.GetFromWindowId(windowId);
+
+            var left = TSettings.WindowLeft;
+            var top = TSettings.WindowTop;
+            var width = TSettings.WindowWidth;
+            var height = TSettings.WindowHeight;
+            var scale = TSettings.WindowScale;
+
+            double InitialRasterizationScale = grdMain.XamlRoot.RasterizationScale;
+            double InitialScaleFactor = InitialRasterizationScale / scale;
+
+            appWindow.Move(new PointInt32 { X = left, Y = top });
+            appWindow.Resize(new SizeInt32
+            {
+                Width = (int)Math.Truncate(width * InitialScaleFactor),
+                Height = (int)Math.Truncate(height * InitialScaleFactor)
+            });
+        }
+
+        private void SaveWindowSizePos(Window window)
+        {
+
+            var appData = ApplicationData.Current.LocalSettings;
+            var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
+            var appWindow = AppWindow.GetFromWindowId(windowId);
+
+            var size = appWindow.Size;
+            var position = appWindow.Position;
+
+            TSettings.WindowLeft = position.X;
+            TSettings.WindowTop = position.Y;
+            TSettings.WindowWidth = size.Width;
+            TSettings.WindowHeight = size.Height;
+            TSettings.WindowScale = grdMain.XamlRoot.RasterizationScale;
+        }
+
 
         private void CbShowScanHelp_Click(object sender, RoutedEventArgs e)
         {
@@ -265,7 +327,7 @@ namespace Translator
                 cbTranslationFunction.IsEnabled = false;
                 tbTranslateLog.IsEnabled = false;
                 prTranslate.IsActive = true;
-                pbTranslate.Value = TTranslate.ProgressPerc;
+                //pbTranslate.Value = TTranslate.ProgressPerc;
                 TranslationStatusTimer.Start();
 
                 if (TUtils.CalcPaths(tbScanPath.Text.Trim()))
@@ -285,7 +347,7 @@ namespace Translator
                 cbTranslationFunction.IsEnabled = true;
                 tbTranslateLog.IsEnabled = true;
                 prTranslate.IsActive = false;
-                pbTranslate.Value = TTranslate.ProgressPerc;
+                //pbTranslate.Value = TTranslate.ProgressPerc;
             }
         }
 

@@ -11,7 +11,6 @@ namespace Translator
 {
     public static class TTranslate
     {
-        public static int ProgressPerc = 0;
         public static bool IsCancelled = false;
         private static string _tsDown = new string('┬', 30);
         private static string _tsNeutral = new string('━', 30);
@@ -56,7 +55,7 @@ namespace Translator
           string targetRootPath)
         {
             TUtils.CalcPaths(targetRootPath);
-            ProgressPerc = 0;
+            App.Vm.TranslateProgress = 0;
 
             string fromCulture = "en-US";
 
@@ -198,14 +197,14 @@ namespace Translator
                         }
 
                         TimeSpan ts = DateTime.Now - _lastASync;
-                        if (ts.TotalMilliseconds > (1000 / 120)) //120hz
+                        if (ts.TotalMilliseconds > (1000 / 60)) //120hz
                         {
                             _lastASync = DateTime.Now;
                             await Task.Delay(1);
                         }
                         
                         _progValue++;
-                        ProgressPerc = (int)((float)_progValue/(float)_progMax * 100.0f);
+                        App.Vm.TranslateProgress = (int)((float)_progValue/(float)_progMax * 100.0f);
 
                     }
 

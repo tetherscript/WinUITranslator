@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.UI.Xaml.Data;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System;
 
 namespace Translator
 {
@@ -22,36 +24,39 @@ namespace Translator
 
         public static bool CalcPaths(string targetRootPath)
         {
-            if (Directory.Exists(targetRootPath.Trim()))
+            if (targetRootPath != null)
             {
-                TargetRootPath = targetRootPath;
-                TargetTranslatorPath = Path.Combine(TargetRootPath, "Translator");
-                TargetTranslatorXamlElementsPath = Path.Combine(TargetRootPath, @"Translator\XamlElements.json");
-                TargetTranslatorTLocalizedGetsPath = Path.Combine(TargetRootPath, @"Translator\TLocalizedGets.json");
-                TargetTranslatorDetectedXamlElementsPath = Path.Combine(TargetRootPath, @"Translator\DetectedXamlElements.json");
-                TargetTranslatorHintsPath = Path.Combine(TargetRootPath, @"Translator\Hints.json");
-                TargetTranslatorSpecialsPath = Path.Combine(TargetRootPath, @"Translator\Specials.json");
-                TargetStringsPath = Path.Combine(TargetRootPath, "Strings");
-                TargetStrings_enUS_Path = Path.Combine(TargetStringsPath, @"en-US\Resources.resw");
-                TargetScanLogPath = Path.Combine(TargetRootPath, @"Translator\ScanLog.txt");
-                TargetTranslateLogPath = Path.Combine(TargetRootPath, @"Translator\TranslateLog.txt");
-                return true;
+                if (Directory.Exists(targetRootPath.Trim()))
+                {
+                    TargetRootPath = targetRootPath;
+                    TargetTranslatorPath = Path.Combine(TargetRootPath, "Translator");
+                    TargetTranslatorXamlElementsPath = Path.Combine(TargetRootPath, @"Translator\XamlElements.json");
+                    TargetTranslatorTLocalizedGetsPath = Path.Combine(TargetRootPath, @"Translator\TLocalizedGets.json");
+                    TargetTranslatorDetectedXamlElementsPath = Path.Combine(TargetRootPath, @"Translator\DetectedXamlElements.json");
+                    TargetTranslatorHintsPath = Path.Combine(TargetRootPath, @"Translator\Hints.json");
+                    TargetTranslatorSpecialsPath = Path.Combine(TargetRootPath, @"Translator\Specials.json");
+                    TargetStringsPath = Path.Combine(TargetRootPath, "Strings");
+                    TargetStrings_enUS_Path = Path.Combine(TargetStringsPath, @"en-US\Resources.resw");
+                    TargetScanLogPath = Path.Combine(TargetRootPath, @"Translator\ScanLog.txt");
+                    TargetTranslateLogPath = Path.Combine(TargetRootPath, @"Translator\TranslateLog.txt");
+                    return true;
+                }
+                else
+                {
+                    TargetTranslatorPath = "";
+                    TargetTranslatorXamlElementsPath = "";
+                    TargetTranslatorTLocalizedGetsPath = "";
+                    TargetTranslatorDetectedXamlElementsPath = "";
+                    TargetTranslatorHintsPath = "";
+                    TargetTranslatorSpecialsPath = "";
+                    TargetStringsPath = "";
+                    TargetStrings_enUS_Path = "";
+                    TargetScanLogPath = "";
+                    TargetTranslateLogPath = "";
+                    return false;
+                }
             }
-            else
-            {
-                TargetTranslatorPath = "";
-                TargetTranslatorXamlElementsPath = "";
-                TargetTranslatorTLocalizedGetsPath = "";
-                TargetTranslatorDetectedXamlElementsPath = "";
-                TargetTranslatorHintsPath = "";
-                TargetTranslatorSpecialsPath = "";
-                TargetStringsPath = "";
-                TargetStrings_enUS_Path = "";
-                TargetScanLogPath = "";
-                TargetTranslateLogPath = "";
-                return false;
-            }
-
+            else return false;
         }
 
         public class HintKeyValEntry
@@ -83,5 +88,25 @@ namespace Translator
             SpecialItems = JsonSerializer.Deserialize<List<SpecialItem>>(loadedJson);
         }
         #endregion
+
+    }
+
+    public class InvBoolConv : IValueConverter
+    {
+        // Convert from source to target (invert the value)
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is bool boolean)
+                return !boolean;
+            return false;
+        }
+
+        // Convert back from target to source (optional, invert again)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if (value is bool boolean)
+                return !boolean;
+            return false;
+        }
     }
 }

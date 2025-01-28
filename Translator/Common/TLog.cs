@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Translator
 {
     public static class TLog
     {
+        public enum eMode { scan, translate, system }
+
         private static int _logCounter = 0;
         public static string Text = string.Empty;
+        public static eMode Mode = eMode.system;
+
         public static void Log(string msg, bool isError = false)
         {
             string s = string.Empty;
@@ -16,6 +21,17 @@ namespace Translator
             }
             s = s + String.Format(@"{0}{1}", msg, Environment.NewLine);
             Text = Text + s;
+            if (Mode == eMode.scan)
+            {
+                App.Vm.ScanLog = Text;
+            }
+            else
+            if (Mode == eMode.translate)
+            {
+                App.Vm.TranslateLog = Text;
+            }
+
+
             _logCounter++;
         }
 
@@ -29,6 +45,15 @@ namespace Translator
             }
             s = s + String.Format(@"{0}{1}", msg, Environment.NewLine);
             Text = s + Text;
+            if (Mode == eMode.scan)
+            {
+                App.Vm.ScanLog = Text;
+            }
+            else
+                if (Mode == eMode.translate)
+            {
+                App.Vm.TranslateLog = Text;
+            }
             _logCounter++;
         }
 

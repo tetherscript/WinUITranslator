@@ -3,9 +3,10 @@ using System;
 
 namespace Translator
 {
-
     public partial class App : Application
     {
+        private static TVm _vm;
+        public static TVm Vm { get => _vm; }
 
         public static bool IsRTL = false;
 
@@ -24,6 +25,8 @@ namespace Translator
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
+            _vm = new TVm(Environment.GetCommandLineArgs());
+
             m_window = new MainWindow();
             m_window.Activate();
         }

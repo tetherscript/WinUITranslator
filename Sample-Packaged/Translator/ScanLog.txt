@@ -1,7 +1,6 @@
 ****************
 Summary: 18 translateable items found
 ****************
-Scanning...
 ---------------------------------------
 Scanning target project: E:\Code\VS\TranslatorNet8\Sample-Packaged
 Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\App.xaml
@@ -15,8 +14,6 @@ Found 4 mergeable entries.
   Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
   Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
 Merge complete.
-Updated: E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
-Updated: E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\DetectedXamlElements.json
 Updating E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
 Clearing old entries from en-US/Resources.resw...
 Adding entries to en-US/Resources.resw...
@@ -40,4 +37,6 @@ Adding entries to en-US/Resources.resw...
 Checking for specials...
 Adding special: SettingsIcon=settings1.ico
 en-US/Resources.resw updated.
+Updated: E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
+Updated: E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\DetectedXamlElements.json
 Scan complete.
