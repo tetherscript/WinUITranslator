@@ -14,7 +14,7 @@
 	<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Translator\Common\TLocalized.cs" Link="TLocalized.cs" />
+    <Compile Include="..\Translator\Target\TLocalized.cs" Link="TLocalized.cs" />
   </ItemGroup>
 
   <ItemGroup>

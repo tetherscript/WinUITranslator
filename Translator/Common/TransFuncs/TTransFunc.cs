@@ -23,7 +23,7 @@ namespace Translator
             {
                 case _sample: return false;
                 case _openAI_1: return TTF_OpenAI_1.InitGlobal(fromCulture);
-                case _lMS_DeepSeekR1_OpenAIEmu: return TLMS_DeepSeekR1_OpenAIEmul.InitGlobal(fromCulture);
+                case _lMS_DeepSeekR1_OpenAIEmu: return TTF_LMS_DeepSeekR1_OpenAIEmul.InitGlobal(fromCulture);
                 default: return false;
             }
         }
@@ -35,7 +35,7 @@ namespace Translator
             {
                 case _sample: return false;
                 case _openAI_1: return TTF_OpenAI_1.InitPerCulture(fromCulture, toCulture); 
-                case _lMS_DeepSeekR1_OpenAIEmu: return TLMS_DeepSeekR1_OpenAIEmul.InitPerCulture(fromCulture, toCulture);
+                case _lMS_DeepSeekR1_OpenAIEmu: return TTF_LMS_DeepSeekR1_OpenAIEmul.InitPerCulture(fromCulture, toCulture);
                 default: return false;
             }
         }
@@ -48,7 +48,7 @@ namespace Translator
             {
                 case _sample: return null;
                 case _openAI_1: return TTF_OpenAI_1.Translate(fromCulture, toCulture, textToTranslate, hintToken);
-                case _lMS_DeepSeekR1_OpenAIEmu: return TLMS_DeepSeekR1_OpenAIEmul.Translate(fromCulture, toCulture, textToTranslate, hintToken);
+                case _lMS_DeepSeekR1_OpenAIEmu: return TTF_LMS_DeepSeekR1_OpenAIEmul.Translate(fromCulture, toCulture, textToTranslate, hintToken);
                 default: return null;
             }
         }
@@ -60,7 +60,7 @@ namespace Translator
             {
                 case _sample: return false;
                 case _openAI_1: return TTF_OpenAI_1.DeInitGlobal();
-                case _lMS_DeepSeekR1_OpenAIEmu: return TLMS_DeepSeekR1_OpenAIEmul.DeInitGlobal();
+                case _lMS_DeepSeekR1_OpenAIEmu: return TTF_LMS_DeepSeekR1_OpenAIEmul.DeInitGlobal();
                 default: return false;
             }
         }

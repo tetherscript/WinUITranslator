@@ -1,43 +1,41 @@
-****************
-Summary: 18 translateable items found
-****************
-Scanning...
----------------------------------------
-Scanning target project: E:\Code\VS\TranslatorNet8\Sample-UnPackaged
-Found: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\App.xaml
-Found: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\MainWindow.xaml
-  ***Rejected E:\Code\VS\TranslatorNet8\Sample-UnPackaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
-Checking .csproj for linked .xaml's...
-Merging E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Translator\TLocalizedGets.json...
-Found 4 mergeable entries.
-  Merged LoadingFile: @Loading {0}}, please wait...
-  Merged OpenAperture_Generic: @Open the aperture for a shallower depth of field.
-  Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
-  Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
-Merge complete.
-Updated: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Strings\en-US\Resources.resw
-Updated: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Translator\DetectedXamlElements.json
-Updating E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Strings\en-US\Resources.resw
-Clearing old entries from en-US/Resources.resw...
-Adding entries to en-US/Resources.resw...
-  Added Aperture_tb.Text
-  Added EnterYourNameHere_tb.Text
-  Added EnterYourNameHere_short_tb.Text
-  Added MissingHintToken_tb.Text
-  Added Close_btn.Content
-  Added Lock_cb.Content
-  Added Zoom_rbs.Header
-  Added Zoom100_rb.Content
-  Added Zoom200_rb.Content
-  Added Browser_tgbtn.Content
-  Added Connect_ts.Header
-  Added Connect_ts.OffContent
-  Added Connect_ts.OnContent
-  Added LoadingFile
-  Added OpenAperture_Generic
-  Added OpenAperture_MoreContext
-  Added OpenAperture_MoreContext_Constrained
-Checking for specials...
-Adding special: SettingsIcon=settings1.ico
-en-US/Resources.resw updated.
-Scan complete.
+0040:   Scan complete.
+0039:   Summary: Updated E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Translator\DetectedXamlElements.json
+0038:   Summary: Updated E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Strings\en-US\Resources.resw
+0037:   Summary: 18 translateable items found
+0036:   Summary: 0 errors
+0035:   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0034:   en-US/Resources.resw updated.
+0033:   Adding special: SettingsIcon=settings1.ico
+0032:   Checking for specials...
+0031:   Added OpenAperture_MoreContext_Constrained
+0030:   Added OpenAperture_MoreContext
+0029:   Added OpenAperture_Generic
+0028:   Added LoadingFile
+0027:   Added Connect_ts.OnContent
+0026:   Added Connect_ts.OffContent
+0025:   Added Connect_ts.Header
+0024:   Added Browser_tgbtn.Content
+0023:   Added Zoom200_rb.Content
+0022:   Added Zoom100_rb.Content
+0021:   Added Zoom_rbs.Header
+0020:   Added Lock_cb.Content
+0019:   Added Close_btn.Content
+0018:   Added MissingHintToken_tb.Text
+0017:   Added EnterYourNameHere_short_tb.Text
+0016:   Added EnterYourNameHere_tb.Text
+0015:   Added Aperture_tb.Text
+0014:   Adding entries to en-US/Resources.resw...
+0013:   Clearing old entries from en-US/Resources.resw...
+0012:   Updating E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Strings\en-US\Resources.resw
+0011:   Merge complete.
+0010:   Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
+0009:   Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
+0008:   Merged OpenAperture_Generic: @Open the aperture for a shallower depth of field.
+0007:   Merged LoadingFile: @Loading {0}}, please wait...
+0006:   Found 4 mergeable entries.
+0005:   Merging E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Translator\TLocalizedGets.json...
+0004:   Checking .csproj for linked .xaml's...
+0003: E Rejected E:\Code\VS\TranslatorNet8\Sample-UnPackaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
+0002:   Found: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\MainWindow.xaml
+0001:   Found: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\App.xaml
+0000:   Scanning target project: E:\Code\VS\TranslatorNet8\Sample-UnPackaged

@@ -1,10 +1,9 @@
-0083:   Translation complete.
-0082:   Summary: Used 176 prompt tokens + 22 completion_tokens = 198 total tokens.
-0081: D Summary: Retranslated the top 1 items for each toCulture.
+0082:   Translation complete.
+0081:   Summary: Used 259 prompt tokens + 30 completion_tokens = 289 total tokens.
 0080:   Summary: 0 failed translations
-0079:   Summary: 3 translation attempts
-0078:   Summary: 3 cache misses
-0077:   Summary: 45 cache hits
+0079:   Summary: 6 translation attempts
+0078:   Summary: 6 cache misses
+0077:   Summary: 42 cache hits
 0076:   Summary: Found 18 translateable items in en-US\Resources.resw
 0075:   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 0074:   Adding special: SettingsIcon=settings1.ico
@@ -19,13 +18,13 @@
 0065:   Cache hit: fr-FR:!:Image Browser
 0064:   Cache hit: fr-FR:@:200%
 0063:   Cache hit: fr-FR:@:100%
-0062:   Cache hit: fr-FR:@:Zoom
-0061:   Cache hit: fr-FR:@@:Lock
-0060:   Cache hit: fr-FR:@:Close
-0059:   Cache hit: fr-FR:@@:Enter your name here
-0058:   Cache hit: fr-FR:@:Enter your name here
-0057: D Cache miss: fr-FR:!:Aperture --> RETRANSLATED -->  Ouverture
-0056:   OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=fr-FR
+0062:   Cache miss: fr-FR:@:Zoom --> Zoom
+0061:   Cache miss: fr-FR:@@:Lock --> Verrou
+0060:   OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=fr-FR
+0059:   Cache hit: fr-FR:@:Close
+0058:   Cache hit: fr-FR:@@:Enter your name here
+0057:   Cache hit: fr-FR:@:Enter your name here
+0056:   Cache hit: fr-FR:!:Aperture
 0055:   Processing fr-FR...
 0054:   Adding special: SettingsIcon=settings1.ico
 0053:   Checking for specials...
@@ -38,14 +37,14 @@
 0046:   Cache hit: de-DE:@:Connection
 0045:   Cache hit: de-DE:!:Image Browser
 0044:   Cache hit: de-DE:@:200%
-0043:   Cache hit: de-DE:@:100%
-0042:   Cache hit: de-DE:@:Zoom
-0041:   Cache hit: de-DE:@@:Lock
-0040:   Cache hit: de-DE:@:Close
-0039:   Cache hit: de-DE:@@:Enter your name here
-0038:   Cache hit: de-DE:@:Enter your name here
-0037: D Cache miss: de-DE:!:Aperture --> RETRANSLATED -->  Blende
-0036:   OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=de-DE
+0043:   Cache miss: de-DE:@:100% --> 100%
+0042:   Cache miss: de-DE:@:Zoom --> Zoom
+0041:   OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=de-DE
+0040:   Cache hit: de-DE:@@:Lock
+0039:   Cache hit: de-DE:@:Close
+0038:   Cache hit: de-DE:@@:Enter your name here
+0037:   Cache hit: de-DE:@:Enter your name here
+0036:   Cache hit: de-DE:!:Aperture
 0035:   Processing de-DE...
 0034:   Adding special: SettingsIcon=settings2.ico
 0033:   Checking for specials...
@@ -57,15 +56,15 @@
 0027:   Cache hit: ar-SA:@:Disconnected
 0026:   Cache hit: ar-SA:@:Connection
 0025:   Cache hit: ar-SA:!:Image Browser
-0024:   Cache hit: ar-SA:@:200%
-0023:   Cache hit: ar-SA:@:100%
-0022:   Cache hit: ar-SA:@:Zoom
-0021:   Cache hit: ar-SA:@@:Lock
-0020:   Cache hit: ar-SA:@:Close
-0019:   Cache hit: ar-SA:@@:Enter your name here
-0018:   Cache hit: ar-SA:@:Enter your name here
-0017: D Cache miss: ar-SA:!:Aperture --> RETRANSLATED -->  فتحة العدسة
-0016:   OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=ar-SA
+0024:   Cache miss: ar-SA:@:200% --> 200٪
+0023:   Cache miss: ar-SA:@:100% --> 100٪
+0022:   OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=ar-SA
+0021:   Cache hit: ar-SA:@:Zoom
+0020:   Cache hit: ar-SA:@@:Lock
+0019:   Cache hit: ar-SA:@:Close
+0018:   Cache hit: ar-SA:@@:Enter your name here
+0017:   Cache hit: ar-SA:@:Enter your name here
+0016:   Cache hit: ar-SA:!:Aperture
 0015:   Processing ar-SA...
 0014:   Found 4 Resources.resw files.
 0013:   Cache initialized.

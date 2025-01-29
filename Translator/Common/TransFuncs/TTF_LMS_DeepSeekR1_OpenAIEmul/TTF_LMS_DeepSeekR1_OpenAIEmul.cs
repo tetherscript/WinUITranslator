@@ -9,16 +9,16 @@ using System.Text.Json;
 
 namespace Translator
 {
-    public static class TLMS_DeepSeekR1_OpenAIEmul
+    public static class TTF_LMS_DeepSeekR1_OpenAIEmul
     {
         private static string _fromCulture = string.Empty;
         private static string _toCulture = string.Empty;
         private static string _logPrefix = "DeepSeekR1_OpenAIEmul";
-        private const string _settingsFilename = "TLMS_DeepSeekR1_OpenAIEmul.json";
+        private const string _settingsFilename = "TTF_LMS_DeepSeekR1_OpenAIEmul.json";
         private static int _totalSendTokens = 0;
         private static int _totalReceiveTokens = 0;
         private static int _totalTokens = 0;
-        private static int _requestBodyMaxTokens = 10;
+        private static int _requestBodyMaxTokens = 1000;
 
         private static void Log(string msg, bool isError = false)
         {
@@ -32,11 +32,18 @@ namespace Translator
             _totalTokens = 0;
             _fromCulture = fromCulture;
             TLog.Log(TLog.eLogType.inf, 0, String.Format(_logPrefix + ": InitGlobal: fromCulture={0}", _fromCulture));
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": DESCRIPTION: Calls DeepSeek R1 on LM Studio API with OpenAI API chat endpoint emulation");
+            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": WARNING: This is in development.  Still can't find the right prompts to only return the translation.  DeepSeek R1 is by default very verbose.");
+            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": DESCRIPTION: DeepSeek R1 - Calls the local LM Studio API in OpenAI API emulation mode.");
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": AUTHOR: Tetherscript");
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": CONTACT: support@tetherscript.com");
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": SETTINGS: " + _settingsFilename);
-            return LoadSettings();
+            bool res = LoadSettings();
+            foreach (var item in Settings)
+            {
+                string s = item.Key + ": " + item.Value;
+                TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": SETTINGS: " + s);
+            }
+            return res;
         }
 
         public static bool InitPerCulture(string fromCulture, string toCulture)
@@ -74,7 +81,7 @@ namespace Translator
                     {
                         Settings[entry.Key] = entry.Value;
                     }
-                    Log("Settings loaded.");
+                    Log("SETTINGS: loaded.");
                     return true;
                     //string setting1 = Settings["mykey"];
                 }
@@ -133,10 +140,11 @@ namespace Translator
             //Worst case is some obscure string has this confused bad translation that is rarely seen by users.
             //Best thing to do is to review the Translate log where you can see the API responses for translations.
 
-            //this Translation Function is the original one used on this translator app.  It is not optimized.
-            string openAiApiKey = Environment.GetEnvironmentVariable("OpenAIAPIKey1");
+            //string openAiApiKey = Environment.GetEnvironmentVariable("OpenAIAPIKey1");
+            string openAiApiKey = "lm-studio";
 
-            const string openAiChatEndpoint = "https://api.openai.com/v1/chat/completions";
+            //const string openAiChatEndpoint = "https://api.openai.com/v1/chat/completions";
+            const string openAiChatEndpoint = "http://localhost:1234/v1/chat/completions";
 
             using HttpClient httpClient = new HttpClient();
 
@@ -145,16 +153,22 @@ namespace Translator
             string systemContent = String.Format(Settings[hintToken], _toCulture);
             string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
 
+            string mt = Settings["max_tokens"];
+            if (!int.TryParse(mt, out _requestBodyMaxTokens))
+            {
+                _requestBodyMaxTokens = 1000;
+            }
+
             var requestBody = new
             {
                 model = "gpt-4",
                 messages = new[]
                 {
-                    new { role = "developer", content = systemContent},
+                    new { role = "system", content = systemContent},
                     new { role = "user", content = userContent}
                     },
                 temperature = 0.0,  //keep it at zero so it is deterministic
-                max_tokens = 1000   //=data sent + data returned
+                max_tokens = _requestBodyMaxTokens   //=data sent + data returned
             };
 
             var requestContent = new StringContent(
