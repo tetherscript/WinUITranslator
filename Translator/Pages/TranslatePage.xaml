@@ -41,13 +41,6 @@
                     <StackPanel
                         Spacing="20"
                         Orientation="Horizontal">
-                        <ComboBox
-                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                            ItemsSource="{x:Bind Vm.TranslationFunctions}"
-                            SelectedValue="{x:Bind Vm.SelectedTranslationFunction, Mode=TwoWay}"
-                            DisplayMemberPath="Display"
-                            SelectedValuePath="Value"
-                            Width="250" />
                         <Button
                             IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
                             Command="{x:Bind Vm.StartTranslateCommand}"
@@ -64,6 +57,13 @@
                             IsEnabled="{x:Bind Vm.IsTranslating, Mode=OneWay}"
                             Command="{x:Bind Vm.CancelTranslateCommand}"
                             Content="Cancel" />
+                        <ComboBox
+                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                            ItemsSource="{x:Bind Vm.TranslationFunctions}"
+                            SelectedValue="{x:Bind Vm.SelectedTranslationFunction, Mode=TwoWay}"
+                            DisplayMemberPath="Display"
+                            SelectedValuePath="Value"
+                            Width="250" />
                     </StackPanel>
                         
                 </StackPanel>
@@ -81,7 +81,7 @@
             Margin="10 0 10 10"
             FontFamily="Courier New"
             AcceptsReturn="True"
-            TextWrapping="Wrap"
+            TextWrapping="NoWrap"
             FontWeight="Light"
             IsReadOnly="false"
             TextAlignment="Left"

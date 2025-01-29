@@ -1,81 +1,78 @@
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SUMMARY
-The 18 translateable items in en-US\Resources.resw were translated to 3 languages with 48 cache hits and 0 misses.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Translating...
-Translation function: OpenAI_1
-TTransFunc_OpenAI_1: InitGlobal: fromCulture=en-US
-TTransFunc_OpenAI_1: Settings loaded.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TRANSLATION FUNCTION DETAILS
-TYPE: OpenAI_1
-DESCRIPTION: Calls API chat endpoint with a prompt that depends on the hint token used.
-AUTHOR: Tetherscript
-CONTACT: support@tetherscript.com
-SETTINGS:TF_OpenAI_1.json
-@: You are a professional language translator.  Translate the following text from American English (en-US) to ({0}).
-@@: You are a professional language translator.  Translate the following text from American English (en-US) to ({0}).  Aim to keep the translated text the same length or shorter, but prioritize accuracy and clarity if a slight increase in length is unavoidable.
-!: You are a professional language translator. These translations are for a photography website, so use terminology and style suitable for photographers and their audience. Translate the following text from American English (en-US) to ({0}).
-!!: You are a professional language translator. These translations are for a photography website, so use terminology and style suitable for photographers and their audience.  Translate the following text from American English (en-US) to ({0}).  Aim to keep the translated text the same length or shorter, but prioritize accuracy and clarity if a slight increase in length is unavoidable.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Cache initialized.
-Found 4 Resources.resw files.
-Processing ar-SA...
-  Cache hit: ar-SA:!:Aperture
-  Cache hit: ar-SA:@:Enter your name here
-  Cache hit: ar-SA:@@:Enter your name here
-  Cache hit: ar-SA:@:Close
-  Cache hit: ar-SA:@@:Lock
-  Cache hit: ar-SA:@:Zoom
-  Cache hit: ar-SA:@:100%
-  Cache hit: ar-SA:@:200%
-  Cache hit: ar-SA:!:Image Browser
-  Cache hit: ar-SA:@:Connection
-  Cache hit: ar-SA:@:Disconnected
-  Cache hit: ar-SA:@:Connected
-  Cache hit: ar-SA:@:Loading {0}}, please wait...
-  Cache hit: ar-SA:@:Open the aperture for a shallower depth of field.
-  Cache hit: ar-SA:!:Open the aperture for a shallower depth of field.
-  Cache hit: ar-SA:!!:Open the aperture for a shallower depth of field.
-  Checking for specials...
-  Adding special: SettingsIcon=settings2.ico
-Processing de-DE...
-  Cache hit: de-DE:!:Aperture
-  Cache hit: de-DE:@:Enter your name here
-  Cache hit: de-DE:@@:Enter your name here
-  Cache hit: de-DE:@:Close
-  Cache hit: de-DE:@@:Lock
-  Cache hit: de-DE:@:Zoom
-  Cache hit: de-DE:@:100%
-  Cache hit: de-DE:@:200%
-  Cache hit: de-DE:!:Image Browser
-  Cache hit: de-DE:@:Connection
-  Cache hit: de-DE:@:Disconnected
-  Cache hit: de-DE:@:Connected
-  Cache hit: de-DE:@:Loading {0}}, please wait...
-  Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
-  Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
-  Cache hit: de-DE:!!:Open the aperture for a shallower depth of field.
-  Checking for specials...
-  Adding special: SettingsIcon=settings1.ico
-Processing fr-FR...
-  Cache hit: fr-FR:!:Aperture
-  Cache hit: fr-FR:@:Enter your name here
-  Cache hit: fr-FR:@@:Enter your name here
-  Cache hit: fr-FR:@:Close
-  Cache hit: fr-FR:@@:Lock
-  Cache hit: fr-FR:@:Zoom
-  Cache hit: fr-FR:@:100%
-  Cache hit: fr-FR:@:200%
-  Cache hit: fr-FR:!:Image Browser
-  Cache hit: fr-FR:@:Connection
-  Cache hit: fr-FR:@:Disconnected
-  Cache hit: fr-FR:@:Connected
-  Cache hit: fr-FR:@:Loading {0}}, please wait...
-  Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
-  Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
-  Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
-  Checking for specials...
-  Adding special: SettingsIcon=settings1.ico
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Translation complete.
+0077: [INF] Translation complete.
+0076: [DBG] Summary: Retranslated the top 1 items for each toCulture.
+0075: [INF] Summary: 0 failed translations
+0074: [INF] Summary: 3 translation attempts
+0073: [INF] Summary: 3 cache misses
+0072: [INF] Summary: 45 cache hits
+0071: [INF] Summary: Found 18 translateable items in en-US\Resources.resw
+0070: [INF] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0069: [INF] Adding special: SettingsIcon=settings1.ico
+0068: [INF] Checking for specials...
+0067: [INF] Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
+0066: [INF] Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
+0065: [INF] Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
+0064: [INF] Cache hit: fr-FR:@:Loading {0}}, please wait...
+0063: [INF] Cache hit: fr-FR:@:Connected
+0062: [INF] Cache hit: fr-FR:@:Disconnected
+0061: [INF] Cache hit: fr-FR:@:Connection
+0060: [INF] Cache hit: fr-FR:!:Image Browser
+0059: [INF] Cache hit: fr-FR:@:200%
+0058: [INF] Cache hit: fr-FR:@:100%
+0057: [INF] Cache hit: fr-FR:@:Zoom
+0056: [INF] Cache hit: fr-FR:@@:Lock
+0055: [INF] Cache hit: fr-FR:@:Close
+0054: [INF] Cache hit: fr-FR:@@:Enter your name here
+0053: [INF] Cache hit: fr-FR:@:Enter your name here
+0052: [DBG] Cache miss: fr-FR:!:Aperture --> RETRANSLATED -->  Ouverture
+0051: [INF] OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=fr-FR
+0050: [INF] Processing fr-FR...
+0049: [INF] Adding special: SettingsIcon=settings1.ico
+0048: [INF] Checking for specials...
+0047: [INF] Cache hit: de-DE:!!:Open the aperture for a shallower depth of field.
+0046: [INF] Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
+0045: [INF] Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
+0044: [INF] Cache hit: de-DE:@:Loading {0}}, please wait...
+0043: [INF] Cache hit: de-DE:@:Connected
+0042: [INF] Cache hit: de-DE:@:Disconnected
+0041: [INF] Cache hit: de-DE:@:Connection
+0040: [INF] Cache hit: de-DE:!:Image Browser
+0039: [INF] Cache hit: de-DE:@:200%
+0038: [INF] Cache hit: de-DE:@:100%
+0037: [INF] Cache hit: de-DE:@:Zoom
+0036: [INF] Cache hit: de-DE:@@:Lock
+0035: [INF] Cache hit: de-DE:@:Close
+0034: [INF] Cache hit: de-DE:@@:Enter your name here
+0033: [INF] Cache hit: de-DE:@:Enter your name here
+0032: [DBG] Cache miss: de-DE:!:Aperture --> RETRANSLATED -->  Blende
+0031: [INF] OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=de-DE
+0030: [INF] Processing de-DE...
+0029: [INF] Adding special: SettingsIcon=settings2.ico
+0028: [INF] Checking for specials...
+0027: [INF] Cache hit: ar-SA:!!:Open the aperture for a shallower depth of field.
+0026: [INF] Cache hit: ar-SA:!:Open the aperture for a shallower depth of field.
+0025: [INF] Cache hit: ar-SA:@:Open the aperture for a shallower depth of field.
+0024: [INF] Cache hit: ar-SA:@:Loading {0}}, please wait...
+0023: [INF] Cache hit: ar-SA:@:Connected
+0022: [INF] Cache hit: ar-SA:@:Disconnected
+0021: [INF] Cache hit: ar-SA:@:Connection
+0020: [INF] Cache hit: ar-SA:!:Image Browser
+0019: [INF] Cache hit: ar-SA:@:200%
+0018: [INF] Cache hit: ar-SA:@:100%
+0017: [INF] Cache hit: ar-SA:@:Zoom
+0016: [INF] Cache hit: ar-SA:@@:Lock
+0015: [INF] Cache hit: ar-SA:@:Close
+0014: [INF] Cache hit: ar-SA:@@:Enter your name here
+0013: [INF] Cache hit: ar-SA:@:Enter your name here
+0012: [DBG] Cache miss: ar-SA:!:Aperture --> RETRANSLATED -->  فتحة العدسة
+0011: [INF] OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=ar-SA
+0010: [INF] Processing ar-SA...
+0009: [INF] Found 4 Resources.resw files.
+0008: [INF] Cache initialized.
+0007: [INF] OpenAI_1: Settings loaded.
+0006: [INF] OpenAI_1: SETTINGS: TF_OpenAI_1.json
+0005: [INF] OpenAI_1: CONTACT: support@tetherscript.com
+0004: [INF] OpenAI_1: AUTHOR: Tetherscript
+0003: [INF] OpenAI_1: DESCRIPTION: Calls the OpenAI API chat endpoint
+0002: [INF] OpenAI_1: InitGlobal: fromCulture=en-US
+0001: [INF] Translation function: OpenAI_1
+0000: [INF] Translating...

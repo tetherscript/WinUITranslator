@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using Windows.Graphics;
 using Windows.Storage;
 using WinRT.Interop;
-using System.Diagnostics;
 
 namespace Translator
 {
@@ -31,8 +30,6 @@ namespace Translator
 
         private readonly TVm _vm = App.Vm;
         public TVm Vm { get => _vm; }
-
-        private IntPtr _hWnd;
 
         public MainWindow()
         {

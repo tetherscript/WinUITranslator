@@ -47,7 +47,21 @@ namespace Translator
         private bool _debug;
         partial void OnDebugChanged(bool oldValue, bool newValue)
         {
-            TUtils.Debug = newValue;
+            TSettings.Debug = newValue;
+        }
+
+        [ObservableProperty]
+        private bool _debugRetranslate;
+        partial void OnDebugRetranslateChanged(bool oldValue, bool newValue)
+        {
+            TSettings.DebugRetranslate = newValue;
+        }
+
+        [ObservableProperty]
+        private int _debugRetranslateItemsCount;
+        partial void OnDebugRetranslateItemsCountChanged(int oldValue, int newValue)
+        {
+            TSettings.DebugRetranslateItemsCount = newValue;
         }
 
         [ObservableProperty]
@@ -72,7 +86,7 @@ namespace Translator
             }
             else
             {
-                TLog.Log("Target root path does not exist: " + Target, true);
+                TLog.LogExt("Target root path does not exist: " + Target, true);
             }
             IsScanning = false;
             IsBusy = false;
@@ -107,7 +121,7 @@ namespace Translator
             }
             else
             {
-                TLog.Log("Target root path does not exist: " + Target, true);
+                TLog.LogExt("Target root path does not exist: " + Target, true);
             }
             IsTranslating = false;
             IsBusy = false;

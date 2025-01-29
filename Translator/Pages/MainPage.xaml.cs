@@ -69,32 +69,24 @@ namespace Translator
                     PopulateNavigationViewHeader(Symbol.Folder, "1. Target a Project");
                     frMain.Navigate(typeof(TargetPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
-            }
-            switch (tag)
-            {
+
                 case "Scan":
                     SetActiveNavItem(nviScan);
                     PopulateNavigationViewHeader(Symbol.Play, "2. Scan Target Project");
                     frMain.Navigate(typeof(ScanPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
-            }
-            switch (tag)
-            {
+
                 case "Translate":
                     SetActiveNavItem(nviTranslate);
                     PopulateNavigationViewHeader(Symbol.Globe, "3. Translate Scan Results");
                     frMain.Navigate(typeof(TranslatePage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
-            }
 
-            switch (tag)
-            {
                 case "Settings":
                     PopulateNavigationViewHeader(Symbol.Setting, "Settings");
                     frMain.Navigate(typeof(SettingsPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
             }
-
         }
 
     }

@@ -4,6 +4,10 @@ namespace Translator
 {
     public static class TSettings
     {
+        public static bool Debug = false;
+        public static int DebugRetranslateItemsCount;
+        public static bool DebugRetranslate;
+
         public static int WindowLeft;
         public static int WindowTop;
         public static int WindowWidth;
@@ -25,6 +29,8 @@ namespace Translator
             public const string SelectedTranslationFunction = "SelectedTranslationFunction";
             public const string ThemeIndex = "ThemeIndex";
             public const string Debug = "Debug";
+            public const string DebugRetranslate = "DebugRetranslate";
+            public const string DebugRetranslateItemsCount = "DebugRetranslateItemsCount";
         }
 
         public static void Load()
@@ -38,6 +44,12 @@ namespace Translator
 
             App.Vm.Debug = (appData.Values.ContainsKey(AppSettingsKeys.Debug)) ?
                 (bool)appData.Values[AppSettingsKeys.Debug] : false;
+
+            App.Vm.DebugRetranslate = (appData.Values.ContainsKey(AppSettingsKeys.DebugRetranslate)) ?
+                (bool)appData.Values[AppSettingsKeys.DebugRetranslate] : false;
+            
+            App.Vm.DebugRetranslateItemsCount = (appData.Values.ContainsKey(AppSettingsKeys.DebugRetranslateItemsCount)) ?
+                (int)appData.Values[AppSettingsKeys.DebugRetranslateItemsCount] : 1;
 
             App.Vm.Target = (appData.Values.ContainsKey(AppSettingsKeys.Target)) ?
                 (string)appData.Values[AppSettingsKeys.Target] : @"C:\Repo\WinUITranslator\Sample-Packaged";
@@ -74,6 +86,10 @@ namespace Translator
 
             appData.Values[AppSettingsKeys.ThemeIndex] = App.Vm.ThemeIndex;
             appData.Values[AppSettingsKeys.Debug] = App.Vm.Debug;
+            appData.Values[AppSettingsKeys.DebugRetranslate] = App.Vm.DebugRetranslate;
+            
+            appData.Values[AppSettingsKeys.DebugRetranslateItemsCount] = App.Vm.DebugRetranslateItemsCount;
+
             appData.Values[AppSettingsKeys.Target] = App.Vm.Target;
             appData.Values[AppSettingsKeys.SelectedTranslationFunction] = App.Vm.SelectedTranslationFunction;
 

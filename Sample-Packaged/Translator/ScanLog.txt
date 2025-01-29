@@ -1,45 +1,41 @@
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Summary: 18 translateable items found
-Summary: 1 errors
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Scanning target project: E:\Code\VS\TranslatorNet8\Sample-Packaged
-Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\App.xaml
-Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml
-▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-ERROR
-Rejected E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
-▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-Checking .csproj for linked .xaml's...
-Merging E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\TLocalizedGets.json...
-Found 4 mergeable entries.
-  Merged LoadingFile: @Loading {0}}, please wait...
-  Merged OpenAperture_Generic: @Open the aperture for a shallower depth of field.
-  Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
-  Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
-Merge complete.
-Updating E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
-Clearing old entries from en-US/Resources.resw...
-Adding entries to en-US/Resources.resw...
-  Added Aperture_tb.Text
-  Added EnterYourNameHere_tb.Text
-  Added EnterYourNameHere_short_tb.Text
-  Added MissingHintToken_tb.Text
-  Added Close_btn.Content
-  Added Lock_cb.Content
-  Added Zoom_rbs.Header
-  Added Zoom100_rb.Content
-  Added Zoom200_rb.Content
-  Added Browser_tgbtn.Content
-  Added Connect_ts.Header
-  Added Connect_ts.OffContent
-  Added Connect_ts.OnContent
-  Added LoadingFile
-  Added OpenAperture_Generic
-  Added OpenAperture_MoreContext
-  Added OpenAperture_MoreContext_Constrained
-Checking for specials...
-Adding special: SettingsIcon=settings1.ico
-en-US/Resources.resw updated.
-Updated: E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
-Updated: E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\DetectedXamlElements.json
-Scan complete.
+0040: [INF] Scan complete.
+0039: [INF] Summary: Updated E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\DetectedXamlElements.json
+0038: [INF] Summary: Updated E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
+0037: [INF] Summary: 18 translateable items found
+0036: [INF] Summary: 0 errors
+0035: [INF] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0034: [INF] en-US/Resources.resw updated.
+0033: [INF] Adding special: SettingsIcon=settings1.ico
+0032: [INF] Checking for specials...
+0031: [INF] Added OpenAperture_MoreContext_Constrained
+0030: [INF] Added OpenAperture_MoreContext
+0029: [INF] Added OpenAperture_Generic
+0028: [INF] Added LoadingFile
+0027: [INF] Added Connect_ts.OnContent
+0026: [INF] Added Connect_ts.OffContent
+0025: [INF] Added Connect_ts.Header
+0024: [INF] Added Browser_tgbtn.Content
+0023: [INF] Added Zoom200_rb.Content
+0022: [INF] Added Zoom100_rb.Content
+0021: [INF] Added Zoom_rbs.Header
+0020: [INF] Added Lock_cb.Content
+0019: [INF] Added Close_btn.Content
+0018: [INF] Added MissingHintToken_tb.Text
+0017: [INF] Added EnterYourNameHere_short_tb.Text
+0016: [INF] Added EnterYourNameHere_tb.Text
+0015: [INF] Added Aperture_tb.Text
+0014: [INF] Adding entries to en-US/Resources.resw...
+0013: [INF] Clearing old entries from en-US/Resources.resw...
+0012: [INF] Updating E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
+0011: [INF] Merge complete.
+0010: [INF] Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
+0009: [INF] Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
+0008: [INF] Merged OpenAperture_Generic: @Open the aperture for a shallower depth of field.
+0007: [INF] Merged LoadingFile: @Loading {0}}, please wait...
+0006: [INF] Found 4 mergeable entries.
+0005: [INF] Merging E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\TLocalizedGets.json...
+0004: [INF] Checking .csproj for linked .xaml's...
+0003: [ERR] Rejected E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
+0002: [INF] Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml
+0001: [INF] Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\App.xaml
+0000: [INF] Scanning target project: E:\Code\VS\TranslatorNet8\Sample-Packaged

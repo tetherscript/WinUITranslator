@@ -20,8 +20,6 @@ namespace Translator
         public static string TargetScanLogPath = string.Empty;
         public static string TargetTranslateLogPath = string.Empty;
 
-        public static bool Debug = false;
-
         public static bool CalcPaths(string targetRootPath)
         {
             if (targetRootPath != null)

@@ -27,8 +27,8 @@ namespace Translator
         {
             IsCancelled = false;
             TLog.Reset();
-            TLog.Log("Translating...");
-            TLog.Log("Translation function: " + translationFunction);
+            TLog.Log(TLog.eLogType.inf, 0, "Translating...");
+            TLog.Log(TLog.eLogType.inf, 0, "Translation function: " + translationFunction);
             try
             {
                 await TranslateAsync(
@@ -36,11 +36,11 @@ namespace Translator
                     targetRootPath);
 
                 // Once the operation finishes, you can update UI accordingly
-                TLog.Log("Translation complete.");
+                TLog.Log(TLog.eLogType.inf, 0, "Translation complete.");
             }
             catch (Exception ex)
             {
-                TLog.Log($"An error occurred: {ex.Message}", true);
+                TLog.Log(TLog.eLogType.err, 0, $"An error occurred: {ex.Message}");
             }
             TLog.Save(TUtils.TargetTranslateLogPath);
         }
@@ -61,21 +61,18 @@ namespace Translator
 
             if (!TTransFunc.InitGlobal(translationFunction, fromCulture))
             {
-                TLog.Log(String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}",
-                    translationFunction, fromCulture), true);
+                TLog.Log(TLog.eLogType.err, 0, String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}",
+                    translationFunction, fromCulture));
                 return;
             }
-
-            TLog.Log(_tsNeutral);
-            TLog.Log("TRANSLATION FUNCTION DETAILS");
-            TLog.Log(TTransFunc.GetDescription(translationFunction));
-            TLog.Log(_tsNeutral);
 
             #region CACHE
             StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
             TCache.Init(x);
-            await TCache.InitializeAsync();
-            TLog.Log("Cache initialized.");
+            await TCache.InitializeAsync(); 
+            TLog.Log(TLog.eLogType.inf, 0, "Cache initialized.");
+
+
             #endregion
 
             #region TRANSLATE
@@ -84,16 +81,19 @@ namespace Translator
             int _failedTranslationCounter = 0;
             int _nonEnUSLanguages = 0;
 
+            int _debugRetranslateCounter = 0;
+            bool _debugRetranslateBypass = false;
+
             if (!File.Exists(TUtils.TargetStrings_enUS_Path))
             {
-                TLog.Log(String.Format("File does not exist: {0}", TUtils.TargetStrings_enUS_Path), true);
+                TLog.Log(TLog.eLogType.err, 0, String.Format("File does not exist: {0}", TUtils.TargetStrings_enUS_Path));
             }
             XDocument enUSDoc = XDocument.Load(TUtils.TargetStrings_enUS_Path);
 
             var reswFiles = Directory.GetFiles(TUtils.TargetStringsPath, 
                 "Resources.resw", SearchOption.AllDirectories);
 
-            TLog.Log(String.Format("Found {0} Resources.resw files.", reswFiles.Count().ToString()));
+            TLog.Log(TLog.eLogType.inf, 0, String.Format("Found {0} Resources.resw files.", reswFiles.Count().ToString()));
 
             //load specials
             List<SpecialItem> SpecialItems;
@@ -119,8 +119,10 @@ namespace Translator
                     _nonEnUSLanguages++;
                     hasAlreadyInittedThisCulture = false;
 
+                    _debugRetranslateCounter = 0;
+
                     XDocument destDoc = XDocument.Load(destDocFilePath);
-                    TLog.Log(String.Format("Processing {0}...", toCulture));
+                    TLog.Log(TLog.eLogType.inf, 0, String.Format("Processing {0}...", toCulture));
 
                     //reset destDoc
                     destDoc.Descendants("data")
@@ -137,7 +139,7 @@ namespace Translator
                     {
                         if (IsCancelled)
                         {
-                            TLog.Log("Cancelled.", true);
+                            TLog.Log(TLog.eLogType.err, 0, "Cancelled.");
                             return;
                         }
 
@@ -156,12 +158,21 @@ namespace Translator
                         }
                         else
                         {
+                            if (TSettings.Debug)
+                            {
+                                if (TSettings.DebugRetranslate)
+                                {
+                                   _debugRetranslateCounter++;
+                                    _debugRetranslateBypass = (_debugRetranslateCounter <= TSettings.DebugRetranslateItemsCount);
+                                }
+                            }
+                            
                             string cacheKey = String.Format("{0}:{1}:{2}", toCulture, hintToken, textToTranslate);
                             string cachedData = TCache.GetValue(cacheKey);
-                            if (cachedData != null)
+                            if ((cachedData != null) && (!_debugRetranslateBypass))
                             {
                                 translatedText = cachedData;
-                                TLog.Log(String.Format("  Cache hit: {0}:{1}:{2}", toCulture, hintToken, textToTranslate));
+                                TLog.Log(TLog.eLogType.inf, 2, String.Format("Cache hit: {0}:{1}:{2}", toCulture, hintToken, textToTranslate));
                                 _cacheHitCounter++;
                             }
                             else
@@ -173,16 +184,25 @@ namespace Translator
                                     TTransFunc.InitPerCulture(translationFunction, fromCulture, toCulture);
                                     hasAlreadyInittedThisCulture = true;
                                 }
-
+                                
                                 translatedText = TTransFunc.Translate(translationFunction, fromCulture, toCulture, textToTranslate, hintToken);
-                                TLog.Log(String.Format("  Cache miss: {0}:{1}:{2} --> {3}", toCulture, hintToken, textToTranslate, translatedText));
+                                TLog.Log((_debugRetranslateBypass ? TLog.eLogType.dbg :TLog.eLogType.inf), 2, String.Format("Cache miss: {0}:{1}:{2} {3} {4}", toCulture, hintToken, textToTranslate,
+                                    _debugRetranslateBypass ? "--> RETRANSLATED --> " : "-->", translatedText));
+                                //TLog.Log(TLog.eLogType.inf, 0, String.Format("  Cache miss: {0}:{1}:{2} --> {3}", toCulture, hintToken, textToTranslate, translatedText));
                                 if (translatedText == null)
                                 {
                                     //null returned, so skip it - could be a bad translation or critical failed attempt?
                                     _failedTranslationCounter++;
-                                    TLog.Log(String.Format("TTransFunc.Translate failed: translationFunction={0}, fromCulture={1}," +
+                                    TLog.Log(TLog.eLogType.err, 0, String.Format("TTransFunc.Translate failed: translationFunction={0}, fromCulture={1}," +
                                         "toCulture={2}, hintToken={3}, textToTranslate={4}",
-                                        translationFunction, fromCulture, toCulture, hintToken, textToTranslate), true);
+                                        translationFunction, fromCulture, toCulture, hintToken, textToTranslate));
+
+                                    if (_failedTranslationCounter >= 5)
+                                    {
+                                        TLog.Log(TLog.eLogType.inf, 0, "Too many translation errors (max 5).  Cancelling...");
+                                        IsCancelled = true;
+                                    }
+
                                     continue;
                                 }
                                 await TCache.AddEntryAsync(cacheKey, translatedText);
@@ -209,10 +229,10 @@ namespace Translator
                     }
 
                     //add the specials
-                    TLog.Log("  Checking for specials...");
+                    TLog.Log(TLog.eLogType.inf, 0, "  Checking for specials...");
                     foreach (var item in SpecialItems.Where(item => item.Culture == toCulture))
                     {
-                        TLog.Log("  Adding special: " + item.Key.ToString() + "=" + item.Value.ToString());
+                        TLog.Log(TLog.eLogType.inf, 0, "  Adding special: " + item.Key.ToString() + "=" + item.Value.ToString());
 
                         var desDocDataElement1 = new XElement("data",
                             new XAttribute("name", item.Key.ToString()),
@@ -228,38 +248,22 @@ namespace Translator
                 }
             }
 
-            TLog.Log(_tsNeutral);
+            TLog.Log(TLog.eLogType.inf, 0, _tsNeutral);
 
-            TLog.LogInsert(_tsNeutral);
-
-            string smx = string.Empty;
-            string sm = "The {0} translateable items in en-US\\Resources.resw were translated to {1} languages with {2} cache hits and {3} misses.";
-            if (_cacheMissCounter > 0)
+            TLog.Log(TLog.eLogType.inf, 0, String.Format(@"Summary: Found {0} translateable items in en-US\Resources.resw", _translateableCount));
+            TLog.Log(TLog.eLogType.inf, 0, String.Format("Summary: {0} cache hits", _cacheHitCounter));
+            TLog.Log(TLog.eLogType.inf, 0, String.Format("Summary: {0} cache misses", _cacheMissCounter));
+            TLog.Log(TLog.eLogType.inf, 0, String.Format("Summary: {0} translation attempts", _cacheMissCounter));
+            TLog.Log(TLog.eLogType.inf, 0, String.Format("Summary: {0} failed translations", _failedTranslationCounter));
+            if (TSettings.Debug)
             {
-                sm = sm + Environment.NewLine + "There were {4} calls to the Translation Function with {5} failures.";
-                smx = String.Format(sm,
-                    _translateableCount,
-                    _nonEnUSLanguages,
-                    _cacheHitCounter,
-                    _cacheMissCounter,
-                    _cacheMissCounter,
-                    _failedTranslationCounter);
+                if (_debugRetranslateCounter > 0)
+                {
+                    string s = String.Format("Summary: Retranslated the top {0} items for each toCulture.",
+                        TSettings.DebugRetranslateItemsCount.ToString());
+                    TLog.Log(TLog.eLogType.dbg, 0, s);
+                }
             }
-            else
-            {
-                smx = String.Format(sm,
-                    _translateableCount,
-                    _nonEnUSLanguages,
-                    _cacheHitCounter,
-                    _cacheMissCounter);
-            }
-            TLog.LogInsert(smx);
-            if (_failedTranslationCounter > 0)
-            {
-                TLog.LogInsert("Some translations have failed: Examine log closely to troubleshoot.", true);
-            }
-            TLog.LogInsert("SUMMARY");
-            TLog.LogInsert(_tsNeutral);
 
             #endregion
 

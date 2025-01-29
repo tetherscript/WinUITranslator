@@ -9,33 +9,34 @@ using System.Text.Json;
 
 namespace Translator
 {
-    public static class TTF_OpenAI_1
+    public static class TTF_LMS_DeepSeekR1_OpenAIEmul
     {
         private static string _fromCulture = string.Empty;
         private static string _toCulture = string.Empty;
-        private static string _logPrefix = "OpenAI_1";
-        private const string _settingsFilename = "TF_OpenAI_1.json";
-        private static int _totalSendTokens = 0;
-        private static int _totalReceiveTokens = 0;
-        private static int _totalTokens = 0;
-        private static int _requestBodyMaxTokens = 10;
+        private const string _logPrefix= "TTF_LMS_DeepSeekR1_OpenAIEmul";
+        public const string _settingsFilename = "TTF_LMS_DeepSeekR1_OpenAIEmul.json";
 
-        private static void Log(string msg, bool isError = false)
+        public static string Description(string funcType)
         {
-            TLog.Log((isError ? TLog.eLogType.err : TLog.eLogType.inf), 0, _logPrefix + ": " + msg);
+            //Include a TYPE and DESCRIPTION.  You can add optional info. 
+            string s = string.Empty;
+            foreach (var item in Settings)
+            {
+                s = s + item.Key + ": " + item.Value + Environment.NewLine;
+            }
+            return
+                "TYPE: " + funcType + Environment.NewLine +
+                "DESCRIPTION: Calls DeepSeek R1 on LM Studio using OpenAI API emulation." + Environment.NewLine +
+                "AUTHOR: Tetherscript" + Environment.NewLine +
+                "CONTACT: support@tetherscript.com" + Environment.NewLine +
+                "SETTINGS:" + _settingsFilename + Environment.NewLine +
+                s;
         }
 
         public static bool InitGlobal(string fromCulture)
         {
-            _totalSendTokens = 0;
-            _totalReceiveTokens = 0;
-            _totalTokens = 0;
             _fromCulture = fromCulture;
-            TLog.Log(TLog.eLogType.inf, 0, String.Format(_logPrefix + ": InitGlobal: fromCulture={0}", _fromCulture));
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": DESCRIPTION: Calls the OpenAI API chat endpoint");
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": AUTHOR: Tetherscript");
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": CONTACT: support@tetherscript.com");
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": SETTINGS: " + _settingsFilename);
+            TLog.Log(TLog.eLogType.inf, 0, String.Format("TLMS_DeepSeekR1_OpenAIEmulation: InitGlobal: fromCulture={0}", _fromCulture));
             return LoadSettings();
         }
 
@@ -43,7 +44,7 @@ namespace Translator
         {
             _fromCulture = fromCulture;
             _toCulture = toCulture;
-            TLog.Log(TLog.eLogType.inf, 2, String.Format(_logPrefix + ": InitPerCulture: fromCulture={0}, toCulture={1}", _fromCulture, _toCulture));
+            TLog.Log(TLog.eLogType.inf, 0, String.Format("TLMS_DeepSeekR1_OpenAIEmulation: InitPerCulture: fromCulture={0}, toCulture={1}", _fromCulture, _toCulture));
             return true;
         }
 
@@ -66,15 +67,15 @@ namespace Translator
                     {
                         Settings[entry.Key] = entry.Value;
                     }
-                    Log("Settings loaded.");
+                    TLog.Log(TLog.eLogType.inf, 0, "TLMS_DeepSeekR1_OpenAIEmulation: Settings loaded.");
                     return true;
                     //string setting1 = Settings["mykey"];
                 }
                 catch (Exception ex)
                 {
-                    Log(String.Format(
-                        "LoadSettings(): Error when loading settings: {0} : {1}",
-                        ex.Message, path), true);
+                    TLog.Log(TLog.eLogType.err, 0, (String.Format(
+                        "TLMS_DeepSeekR1_OpenAIEmulation(): Error when loading settings: {0} : {1}",
+                        ex.Message, path)));
                     return false;
                 }
             }
@@ -97,13 +98,14 @@ namespace Translator
                     var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
                     string jsonOutput = JsonSerializer.Serialize(entries, jsonOptions);
                     File.WriteAllText(path, jsonOutput);
-                    Log("Settings saved.");
+                    TLog.LogExt("TLMS_DeepSeekR1_OpenAIEmulation: Settings saved.");
                     return true;
+                    //string setting1 = Settings["mykey"];
                 }
                 catch (Exception ex)
                 {
-                    Log(String.Format(
-                        "SaveSettings(): Error when saving settings: {0} : {1}",
+                    TLog.LogExt(String.Format(
+                        "TLMS_DeepSeekR1_OpenAIEmulation.SaveSettings(): Error when saving settings: {0} : {1}",
                         ex.Message, path), true);
                     return false;
                 }
@@ -145,8 +147,8 @@ namespace Translator
                     new { role = "developer", content = systemContent},
                     new { role = "user", content = userContent}
                     },
-                temperature = 0.0,  //keep it at zero so it is deterministic
-                max_tokens = 1000   //=data sent + data returned
+                temperature = 0.0,
+                max_tokens = 1000
             };
 
             var requestContent = new StringContent(
@@ -169,47 +171,18 @@ namespace Translator
                 using JsonDocument doc = JsonDocument.Parse(jsonResponse);
                 JsonElement root = doc.RootElement;
                 JsonElement choices = root.GetProperty("choices");
-                JsonElement error;
-                if (root.TryGetProperty("error", out error))
-                {
-                    string errorMsg = error.GetProperty("message").GetString() ?? string.Empty;
-                    string errortype = error.GetProperty("type").GetString() ?? string.Empty;
-                    TLog.Log(TLog.eLogType.err, 0, errortype + ": " + errorMsg);
-                    TLog.Log(TLog.eLogType.err, 0, userContent);
-                    return null;
-                }
-
                 JsonElement firstChoice = choices[0];
                 JsonElement message = firstChoice.GetProperty("message");
                 string translatedText = message.GetProperty("content").GetString() ?? string.Empty;
                 doctxt = root.GetRawText();
-
-                //usage
-                JsonElement usage = root.GetProperty("usage");
-                int promptSendTokens = usage.GetProperty("prompt_tokens").GetInt32();
-                int completion_tokens = usage.GetProperty("completion_tokens").GetInt32();
-                int total_tokens = usage.GetProperty("total_tokens").GetInt32();
-                _totalSendTokens = _totalSendTokens + promptSendTokens;
-                _totalReceiveTokens = _totalReceiveTokens + completion_tokens;
-                _totalTokens = _totalTokens + total_tokens;
-
-                //status
-                string finish_reason =  firstChoice.GetProperty("finish_reason").GetString();
-                switch (finish_reason) {
-                    case "stop":
-                        translatedText = translatedText.Substring(1, translatedText.Length - 2);
-                        return translatedText.Trim();
-                    case "length": Log("The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent, true);
-                        return null;
-                    case "content_filter": Log("The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent, true); 
-                        return null;
-                    default: return null;
-                }
+                //remove the quotes
+                translatedText = translatedText.Substring(1, translatedText.Length - 2);
+                return translatedText.Trim();
             }
             catch
             {
                 // Fallback in case of any unexpected structure
-                TLog.Log(TLog.eLogType.err, 0, _logPrefix + ": Bad API return structure: " + Environment.NewLine + doctxt);
+                TLog.LogExt("TLMS_DeepSeekR1_OpenAIEmulation: Bad API return structure: " + Environment.NewLine + doctxt, true);
                 return null;
             }
         }

@@ -7,6 +7,7 @@ namespace Translator
     public static class TLog
     {
         public enum eMode { scan, translate, system }
+        public enum eLogType { inf, err, dbg, sep };
 
         private static int _logCounter = 0;
         private static int _errorCounter = 0;
@@ -24,48 +25,31 @@ namespace Translator
         public static string Text = string.Empty;
         public static eMode Mode = eMode.system;
 
-        public static void Log(string msg, bool isError = false)
+
+        public static void Log(eLogType logType, int indent, string msg)
         {
-            if (isError)
-            {
-                Text = Text + TsDown + Environment.NewLine;
-                Text = Text + "ERROR" + Environment.NewLine;
-                _errorCounter++;
-            }
-            Text = Text + String.Format(@"{0}{1}", msg, Environment.NewLine);
-            if (isError)
-            {
-                Text = Text + TsUp + Environment.NewLine;
-            }
+            //line #
+            string lineNumber = _logCounter.ToString("D4"); //0473
+
+            //type
+            string type = String.Format("[{0}]", logType.ToString()).ToUpper(); //[INF]
+
+            //indent
+            string ind = new string(' ', indent);
+
+            //message
+            string m = msg.Trim();
+
+            string res = String.Format("{0}: {1} {2}", lineNumber, type, m);
+
+            Text = res + Environment.NewLine + Text;
+
             if (Mode == eMode.scan)
             {
                 App.Vm.ScanLog = Text;
             }
             else
             if (Mode == eMode.translate)
-            {
-                App.Vm.TranslateLog = Text;
-            }
-            _logCounter++;
-        }
-
-        public static void LogInsert(string msg, bool isError = false)
-        {
-            string s = string.Empty;
-            if (isError)
-            {
-                s = ">>>>>> ";
-                _errorCounter++;
-
-            }
-            s = s + String.Format(@"{0}{1}", msg, Environment.NewLine);
-            Text = s + Text;
-            if (Mode == eMode.scan)
-            {
-                App.Vm.ScanLog = Text;
-            }
-            else
-                if (Mode == eMode.translate)
             {
                 App.Vm.TranslateLog = Text;
             }
