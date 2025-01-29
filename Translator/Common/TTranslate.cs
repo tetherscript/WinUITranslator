@@ -181,29 +181,64 @@ namespace Translator
                                     TTransFunc.InitPerCulture(translationFunction, fromCulture, toCulture);
                                     hasAlreadyInittedThisCulture = true;
                                 }
-                                
+
+
+                                string s1, s2;
+                                s1 = (_debugRetranslateBypass ? "Re-Translating..." : "Cache miss: Translating...");
+                                TLog.Log((TSettings.Debug ? TLog.eLogType.dbg : TLog.eLogType.inf), 2, s1);
+                                s2 = String.Format(
+                                     "Untranslated: {0}:{1}:{2}",
+                                     toCulture,
+                                     hintToken,
+                                     textToTranslate
+                                     );
+                                TLog.Log(TLog.eLogType.inf, 4, s2);
                                 translatedText = TTransFunc.Translate(translationFunction, fromCulture, toCulture, textToTranslate, hintToken);
                                 if (translatedText == null)
                                 {
-                                    //null returned, so skip it - could be a bad translation or critical failed attempt?
+                                    translatedText = "--- FAILED ---";
                                     _failedTranslationCounter++;
-                                    TLog.Log(TLog.eLogType.err, 0, String.Format("TTransFunc.Translate failed: translationFunction={0}, fromCulture={1}," +
-                                        "toCulture={2}, hintToken={3}, textToTranslate={4}",
-                                        translationFunction, fromCulture, toCulture, hintToken, textToTranslate));
-
                                     if (_failedTranslationCounter >= 5)
                                     {
-                                        TLog.Log(TLog.eLogType.inf, 0, "Too many translation errors (max 5).  Cancelling...");
+                                        TLog.Log(TLog.eLogType.err, 4, "Too many translation errors (max 5).  Cancelling...");
                                         IsCancelled = true;
                                     }
-
                                     continue;
                                 }
                                 else
                                 {
-                                    TLog.Log((_debugRetranslateBypass ? TLog.eLogType.dbg : TLog.eLogType.inf), 2, String.Format("Cache miss: {0}:{1}:{2} {3} {4}", toCulture, hintToken, textToTranslate,
-                                        _debugRetranslateBypass ? "--> RETRANSLATED --> " : "-->", translatedText));
+                                    String.Format("Result: " + translatedText);
+                                    TLog.Log(TLog.eLogType.inf, 4, s2);
                                 }
+
+
+
+                                //translatedText = TTransFunc.Translate(translationFunction, fromCulture, toCulture, textToTranslate, hintToken);
+                                //if (translatedText == null)
+                                //{
+                                //    //null returned, so skip it - could be a bad translation or critical failed attempt?
+                                //    _failedTranslationCounter++;
+                                //    TLog.Log(TLog.eLogType.err, 0, String.Format("TTransFunc.Translate failed: translationFunction={0}, fromCulture={1}," +
+                                //        "toCulture={2}, hintToken={3}, textToTranslate={4}",
+                                //        translationFunction, fromCulture, toCulture, hintToken, textToTranslate));
+
+                                //    if (_failedTranslationCounter >= 5)
+                                //    {
+                                //        TLog.Log(TLog.eLogType.inf, 0, "Too many translation errors (max 5).  Cancelling...");
+                                //        IsCancelled = true;
+                                //    }
+
+                                //    continue;
+                                //}
+                                //else
+                                //{
+                                //    TLog.Log((_debugRetranslateBypass ? TLog.eLogType.dbg : TLog.eLogType.inf), 2, String.Format("Cache miss: {0}:{1}:{2} {3} {4}", toCulture, hintToken, textToTranslate,
+                                //        _debugRetranslateBypass ? "--> RETRANSLATED --> " : "-->", translatedText));
+                                //}
+
+
+
+
                                 await TCache.AddEntryAsync(cacheKey, translatedText);
                             }
                             var desDocDataElement = new XElement("data",

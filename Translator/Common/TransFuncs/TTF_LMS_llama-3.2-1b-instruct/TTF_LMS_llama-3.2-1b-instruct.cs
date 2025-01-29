@@ -6,23 +6,24 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Net;
 
 namespace Translator
 {
-    public static class TTF_LMS_DeepSeekR1_OpenAIEmul
+    public static class TTF_LMS_llama_3_2_1b_instruct
     {
         private static string _fromCulture = string.Empty;
         private static string _toCulture = string.Empty;
-        private static string _logPrefix = "DeepSeekR1_OpenAIEmul";
-        private const string _settingsFilename = "TTF_LMS_DeepSeekR1_OpenAIEmul.json";
+        private static string _logPrefix = "TTF_LMS_llama-3.2-1b-instruct";
+        private const string _settingsFilename = "TTF_LMS_llama-3.2-1b-instruct.json";
         private static int _totalSendTokens = 0;
         private static int _totalReceiveTokens = 0;
         private static int _totalTokens = 0;
         private static int _requestBodyMaxTokens = 1000;
 
-        private static void Log(string msg, bool isError = false)
+        private static void Log(TLog.eLogType type, int indent, string msg, bool isError = false)
         {
-            TLog.Log((isError ? TLog.eLogType.err : TLog.eLogType.inf), 0, _logPrefix + ": " + msg);
+            TLog.Log(type, indent, _logPrefix + ": " + msg);
         }
 
         public static bool InitGlobal(string fromCulture)
@@ -32,8 +33,7 @@ namespace Translator
             _totalTokens = 0;
             _fromCulture = fromCulture;
             TLog.Log(TLog.eLogType.inf, 0, String.Format(_logPrefix + ": InitGlobal: fromCulture={0}", _fromCulture));
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": WARNING: This is in development.  Still can't find the right prompts to only return the translation.  DeepSeek R1 is by default very verbose.");
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": DESCRIPTION: DeepSeek R1 - Calls the local LM Studio API in OpenAI API emulation mode.");
+            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": DESCRIPTION: The model is 'llama-3.2-1b-instruct' hosted on LM Studio.");
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": AUTHOR: Tetherscript");
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": CONTACT: support@tetherscript.com");
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": SETTINGS: " + _settingsFilename);
@@ -81,15 +81,15 @@ namespace Translator
                     {
                         Settings[entry.Key] = entry.Value;
                     }
-                    Log("SETTINGS: loaded.");
+                    Log(TLog.eLogType.inf, 0, "SETTINGS: loaded.");
                     return true;
                     //string setting1 = Settings["mykey"];
                 }
                 catch (Exception ex)
                 {
-                    Log(String.Format(
+                    Log(TLog.eLogType.err, 0, String.Format(
                         "LoadSettings(): Error when loading settings: {0} : {1}",
-                        ex.Message, path), true);
+                        ex.Message, path));
                     return false;
                 }
             }
@@ -112,14 +112,14 @@ namespace Translator
                     var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
                     string jsonOutput = JsonSerializer.Serialize(entries, jsonOptions);
                     File.WriteAllText(path, jsonOutput);
-                    Log("Settings saved.");
+                    Log(TLog.eLogType.inf, 0, "Settings saved.");
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    Log(String.Format(
+                    Log(TLog.eLogType.err, 0, String.Format(
                         "SaveSettings(): Error when saving settings: {0} : {1}",
-                        ex.Message, path), true);
+                        ex.Message, path));
                     return false;
                 }
             }
@@ -127,20 +127,17 @@ namespace Translator
                 return false;
         }
 
-        //OPENAI API TRANSLATION FUNCTION
         public static string Translate(string fromCulture, string toCulturestring,
             string textToTranslate, string hintToken)
         {
             //returning null means this function has failed. It could be due to a bad return data structure.
 
             //However, the API may not understand the question and returns something like a confused 'I do not understand',
-            //which is a valid return data structure, but a failed translation.  In this OpenAI API,
-            //it would do that if we send None ....so we add single quotes going to, and remove the quotes on return.
+            //which is a valid return data structure, but a failed translation.  
 
             //Worst case is some obscure string has this confused bad translation that is rarely seen by users.
             //Best thing to do is to review the Translate log where you can see the API responses for translations.
 
-            //string openAiApiKey = Environment.GetEnvironmentVariable("OpenAIAPIKey1");
             string openAiApiKey = "lm-studio";
 
             //const string openAiChatEndpoint = "https://api.openai.com/v1/chat/completions";
@@ -150,12 +147,17 @@ namespace Translator
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", openAiApiKey);
 
-            string systemContent = String.Format(Settings[hintToken], _toCulture);
-            string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
+            //string systemContent = String.Format(Settings[hintToken], _toCulture);
 
-            string mt = Settings["max_tokens"];
-            if (!int.TryParse(mt, out _requestBodyMaxTokens))
+            string z = @"You are a professional language translator.  Translate the following text from American English (en - US) to ({0}).";
+
+            string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
+            string systemContent = String.Format(z, _toCulture);
+
+          
+           if (!Settings.TryGetValue("max_tokens", out string mt))
             {
+                Log(TLog.eLogType.inf, 0, "max_tokens not defined in " + _settingsFilename + " defaulting to 1000.");
                 _requestBodyMaxTokens = 1000;
             }
 
@@ -171,16 +173,23 @@ namespace Translator
                 max_tokens = _requestBodyMaxTokens   //=data sent + data returned
             };
 
+            //COMPOSE AND SEND REQUEST
             var requestContent = new StringContent(
                 JsonSerializer.Serialize(requestBody),
                 Encoding.UTF8,
                 "application/json"
             );
-
             using HttpResponseMessage response = httpClient.PostAsync(openAiChatEndpoint, requestContent).Result;
+            HttpStatusCode statusCode = response.StatusCode;
+            if (statusCode != System.Net.HttpStatusCode.OK)
+            {
+                Log(TLog.eLogType.err, 0, "Error in response: statusCode = " + statusCode.ToString());
+                return null;
+            }
             response.EnsureSuccessStatusCode();
-
             string jsonResponse = response.Content.ReadAsStringAsync().Result;
+
+
 
             // The response JSON includes an array of "choices"; we want the "message.content"
             // of the first choice. For structure details, see:
@@ -223,10 +232,10 @@ namespace Translator
                         translatedText = translatedText.Substring(1, translatedText.Length - 2);
                         return translatedText.Trim();
                     case "length":
-                        Log("The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent, true);
+                        Log(TLog.eLogType.err, 0, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent);
                         return null;
                     case "content_filter":
-                        Log("The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent, true);
+                        Log(TLog.eLogType.err, 0, "The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent);
                         return null;
                     default: return null;
                 }

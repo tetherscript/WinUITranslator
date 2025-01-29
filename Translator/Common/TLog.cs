@@ -34,8 +34,16 @@ namespace Translator
             Log(eLogType.inf, 0, s);
         }
 
+        public static void Add(string msg)
+        {
+            string x = Environment.NewLine;
+            if (msg.Contains(Environment.NewLine))
+            Text = msg.Trim() + (msg.Contains(Environment.NewLine) ? Environment.NewLine : "") + Text;
 
-        public static void Log(eLogType logType, int indent, string msg)
+            UpdateVm();
+        }
+
+        public static void Log(eLogType logType, int indent, string msg, bool appendNewLine = true)
         {
             //line #
             string lineNumber = _logCounter.ToString("D4"); //0473
@@ -63,8 +71,14 @@ namespace Translator
 
             string res = String.Format("{0}: {1} {2}", lineNumber, attn, m);
 
-            Text = res + Environment.NewLine + Text;
+            Text = res + (appendNewLine ? Environment.NewLine : "") + Text;
 
+            UpdateVm();
+            _logCounter++;
+        }
+
+        private static void UpdateVm()
+        {
             if (Mode == eMode.scan)
             {
                 App.Vm.ScanLog = Text;
@@ -74,7 +88,6 @@ namespace Translator
             {
                 App.Vm.TranslateLog = Text;
             }
-            _logCounter++;
         }
 
         public static void Reset()

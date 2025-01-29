@@ -7,12 +7,13 @@ namespace Translator
     {
         private const string _sample = "Sample";
         private const string _openAI_1 = "OpenAI_1";
-        private const string _lMS_DeepSeekR1_OpenAIEmu = "LMS_DeepSeekR1_OpenAIEmul";
+        private const string _LMS_llama_3_2_1b_instruct = "LMS_llama-3.2-1b-instruct";
+
         //TLMS_DeepSeekR1_OpenAIEmulation
         public static List<string> Types = new List<string>
         {
             _openAI_1,
-            _lMS_DeepSeekR1_OpenAIEmu,
+            _LMS_llama_3_2_1b_instruct,
             _sample
         };
 
@@ -23,7 +24,7 @@ namespace Translator
             {
                 case _sample: return false;
                 case _openAI_1: return TTF_OpenAI_1.InitGlobal(fromCulture);
-                case _lMS_DeepSeekR1_OpenAIEmu: return TTF_LMS_DeepSeekR1_OpenAIEmul.InitGlobal(fromCulture);
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.InitGlobal(fromCulture);
                 default: return false;
             }
         }
@@ -35,7 +36,7 @@ namespace Translator
             {
                 case _sample: return false;
                 case _openAI_1: return TTF_OpenAI_1.InitPerCulture(fromCulture, toCulture); 
-                case _lMS_DeepSeekR1_OpenAIEmu: return TTF_LMS_DeepSeekR1_OpenAIEmul.InitPerCulture(fromCulture, toCulture);
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.InitPerCulture(fromCulture, toCulture);
                 default: return false;
             }
         }
@@ -48,7 +49,7 @@ namespace Translator
             {
                 case _sample: return null;
                 case _openAI_1: return TTF_OpenAI_1.Translate(fromCulture, toCulture, textToTranslate, hintToken);
-                case _lMS_DeepSeekR1_OpenAIEmu: return TTF_LMS_DeepSeekR1_OpenAIEmul.Translate(fromCulture, toCulture, textToTranslate, hintToken);
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.Translate(fromCulture, toCulture, textToTranslate, hintToken);
                 default: return null;
             }
         }
@@ -60,7 +61,7 @@ namespace Translator
             {
                 case _sample: return false;
                 case _openAI_1: return TTF_OpenAI_1.DeInitGlobal();
-                case _lMS_DeepSeekR1_OpenAIEmu: return TTF_LMS_DeepSeekR1_OpenAIEmul.DeInitGlobal();
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.DeInitGlobal();
                 default: return false;
             }
         }

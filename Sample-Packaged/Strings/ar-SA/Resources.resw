@@ -125,14 +125,6 @@
     <value>أدخل اسمك هنا</value>
     <comment>@</comment>
   </data>
-  <data name="EnterYourNameHere_short_tb.Text" xml:space="preserve">
-    <value>أدخل اسمك هنا</value>
-    <comment>@@</comment>
-  </data>
-  <data name="Close_btn.Content" xml:space="preserve">
-    <value>قريب</value>
-    <comment>@</comment>
-  </data>
   <data name="Lock_cb.Content" xml:space="preserve">
     <value>قفل</value>
     <comment>@@</comment>
