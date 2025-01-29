@@ -12,9 +12,6 @@ namespace Translator
     public static class TTranslate
     {
         public static bool IsCancelled = false;
-        private static string _tsDown = new string('┬', 30);
-        private static string _tsNeutral = new string('━', 30);
-        private static string _tsUp = new string('┴', 30);
 
         public class SpecialItem
         {
@@ -186,9 +183,6 @@ namespace Translator
                                 }
                                 
                                 translatedText = TTransFunc.Translate(translationFunction, fromCulture, toCulture, textToTranslate, hintToken);
-                                TLog.Log((_debugRetranslateBypass ? TLog.eLogType.dbg :TLog.eLogType.inf), 2, String.Format("Cache miss: {0}:{1}:{2} {3} {4}", toCulture, hintToken, textToTranslate,
-                                    _debugRetranslateBypass ? "--> RETRANSLATED --> " : "-->", translatedText));
-                                //TLog.Log(TLog.eLogType.inf, 0, String.Format("  Cache miss: {0}:{1}:{2} --> {3}", toCulture, hintToken, textToTranslate, translatedText));
                                 if (translatedText == null)
                                 {
                                     //null returned, so skip it - could be a bad translation or critical failed attempt?
@@ -204,6 +198,11 @@ namespace Translator
                                     }
 
                                     continue;
+                                }
+                                else
+                                {
+                                    TLog.Log((_debugRetranslateBypass ? TLog.eLogType.dbg : TLog.eLogType.inf), 2, String.Format("Cache miss: {0}:{1}:{2} {3} {4}", toCulture, hintToken, textToTranslate,
+                                        _debugRetranslateBypass ? "--> RETRANSLATED --> " : "-->", translatedText));
                                 }
                                 await TCache.AddEntryAsync(cacheKey, translatedText);
                             }
@@ -248,8 +247,7 @@ namespace Translator
                 }
             }
 
-            TLog.Log(TLog.eLogType.inf, 0, _tsNeutral);
-
+            TLog.LogSeparator(TLog.eLogSeparatorType.lineWide);
             TLog.Log(TLog.eLogType.inf, 0, String.Format(@"Summary: Found {0} translateable items in en-US\Resources.resw", _translateableCount));
             TLog.Log(TLog.eLogType.inf, 0, String.Format("Summary: {0} cache hits", _cacheHitCounter));
             TLog.Log(TLog.eLogType.inf, 0, String.Format("Summary: {0} cache misses", _cacheMissCounter));
@@ -264,6 +262,7 @@ namespace Translator
                     TLog.Log(TLog.eLogType.dbg, 0, s);
                 }
             }
+            TTransFunc.DeInitGlobal(translationFunction);
 
             #endregion
 

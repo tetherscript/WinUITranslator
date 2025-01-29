@@ -86,7 +86,7 @@ namespace Translator
             }
             else
             {
-                TLog.LogExt("Target root path does not exist: " + Target, true);
+                TLog.Log(TLog.eLogType.err, 0, "Target root path does not exist: " + Target);
             }
             IsScanning = false;
             IsBusy = false;
@@ -121,7 +121,7 @@ namespace Translator
             }
             else
             {
-                TLog.LogExt("Target root path does not exist: " + Target, true);
+                TLog.Log(TLog.eLogType.err, 0, "Target root path does not exist: " + Target);
             }
             IsTranslating = false;
             IsBusy = false;

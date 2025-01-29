@@ -14,11 +14,11 @@ namespace Translator
         private static string _fromCulture = string.Empty;
         private static string _toCulture = string.Empty;
         private static string _logPrefix = "OpenAI_1";
-        private const string _settingsFilename = "TF_OpenAI_1.json";
+        private const string _settingsFilename = "TTF_OpenAI_1.json";
         private static int _totalSendTokens = 0;
         private static int _totalReceiveTokens = 0;
         private static int _totalTokens = 0;
-        private static int _requestBodyMaxTokens = 10;
+        private static int _requestBodyMaxTokens = 1000;
 
         private static void Log(string msg, bool isError = false)
         {
@@ -36,7 +36,13 @@ namespace Translator
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": AUTHOR: Tetherscript");
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": CONTACT: support@tetherscript.com");
             TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": SETTINGS: " + _settingsFilename);
-            return LoadSettings();
+            bool res = LoadSettings();
+            foreach (var item in Settings)
+            {
+                string s = item.Key + ": " + item.Value;
+                TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": SETTINGS: " + s);
+            }
+            return res;
         }
 
         public static bool InitPerCulture(string fromCulture, string toCulture)
@@ -44,6 +50,14 @@ namespace Translator
             _fromCulture = fromCulture;
             _toCulture = toCulture;
             TLog.Log(TLog.eLogType.inf, 2, String.Format(_logPrefix + ": InitPerCulture: fromCulture={0}, toCulture={1}", _fromCulture, _toCulture));
+            return true;
+        }
+
+        public static bool DeInitGlobal()
+        {
+            string s = String.Format("Summary: Used {0} prompt tokens + {1} completion_tokens = {2} total tokens.",
+                _totalSendTokens, _totalReceiveTokens, _totalTokens);
+            TLog.Log(TLog.eLogType.inf, 0, s);
             return true;
         }
 
@@ -66,7 +80,7 @@ namespace Translator
                     {
                         Settings[entry.Key] = entry.Value;
                     }
-                    Log("Settings loaded.");
+                    Log("SETTINGS: loaded.");
                     return true;
                     //string setting1 = Settings["mykey"];
                 }
@@ -125,7 +139,6 @@ namespace Translator
             //Worst case is some obscure string has this confused bad translation that is rarely seen by users.
             //Best thing to do is to review the Translate log where you can see the API responses for translations.
 
-            //this Translation Function is the original one used on this translator app.  It is not optimized.
             string openAiApiKey = Environment.GetEnvironmentVariable("OpenAIAPIKey1");
 
             const string openAiChatEndpoint = "https://api.openai.com/v1/chat/completions";
@@ -137,6 +150,12 @@ namespace Translator
             string systemContent = String.Format(Settings[hintToken], _toCulture);
             string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
 
+            string mt = Settings["max_tokens"];
+            if (!int.TryParse(mt, out _requestBodyMaxTokens))
+            {
+                _requestBodyMaxTokens = 1000;
+            }
+
             var requestBody = new
             {
                 model = "gpt-4",
@@ -146,7 +165,7 @@ namespace Translator
                     new { role = "user", content = userContent}
                     },
                 temperature = 0.0,  //keep it at zero so it is deterministic
-                max_tokens = 1000   //=data sent + data returned
+                max_tokens = _requestBodyMaxTokens   //=data sent + data returned
             };
 
             var requestContent = new StringContent(

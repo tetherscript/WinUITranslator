@@ -392,7 +392,7 @@ namespace Translator
 
             doc.Save(path);
             TLog.Log(TLog.eLogType.inf, 0, "en-US/Resources.resw updated.");
-            TLog.Log(TLog.eLogType.inf, 0, TLog.TsNeutral);
+            TLog.LogSeparator(TLog.eLogSeparatorType.lineWide);
             TLog.Log(TLog.eLogType.inf, 0, String.Format("Summary: {0} errors", TLog.ErrorCounter));
             TLog.Log(TLog.eLogType.inf, 0, String.Format("Summary: {0} translateable items found", _counter));
         }

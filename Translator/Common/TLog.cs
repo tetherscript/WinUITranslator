@@ -8,6 +8,7 @@ namespace Translator
     {
         public enum eMode { scan, translate, system }
         public enum eLogType { inf, err, dbg, sep };
+        public enum eLogSeparatorType { lineWide, lineShort };
 
         private static int _logCounter = 0;
         private static int _errorCounter = 0;
@@ -17,13 +18,21 @@ namespace Translator
                 return _errorCounter;
             }
         }
-
-        public static string TsDown = new string('▼', 30);
-        public static string TsNeutral = new string('━', 60);
-        public static string TsUp = new string('▲', 30);
-
         public static string Text = string.Empty;
         public static eMode Mode = eMode.system;
+
+        public static void LogSeparator(eLogSeparatorType type)
+        {
+
+            string s = string.Empty;
+            switch (type)
+            {
+                case eLogSeparatorType.lineWide: s = new string('━', 60); break;
+                case eLogSeparatorType.lineShort: s = new string('━', 30); break;
+            }
+            //Text = s + Environment.NewLine + Text;
+            Log(eLogType.inf, 0, s);
+        }
 
 
         public static void Log(eLogType logType, int indent, string msg)
@@ -37,10 +46,22 @@ namespace Translator
             //indent
             string ind = new string(' ', indent);
 
+            //error
+            string attn = " ";
+            if (logType == eLogType.err)
+            {
+                attn = "E";
+            }
+            else
+            if (logType == eLogType.dbg)
+            {
+                attn = "D";
+            }
+
             //message
             string m = msg.Trim();
 
-            string res = String.Format("{0}: {1} {2}", lineNumber, type, m);
+            string res = String.Format("{0}: {1} {2}", lineNumber, attn, m);
 
             Text = res + Environment.NewLine + Text;
 

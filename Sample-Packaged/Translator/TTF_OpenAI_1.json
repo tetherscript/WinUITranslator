@@ -1,5 +1,9 @@
 [
   {
+    "Key": "max_tokens",
+    "Value": "1000"
+  },
+  {
     "Key": "@",
     "Value": "You are a professional language translator.  Translate the following text from American English (en-US) to ({0})."
   },
