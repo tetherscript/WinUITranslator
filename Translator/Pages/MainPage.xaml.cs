@@ -32,7 +32,6 @@ namespace Translator
             if (args.IsSettingsSelected == true)
             {
                 GotoPage("Settings");
-                //frMain.Navigate(typeof(SettingsPage), args.RecommendedNavigationTransitionInfo);
             }
             else
             {
@@ -80,6 +79,12 @@ namespace Translator
                     SetActiveNavItem(nviTranslate);
                     PopulateNavigationViewHeader(Symbol.Globe, "3. Translate Scan Results");
                     frMain.Navigate(typeof(TranslatePage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
+                    break;
+
+                case "TranslationFunctions":
+                    SetActiveNavItem(nviTranslationFunctions);
+                    PopulateNavigationViewHeader(Symbol.Bookmarks, "Translation Functions");
+                    frMain.Navigate(typeof(TranslationFunctionsPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
 
                 case "Settings":

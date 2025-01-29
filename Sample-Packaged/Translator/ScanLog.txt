@@ -1,43 +1,43 @@
-0000:    Scan started.
-0001:    Scanning target project: E:\Code\VS\TranslatorNet8\Sample-Packaged
-0002:      Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\App.xaml
-0003:      Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml
-0004: E      Rejected E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
-0005:    Checking .csproj for linked .xaml's...
-0006:      Merging E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\TLocalizedGets.json...
-0007:      Found 4 mergeable entries.
-0008:        Merged LoadingFile: @Loading {0}}, please wait...
-0009:        Merged OpenAperture_Generic: @Open the aperture for a shallower depth of field.
-0010:        Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
-0011:        Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
-0012:      Merge complete.
-0013:    Updating E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
-0014:      Clearing old entries from en-US/Resources.resw...
-0015:        Adding entries to en-US/Resources.resw...
-0016:          Added Aperture_tb.Text
-0017:          Added EnterYourNameHere_tb.Text
-0018:          Added EnterYourNameHere_short_tb.Text
-0019:          Added MissingHintToken_tb.Text
-0020:          Added Close_btn.Content
-0021:          Added Lock_cb.Content
-0022:          Added Zoom_rbs.Header
-0023:          Added Zoom100_rb.Content
-0024:          Added Zoom200_rb.Content
-0025:          Added Browser_tgbtn.Content
-0026:          Added Connect_ts.Header
-0027:          Added Connect_ts.OffContent
-0028:          Added Connect_ts.OnContent
-0029:          Added LoadingFile
-0030:          Added OpenAperture_Generic
-0031:          Added OpenAperture_MoreContext
-0032:          Added OpenAperture_MoreContext_Constrained
-0033:    Checking for specials...
-0034:      Adding special: SettingsIcon=settings1.ico
-0035:    en-US/Resources.resw updated.
-0036:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-0037:    Summary: 0 errors
-0038:    Summary: 18 translateable items found
-0039:    Summary: Updated E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
-0040:    Summary: Updated E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\DetectedXamlElements.json
-0041:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-0042:    Scan complete.
+0001:    Scan started.
+0002:    Scanning target project: E:\Code\VS\TranslatorNet8\Sample-Packaged
+0003:      Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\App.xaml
+0004:      Found: E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml
+0005: E      Rejected E:\Code\VS\TranslatorNet8\Sample-Packaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
+0006:    Checking .csproj for linked .xaml's...
+0007:      Merging E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\TLocalizedGets.json...
+0008:      Found 4 mergeable entries.
+0009:        Merged LoadingFile: @Loading {0}}, please wait...
+0010:        Merged OpenAperture_Generic: @Open the aperture for a shallower depth of field.
+0011:        Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
+0012:        Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
+0013:      Merge complete.
+0014:    Updating E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
+0015:      Clearing old entries from en-US/Resources.resw...
+0016:        Adding entries to en-US/Resources.resw...
+0017:          Added Aperture_tb.Text
+0018:          Added EnterYourNameHere_tb.Text
+0019:          Added EnterYourNameHere_short_tb.Text
+0020:          Added MissingHintToken_tb.Text
+0021:          Added Close_btn.Content
+0022:          Added Lock_cb.Content
+0023:          Added Zoom_rbs.Header
+0024:          Added Zoom100_rb.Content
+0025:          Added Zoom200_rb.Content
+0026:          Added Browser_tgbtn.Content
+0027:          Added Connect_ts.Header
+0028:          Added Connect_ts.OffContent
+0029:          Added Connect_ts.OnContent
+0030:          Added LoadingFile
+0031:          Added OpenAperture_Generic
+0032:          Added OpenAperture_MoreContext
+0033:          Added OpenAperture_MoreContext_Constrained
+0034:    Checking for specials...
+0035:      Adding special: SettingsIcon=settings1.ico
+0036:    en-US/Resources.resw updated.
+0037:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0038:    Summary: 0 errors
+0039:    Summary: 18 translateable items found
+0040:    Summary: Updated E:\Code\VS\TranslatorNet8\Sample-Packaged\Strings\en-US\Resources.resw
+0041:    Summary: Updated E:\Code\VS\TranslatorNet8\Sample-Packaged\Translator\DetectedXamlElements.json
+0042:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0043:    Scan complete.

@@ -20,49 +20,49 @@ namespace Translator
         private static int _totalTokens = 0;
         private static int _requestBodyMaxTokens = 1000;
 
-        private static void Log(string msg, bool isError = false)
+        private static void Log(TLog.eMode mode, string msg, bool isError = false)
         {
-            TLog.Log((isError ? TLog.eLogType.err : TLog.eLogType.inf), 0, _logPrefix + ": " + msg);
+            TLog.Log(mode, (isError ? TLog.eLogItemType.err : TLog.eLogItemType.inf), 0, _logPrefix + ": " + msg);
         }
 
-        public static bool InitGlobal(string fromCulture)
+        public static bool InitGlobal(TLog.eMode mode, string fromCulture)
         {
             _totalSendTokens = 0;
             _totalReceiveTokens = 0;
             _totalTokens = 0;
             _fromCulture = fromCulture;
-            TLog.Log(TLog.eLogType.inf, 0, String.Format(_logPrefix + ": InitGlobal: fromCulture={0}", _fromCulture));
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": DESCRIPTION: Calls the OpenAI API chat endpoint");
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": AUTHOR: Tetherscript");
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": CONTACT: support@tetherscript.com");
-            TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": SETTINGS: " + _settingsFilename);
-            bool res = LoadSettings();
+            TLog.Log(mode, TLog.eLogItemType.inf, 0, String.Format(_logPrefix + ": InitGlobal: fromCulture={0}", _fromCulture));
+            TLog.Log(mode, TLog.eLogItemType.inf, 0, _logPrefix + ": DESCRIPTION: Calls the OpenAI API chat endpoint");
+            TLog.Log(mode, TLog.eLogItemType.inf, 0, _logPrefix + ": AUTHOR: Tetherscript");
+            TLog.Log(mode, TLog.eLogItemType.inf, 0, _logPrefix + ": CONTACT: support@tetherscript.com");
+            TLog.Log(mode, TLog.eLogItemType.inf, 0, _logPrefix + ": SETTINGS: " + _settingsFilename);
+            bool res = LoadSettings(mode);
             foreach (var item in Settings)
             {
                 string s = item.Key + ": " + item.Value;
-                TLog.Log(TLog.eLogType.inf, 0, _logPrefix + ": SETTINGS: " + s);
+                TLog.Log(mode, TLog.eLogItemType.inf, 0, _logPrefix + ": SETTINGS: " + s);
             }
             return res;
         }
 
-        public static bool InitPerCulture(string fromCulture, string toCulture)
+        public static bool InitPerCulture(TLog.eMode mode, string fromCulture, string toCulture)
         {
             _fromCulture = fromCulture;
             _toCulture = toCulture;
-            TLog.Log(TLog.eLogType.inf, 2, String.Format(_logPrefix + ": InitPerCulture: fromCulture={0}, toCulture={1}", _fromCulture, _toCulture));
+            TLog.Log(mode, TLog.eLogItemType.inf, 2, String.Format(_logPrefix + ": InitPerCulture: fromCulture={0}, toCulture={1}", _fromCulture, _toCulture));
             return true;
         }
 
-        public static bool DeInitGlobal()
+        public static bool DeInitGlobal(TLog.eMode mode)
         {
             string s = String.Format("Summary: Used {0} prompt tokens + {1} completion_tokens = {2} total tokens.",
                 _totalSendTokens, _totalReceiveTokens, _totalTokens);
-            TLog.Log(TLog.eLogType.inf, 0, s);
+            TLog.Log(mode, TLog.eLogItemType.inf, 0, s);
             return true;
         }
 
         private static Dictionary<string, string> Settings = new Dictionary<string, string>();
-        private static bool LoadSettings()
+        private static bool LoadSettings(TLog.eMode mode)
         {
             string path = Path.Combine(TUtils.TargetTranslatorPath, _settingsFilename);
             if (File.Exists(path))
@@ -80,13 +80,13 @@ namespace Translator
                     {
                         Settings[entry.Key] = entry.Value;
                     }
-                    Log("SETTINGS: loaded.");
+                    Log(mode, "SETTINGS: loaded.");
                     return true;
                     //string setting1 = Settings["mykey"];
                 }
                 catch (Exception ex)
                 {
-                    Log(String.Format(
+                    Log(mode, String.Format(
                         "LoadSettings(): Error when loading settings: {0} : {1}",
                         ex.Message, path), true);
                     return false;
@@ -96,7 +96,7 @@ namespace Translator
                 return false;
         }
 
-        public static bool SaveSettings()
+        public static bool SaveSettings(TLog.eMode mode)
         {
             string path = Path.Combine(TUtils.TargetTranslatorPath, _settingsFilename);
             if (File.Exists(path))
@@ -111,12 +111,12 @@ namespace Translator
                     var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
                     string jsonOutput = JsonSerializer.Serialize(entries, jsonOptions);
                     File.WriteAllText(path, jsonOutput);
-                    Log("Settings saved.");
+                    Log(mode, "Settings saved.");
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    Log(String.Format(
+                    Log(mode, String.Format(
                         "SaveSettings(): Error when saving settings: {0} : {1}",
                         ex.Message, path), true);
                     return false;
@@ -127,7 +127,7 @@ namespace Translator
         }
 
         //OPENAI API TRANSLATION FUNCTION
-        public static string Translate(string fromCulture, string toCulturestring, 
+        public static string Translate(TLog.eMode mode, string fromCulture, string toCulturestring, 
             string textToTranslate, string hintToken)
         {
             //returning null means this function has failed. It could be due to a bad return data structure.
@@ -193,8 +193,8 @@ namespace Translator
                 {
                     string errorMsg = error.GetProperty("message").GetString() ?? string.Empty;
                     string errortype = error.GetProperty("type").GetString() ?? string.Empty;
-                    TLog.Log(TLog.eLogType.err, 0, errortype + ": " + errorMsg);
-                    TLog.Log(TLog.eLogType.err, 0, userContent);
+                    TLog.Log(mode, TLog.eLogItemType.err, 0, errortype + ": " + errorMsg);
+                    TLog.Log(mode, TLog.eLogItemType.err, 0, userContent);
                     return null;
                 }
 
@@ -218,9 +218,9 @@ namespace Translator
                     case "stop":
                         translatedText = translatedText.Substring(1, translatedText.Length - 2);
                         return translatedText.Trim();
-                    case "length": Log("The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent, true);
+                    case "length": Log(mode, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent, true);
                         return null;
-                    case "content_filter": Log("The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent, true); 
+                    case "content_filter": Log(mode, "The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent, true); 
                         return null;
                     default: return null;
                 }
@@ -228,7 +228,7 @@ namespace Translator
             catch
             {
                 // Fallback in case of any unexpected structure
-                TLog.Log(TLog.eLogType.err, 0, _logPrefix + ": Bad API return structure: " + Environment.NewLine + doctxt);
+                TLog.Log(mode, TLog.eLogItemType.err, 0, _logPrefix + ": Bad API return structure: " + Environment.NewLine + doctxt);
                 return null;
             }
         }

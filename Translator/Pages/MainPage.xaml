@@ -57,6 +57,11 @@
                 Icon="Globe"
                 Content="3. Translate Scan Results"
                 Tag="Translate" />
+            <NavigationViewItem
+                x:Name="nviTranslationFunctions"
+                Icon="Bookmarks"
+                Content="Translation Functions"
+                Tag="TranslationFunctions" />
 
         </NavigationView.MenuItems>
         <Frame

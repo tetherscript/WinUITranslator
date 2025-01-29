@@ -33,6 +33,7 @@
     <None Remove="Pages\SettingsPage.xaml" />
     <None Remove="Pages\TargetPage.xaml" />
     <None Remove="Pages\TranslatePage.xaml" />
+    <None Remove="Pages\TranslationFunctionsPage.xaml" />
     <None Remove="Test2.xaml" />
   </ItemGroup>
 
@@ -232,6 +233,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Page Update="Pages\SettingsPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\TranslationFunctionsPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

@@ -17,51 +17,51 @@ namespace Translator
             _sample
         };
 
-        public static bool InitGlobal(string funcType, string fromCulture)
+        public static bool InitGlobal(TLog.eMode mode, string funcType, string fromCulture)
         {
             //called at the beginning of the translation task
             switch (funcType)
             {
                 case _sample: return false;
-                case _openAI_1: return TTF_OpenAI_1.InitGlobal(fromCulture);
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.InitGlobal(fromCulture);
+                case _openAI_1: return TTF_OpenAI_1.InitGlobal(mode, fromCulture);
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.InitGlobal(mode, fromCulture);
                 default: return false;
             }
         }
 
-        public static bool InitPerCulture(string funcType, string fromCulture, string toCulture)
+        public static bool InitPerCulture(TLog.eMode mode, string funcType, string fromCulture, string toCulture)
         {
             //called just before calling the first .Translate call for a culture ex: 'de-DE'
             switch (funcType)
             {
                 case _sample: return false;
-                case _openAI_1: return TTF_OpenAI_1.InitPerCulture(fromCulture, toCulture); 
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.InitPerCulture(fromCulture, toCulture);
+                case _openAI_1: return TTF_OpenAI_1.InitPerCulture(mode, fromCulture, toCulture); 
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.InitPerCulture(mode, fromCulture, toCulture);
                 default: return false;
             }
         }
 
-        public static string Translate(string funcType, string fromCulture, string toCulture, string textToTranslate, 
+        public static string Translate(TLog.eMode mode, string funcType, string fromCulture, string toCulture, string textToTranslate, 
             string hintToken)
         {
             //called for each translateable item
             switch (funcType)
             {
                 case _sample: return null;
-                case _openAI_1: return TTF_OpenAI_1.Translate(fromCulture, toCulture, textToTranslate, hintToken);
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.Translate(fromCulture, toCulture, textToTranslate, hintToken);
+                case _openAI_1: return TTF_OpenAI_1.Translate(mode, fromCulture, toCulture, textToTranslate, hintToken);
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.Translate(mode, fromCulture, toCulture, textToTranslate, hintToken);
                 default: return null;
             }
         }
 
-        public static bool DeInitGlobal(string funcType)
+        public static bool DeInitGlobal(TLog.eMode mode, string funcType)
         {
             //called at the beginning of the translation task
             switch (funcType)
             {
                 case _sample: return false;
-                case _openAI_1: return TTF_OpenAI_1.DeInitGlobal();
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.DeInitGlobal();
+                case _openAI_1: return TTF_OpenAI_1.DeInitGlobal(mode);
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.DeInitGlobal(mode);
                 default: return false;
             }
         }

@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
+using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.VoiceCommands;
 
 namespace Translator
 {
@@ -80,8 +82,7 @@ namespace Translator
         [RelayCommand]
         private async Task StartScan()
         {
-            TLog.Reset();
-            TLog.Mode = TLog.eMode.scan;
+            TLog.Reset(TLog.eMode.scan);
             if (TUtils.CalcPaths(Target))
             {
                 IsBusy = true;
@@ -89,11 +90,11 @@ namespace Translator
                 ScanLog = "";
                 ScanLogScrollToBottom();
                 await Task.Delay(1000);
-                await TScan.Start(TUtils.TargetRootPath);
+                await TScan.Start(TLog.eMode.scan, TUtils.TargetRootPath);
             }
             else
             {
-                TLog.Log(TLog.eLogType.err, 0, "Target root path does not exist: " + Target);
+                TLog.Log(TLog.eMode.scan, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
             }
             ScanLogScrollToBottom();
             IsScanning = false;
@@ -131,8 +132,7 @@ namespace Translator
         [RelayCommand]
         private async Task StartTranslate()
         {
-            TLog.Mode = TLog.eMode.translate;
-            TLog.Reset();
+            TLog.Reset(TLog.eMode.translate);
             if (TUtils.CalcPaths(Target))
             {
                 IsBusy = true;
@@ -140,11 +140,11 @@ namespace Translator
                 TranslateLog = "";
                 TranslateLogScrollToBottom();
                 await Task.Delay(1000);
-                await TTranslate.Start(TUtils.TargetRootPath, SelectedTranslationFunction);
+                await TTranslate.Start(TLog.eMode.translate, TUtils.TargetRootPath, SelectedTranslationFunction);
             }
             else
             {
-                TLog.Log(TLog.eLogType.err, 0, "Target root path does not exist: " + Target);
+                TLog.Log(TLog.eMode.translate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
             }
             TranslateLogScrollToBottom();
             TranslateProgress = 0;
@@ -177,6 +177,110 @@ namespace Translator
         private int _translateProgress = 0;
 
         #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region TRANSLATION FUNCTIONS
+
+        [ObservableProperty]
+        int _tFLogSelectionStart = 0;
+
+        [ObservableProperty]
+        int _tFLogSelectionLength = 0;
+
+        [ObservableProperty]
+        private string _tFSelectedTranslationFunction;
+
+
+        [ObservableProperty]
+        private string _tFSettings;
+
+        [RelayCommand]
+        private async Task TFTestSLoadSettings()
+        {
+            TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Loaded settings.");
+        }
+
+        [RelayCommand]
+        private async Task TFTestSaveSettings()
+        {
+            TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Saved settings.");
+        }
+
+
+
+        [RelayCommand]
+        private async Task StartTFTest()
+        {
+            TLog.Reset(TLog.eMode.tfTranslate);
+            if (TUtils.CalcPaths(Target))
+            {
+                IsBusy = true;
+                TFIsTranslating = true;
+                TFLog = "";
+                await Task.Delay(1000);
+                await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath, SelectedTranslationFunction, TFTextToTranslate);
+            }
+            else
+            {
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
+            }
+            TranslateLogScrollToBottom();
+            TFIsTranslating = false;
+            IsBusy = false;
+        }
+
+        private void TFTranslateLogScrollToBottom()
+        {
+            TransLogSelectionStart = TranslateLog.Length;
+            TransLogSelectionLength = 0;
+        }
+
+        [ObservableProperty]
+        private int _tFTranslationFunctionIndex;
+
+        [ObservableProperty]
+        private string _tFTextToTranslate;
+
+        [ObservableProperty]
+        private bool _tFIsTranslating;
+
+        [ObservableProperty]
+        private string _tFLog;
+
+
+        #endregion
+
+
+
+
+
+
+
+
 
     }
 

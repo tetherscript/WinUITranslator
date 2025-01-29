@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace Translator
 {
     public static class TLog
     {
-        public enum eMode { scan, translate, system }
-        public enum eLogType { inf, err, dbg, sep };
+        public enum eMode { scan, translate, tfTranslate, system }
+        public enum eLogItemType { inf, err, dbg, sep };
         public enum eLogSeparatorType { lineWide, lineShort };
 
-        private static int _logCounter = 0;
+        private static int _logScanCounter = 0;
+        private static int _logTranslateCounter = 0;
+        private static int _logTFCounter = 0;
         private static int _errorCounter = 0;
         public static int ErrorCounter { 
             get
@@ -18,35 +19,23 @@ namespace Translator
                 return _errorCounter;
             }
         }
-        public static string Text = string.Empty;
-        public static eMode Mode = eMode.system;
 
-        public static void LogSeparator(eLogSeparatorType type)
+        public static void LogSeparator(eMode mode, eLogSeparatorType type)
         {
-
             string s = string.Empty;
             switch (type)
             {
                 case eLogSeparatorType.lineWide: s = new string('━', 60); break;
                 case eLogSeparatorType.lineShort: s = new string('━', 30); break;
             }
-            //Text = s + Environment.NewLine + Text;
-            Log(eLogType.inf, 0, s);
+            Log(mode, eLogItemType.inf, 0, s);
         }
 
-        public static void Add(string msg)
-        {
-            string x = Environment.NewLine;
-            if (msg.Contains(Environment.NewLine))
-            Text = msg.Trim() + (msg.Contains(Environment.NewLine) ? Environment.NewLine : "") + Text;
-
-            UpdateVm();
-        }
-
-        public static void Log(eLogType logType, int indent, string msg, bool appendNewLine = true)
+         public static void Log(eMode mode, eLogItemType logType, int indent, string msg)
         {
             //line #
-            string lineNumber = _logCounter.ToString("D4"); //0473
+            IncLogCounter(mode);
+            string lineNumber = GetLogCounter(mode).ToString("D4"); //0473
 
             //type
             string type = String.Format("[{0}]", logType.ToString()).ToUpper(); //[INF]
@@ -56,12 +45,12 @@ namespace Translator
 
             //error
             string attn = " ";
-            if (logType == eLogType.err)
+            if (logType == eLogItemType.err)
             {
                 attn = "E";
             }
             else
-            if (logType == eLogType.dbg)
+            if (logType == eLogItemType.dbg)
             {
                 attn = "D";
             }
@@ -71,30 +60,80 @@ namespace Translator
 
             string res = String.Format("{0}: {1} {2} {3}", lineNumber, attn, ind, m);
 
-            Text = Text + res + (appendNewLine ? Environment.NewLine : "");
-
-            UpdateVm();
-            _logCounter++;
+            Add(mode, res);
         }
 
-        private static void UpdateVm()
+        private static void IncLogCounter(eMode mode)
         {
-            if (Mode == eMode.scan)
+            switch (mode)
             {
-                App.Vm.ScanLog = Text;
+                case eMode.scan: _logScanCounter++; break;
+                case eMode.translate: _logTranslateCounter++; break;
+                case eMode.tfTranslate: _logTFCounter++; break;
+                default: break;
+            }
+        }
+
+        private static int GetLogCounter(eMode mode)
+        {
+            switch (mode)
+            {
+                case eMode.scan: return _logScanCounter;
+                case eMode.translate: return _logTranslateCounter;
+                case eMode.tfTranslate: return _logTFCounter;
+                default: return -1;
+            }
+        }
+
+
+        private static void Add(eMode mode, string msg)
+        {
+            if (mode == eMode.scan)
+            {
+                App.Vm.ScanLog = App.Vm.ScanLog + msg + Environment.NewLine;
             }
             else
-            if (Mode == eMode.translate)
+            if (mode == eMode.translate)
             {
-                App.Vm.TranslateLog = Text;
+                App.Vm.TranslateLog = App.Vm.TranslateLog + msg + Environment.NewLine;
+            }
+            else
+            if (mode == eMode.tfTranslate)
+            {
+                App.Vm.TFLog = App.Vm.TFLog + msg + Environment.NewLine;
             }
         }
 
-        public static void Reset()
+        public static void Reset(eMode mode)
         {
-            _logCounter = 0;
-            _errorCounter = 0;
-            Text = "";
+            if (mode == eMode.scan)
+            {
+                _logScanCounter = 0;
+                App.Vm.ScanLog = "";
+            }
+            else
+            if (mode == eMode.translate)
+            {
+                _logTranslateCounter = 0;
+                App.Vm.TranslateLog = "";
+            }
+            else
+            if (mode == eMode.tfTranslate)
+            {
+                _logTFCounter = 0;
+                App.Vm.TFLog = "";
+            }
+        }
+
+        public static string GetText(eMode mode)
+        {
+            switch (mode)
+            {
+                case eMode.scan: return App.Vm.ScanLog;
+                case eMode.translate: return App.Vm.TranslateLog;
+                case eMode.tfTranslate: return App.Vm.TFLog;
+                default: return "";
+            }
         }
 
         public static void ClearAllFiles()
@@ -103,9 +142,9 @@ namespace Translator
             File.WriteAllText(TUtils.TargetScanLogPath, "");
         }
 
-        public static void Save(string path)
+        public static void Save(eMode mode, string path)
         {
-            File.WriteAllText(path, Text);
+            File.WriteAllText(path, GetText(mode));
         }
     }
 }
