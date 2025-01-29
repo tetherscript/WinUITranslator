@@ -69,9 +69,9 @@ namespace Translator
             //message
             string m = msg.Trim();
 
-            string res = String.Format("{0}: {1} {2}", lineNumber, attn, m);
+            string res = String.Format("{0}: {1} {2} {3}", lineNumber, attn, ind, m);
 
-            Text = res + (appendNewLine ? Environment.NewLine : "") + Text;
+            Text = Text + res + (appendNewLine ? Environment.NewLine : "");
 
             UpdateVm();
             _logCounter++;

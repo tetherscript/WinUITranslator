@@ -45,10 +45,12 @@ namespace Translator
             TLog.Reset();
             try
             {
+                TLog.Log(TLog.eLogType.inf, 0, "Scan started.");
+
                 await ScanAsync(
                     targetRootPath);
 
-                // Once the operation finishes, you can update UI accordingly
+                TLog.LogSeparator(TLog.eLogSeparatorType.lineWide);
                 TLog.Log(TLog.eLogType.inf, 0, "Scan complete.");
             }
             catch (Exception ex)
@@ -94,7 +96,7 @@ namespace Translator
             {
                 if (!filePath.Contains(@"\obj\"))
                 {
-                    TLog.Log(TLog.eLogType.inf, 0, "Found: " + filePath);
+                    TLog.Log(TLog.eLogType.inf, 2, "Found: " + filePath);
                     ProcessXamlFile(filePath, entriesMap);
                 }
             }
@@ -172,10 +174,10 @@ namespace Translator
             await Task.Delay(_delay);
 
             //merge with manual entries
-            TLog.Log(TLog.eLogType.inf, 0, "Merging " + TUtils.TargetTranslatorTLocalizedGetsPath + "...");
+            TLog.Log(TLog.eLogType.inf, 2, "Merging " + TUtils.TargetTranslatorTLocalizedGetsPath + "...");
             if (!File.Exists(TUtils.TargetTranslatorTLocalizedGetsPath))
             {
-                TLog.Log(TLog.eLogType.inf, 0, $"Merge file not found: {TUtils.TargetTranslatorTLocalizedGetsPath}");
+                TLog.Log(TLog.eLogType.err, 2, $"Merge file not found: {TUtils.TargetTranslatorTLocalizedGetsPath}");
                 return;
             }
 
@@ -191,12 +193,12 @@ namespace Translator
 
                 if (newEntries == null)
                 {
-                    TLog.Log(TLog.eLogType.inf, 0, "Merging: " + "No entries found in " + TUtils.TargetTranslatorTLocalizedGetsPath + ".");
+                    TLog.Log(TLog.eLogType.inf, 2, "Merging: " + "No entries found in " + TUtils.TargetTranslatorTLocalizedGetsPath + ".");
                     return;
                 }
                 else
                 {
-                    TLog.Log(TLog.eLogType.inf, 0, $"Found {newEntries.Count} mergeable entries.");
+                    TLog.Log(TLog.eLogType.inf, 2, $"Found {newEntries.Count} mergeable entries.");
                 }
 
                 // Merge them into entriesMap
@@ -206,14 +208,14 @@ namespace Translator
                     {
                         // Add the new entry
                         entriesMap[entry.Key] = entry.Value;
-                        TLog.Log(TLog.eLogType.inf, 2, $"Merged {entry.Key}: {entry.Value}");
+                        TLog.Log(TLog.eLogType.inf, 4, $"Merged {entry.Key}: {entry.Value}");
                     }
                 }
-                TLog.Log(TLog.eLogType.inf, 0, $"Merge complete.");
+                TLog.Log(TLog.eLogType.inf, 2, $"Merge complete.");
             }
             catch (Exception ex)
             {
-                TLog.Log(TLog.eLogType.err, 0, $"Scanning: Error merging JSON file: {ex.Message}");
+                TLog.Log(TLog.eLogType.err, 2, $"Scanning: Error merging JSON file: {ex.Message}");
             }
 
             SaveAsJson(TUtils.TargetTranslatorDetectedXamlElementsPath, entriesMap);
@@ -250,7 +252,7 @@ namespace Translator
                     //reject items that have invalid XAM/ c# identifiers in the key as this will cause app start fails
                     if (!TLocalized.IsValidXamlIdentifier(uid))
                     {
-                        TLog.Log(TLog.eLogType.err, 0, String.Format("Rejected {0}:x:Uid='{1}' as it is an invalid XAML/C# resource identifier.", filePath, uid));
+                        TLog.Log(TLog.eLogType.err, 4, String.Format("Rejected {0}:x:Uid='{1}' as it is an invalid XAML/C# resource identifier.", filePath, uid));
                         continue;
                         //// XAML/C# rules: The first character must be a letter or underscore.
                         ///// Subsequent characters can be letters, digits, or underscores.
@@ -300,7 +302,7 @@ namespace Translator
             }
             catch (Exception ex)
             {
-                TLog.Log(TLog.eLogType.err, 0, $"Error processing {filePath}: {ex.Message}");
+                TLog.Log(TLog.eLogType.err, 4, $"Error processing {filePath}: {ex.Message}");
             }
         }
 
@@ -351,7 +353,7 @@ namespace Translator
             }
             XDocument doc = XDocument.Load(path);
 
-            TLog.Log(TLog.eLogType.inf, 0, "Clearing old entries from en-US/Resources.resw...");
+            TLog.Log(TLog.eLogType.inf, 2, "Clearing old entries from en-US/Resources.resw...");
 
             doc.Descendants("data")
                 .Where(x => 1 == 1)
@@ -359,7 +361,7 @@ namespace Translator
 
             var dataElements = doc.Descendants("data").ToList();
 
-            TLog.Log(TLog.eLogType.inf, 0, "Adding entries to en-US/Resources.resw...");
+            TLog.Log(TLog.eLogType.inf, 4, "Adding entries to en-US/Resources.resw...");
             foreach (var item in entriesMap)
             {
                 (string valuePrefix, string valueVal) = SplitPrefix(item.Value.Substring(0));
@@ -371,14 +373,14 @@ namespace Translator
                 );
                 doc.Root.Add(dataElement);
                 _counter++;
-                TLog.Log(TLog.eLogType.inf, 0, String.Format("  Added {0}", item.Key));
+                TLog.Log(TLog.eLogType.inf, 6, String.Format("Added {0}", item.Key));
             }
 
             TLog.Log(TLog.eLogType.inf, 0, "Checking for specials...");
             TUtils.LoadSpecials(TUtils.TargetTranslatorSpecialsPath);
             foreach (var item in TUtils.SpecialItems.Where(item => item.Culture == "en-US"))
             {
-                TLog.Log(TLog.eLogType.inf, 0, "Adding special: " + item.Key.ToString() + "=" + item.Value.ToString());
+                TLog.Log(TLog.eLogType.inf, 2, "Adding special: " + item.Key.ToString() + "=" + item.Value.ToString());
 
                 var desDocDataElement1 = new XElement("data",
                     new XAttribute("name", item.Key.ToString()),

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Translator
 {
@@ -107,4 +108,25 @@ namespace Translator
             return false;
         }
     }
+
+
+    public class BoolToOpacityConv : IValueConverter
+    {
+        // Convert from source to target (invert the value)
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is bool boolean)
+                return (((bool)value) ? (double)100.0f : (double)0.0f);
+            return (double)100.0f;
+        }
+
+        // Convert back from target to source (optional, invert again)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if (value is int integer)
+                return ((double)value == (double)100 ? true : false);
+            return false;
+        }
+    }
+
 }

@@ -68,6 +68,8 @@
             IsReadOnly="false"
             TextAlignment="Left"
             Text="{x:Bind Vm.ScanLog, Mode=OneWay}"
+            SelectionStart="{x:Bind Vm.ScanLogSelectionStart, Mode=OneWay}"
+            SelectionLength="{x:Bind Vm.ScanLogSelectionLength, Mode=OneWay}"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
             IsTextPredictionEnabled="False">

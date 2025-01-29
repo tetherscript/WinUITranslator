@@ -12,6 +12,8 @@
     <Page.Resources>
         <converters:InvBoolConv
             x:Key="InvBoolConv" />
+        <converters:BoolToOpacityConv
+            x:Key="BoolToOpacityConv" />
     </Page.Resources>
 
     <Grid>
@@ -45,14 +47,6 @@
                             IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
                             Command="{x:Bind Vm.StartTranslateCommand}"
                             Content="Translate" />
-                        <ProgressRing
-                            IsActive="{x:Bind Vm.IsTranslating, Mode=OneWay}" />
-                        <ProgressBar
-                            Value="{x:Bind Vm.TranslateProgress, Mode=OneWay}"
-                            Maximum="100"
-                            Minimum="0"
-                            Width="200">
-                        </ProgressBar>
                         <Button
                             IsEnabled="{x:Bind Vm.IsTranslating, Mode=OneWay}"
                             Command="{x:Bind Vm.CancelTranslateCommand}"
@@ -65,7 +59,12 @@
                             SelectedValuePath="Value"
                             Width="250" />
                     </StackPanel>
-                        
+                    <ProgressBar
+                        Value="{x:Bind Vm.TranslateProgress, Mode=OneWay}"
+                        Opacity="{x:Bind Vm.IsTranslating, Mode=OneWay, Converter={StaticResource BoolToOpacityConv}}"
+                        Maximum="100"
+                        Minimum="0">
+                    </ProgressBar>
                 </StackPanel>
 
             </StackPanel>
@@ -86,6 +85,8 @@
             IsReadOnly="false"
             TextAlignment="Left"
             Text="{x:Bind Vm.TranslateLog, Mode=OneWay}"
+            SelectionStart="{x:Bind Vm.TransLogSelectionStart, Mode=OneWay}"
+            SelectionLength="{x:Bind Vm.TransLogSelectionLength, Mode=OneWay}"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
             IsTextPredictionEnabled="False">

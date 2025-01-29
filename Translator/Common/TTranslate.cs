@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Storage;
+using System.Diagnostics;
 
 namespace Translator
 {
@@ -24,7 +25,9 @@ namespace Translator
         {
             IsCancelled = false;
             TLog.Reset();
-            TLog.Log(TLog.eLogType.inf, 0, "Translating...");
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            TLog.Log(TLog.eLogType.inf, 0, "Translation Started.");
             TLog.Log(TLog.eLogType.inf, 0, "Translation function: " + translationFunction);
             try
             {
@@ -32,8 +35,12 @@ namespace Translator
                     translationFunction,
                     targetRootPath);
 
-                // Once the operation finishes, you can update UI accordingly
+                TLog.LogSeparator(TLog.eLogSeparatorType.lineWide);
                 TLog.Log(TLog.eLogType.inf, 0, "Translation complete.");
+                stopwatch.Stop();
+                TimeSpan elapsed = stopwatch.Elapsed;
+                string elapsedCustomFormat = elapsed.ToString(@"hh\:mm\:ss");
+                TLog.Log(TLog.eLogType.inf, 0, "Elapsed Time: " + elapsedCustomFormat);
             }
             catch (Exception ex)
             {
@@ -184,10 +191,10 @@ namespace Translator
 
 
                                 string s1, s2;
-                                s1 = (_debugRetranslateBypass ? "Re-Translating..." : "Cache miss: Translating...");
+                                s1 = "Cache miss: Translating...";
                                 TLog.Log((TSettings.Debug ? TLog.eLogType.dbg : TLog.eLogType.inf), 2, s1);
                                 s2 = String.Format(
-                                     "Untranslated: {0}:{1}:{2}",
+                                     "Untranslated: {0}:{1}{2}",
                                      toCulture,
                                      hintToken,
                                      textToTranslate

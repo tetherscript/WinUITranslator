@@ -68,6 +68,12 @@ namespace Translator
         private bool _isBusy = false;
 
         [ObservableProperty]
+        int _scanLogSelectionStart = 0;
+
+        [ObservableProperty]
+        int _scanLogSelectionLength = 0;
+
+        [ObservableProperty]
         private string _target;
 
         #region SCAN
@@ -81,6 +87,7 @@ namespace Translator
                 IsBusy = true;
                 IsScanning = true;
                 ScanLog = "";
+                ScanLogScrollToBottom();
                 await Task.Delay(1000);
                 await TScan.Start(TUtils.TargetRootPath);
             }
@@ -88,8 +95,15 @@ namespace Translator
             {
                 TLog.Log(TLog.eLogType.err, 0, "Target root path does not exist: " + Target);
             }
+            ScanLogScrollToBottom();
             IsScanning = false;
             IsBusy = false;
+        }
+
+        private void ScanLogScrollToBottom()
+        {
+            ScanLogSelectionStart = ScanLog.Length;
+            ScanLogSelectionLength = 0;
         }
 
         [ObservableProperty]
@@ -100,6 +114,14 @@ namespace Translator
         #endregion
 
         #region TRANSLATE
+
+        [ObservableProperty]
+        int _transLogSelectionStart = 0;
+
+        [ObservableProperty]
+        int _transLogSelectionLength = 0;
+
+
         [ObservableProperty]
         List<TTransFuncName> _translationFunctions = new();
 
@@ -116,6 +138,7 @@ namespace Translator
                 IsBusy = true;
                 IsTranslating = true;
                 TranslateLog = "";
+                TranslateLogScrollToBottom();
                 await Task.Delay(1000);
                 await TTranslate.Start(TUtils.TargetRootPath, SelectedTranslationFunction);
             }
@@ -123,6 +146,8 @@ namespace Translator
             {
                 TLog.Log(TLog.eLogType.err, 0, "Target root path does not exist: " + Target);
             }
+            TranslateLogScrollToBottom();
+            TranslateProgress = 0;
             IsTranslating = false;
             IsBusy = false;
         }
@@ -131,6 +156,12 @@ namespace Translator
         private void CancelTranslate()
         {
             TTranslate.Stop();
+        }
+
+        private void TranslateLogScrollToBottom()
+        {
+            TransLogSelectionStart = TranslateLog.Length;
+            TransLogSelectionLength = 0;
         }
 
         [ObservableProperty]
