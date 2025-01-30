@@ -30,22 +30,19 @@
                 Spacing="20"
                 Margin="10,10,10,10">
 
-                <TextBlock
-                    TextWrapping="WrapWholeWords"
-                    Text="This is the project you want to translate.">
-                </TextBlock>
-
                 <StackPanel
                     Spacing="20">
+                    <TextBlock
+                        Text="Target Project Root Path">
+                    </TextBlock>
                     <StackPanel
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
-                       
                         <TextBox
-                            Header="Target Project Root Path"
                             x:Name="tbScanPath"
                             Width="800"
                             IsReadOnly="False"
+                            FontFamily="Courier New"
                             HorizontalAlignment="Left"
                             Text="{x:Bind Vm.Target, Mode=TwoWay}"
                             IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
@@ -56,6 +53,7 @@
                     </StackPanel>
                 
                     <TextBlock
+                        FontFamily="Courier New"
                         Text="ex: C:\Repo\WinUITranslator\Sample-Packaged">
                     </TextBlock>
 
@@ -81,16 +79,19 @@
 
                     <StackPanel>
                         <TextBlock
+                            FontFamily="Courier New"
                             TextWrapping="WrapWholeWords"
                             Text="\Strings\en-US\Resources.resw  -- this is the 'fromCulture'">
                         </TextBlock>
 
                         <TextBlock
+                            FontFamily="Courier New"
                             TextWrapping="WrapWholeWords"
                             Text="\Strings\fr-FR\Resources.resw -- this is a 'toCulture'">
                         </TextBlock>
 
                         <TextBlock
+                            FontFamily="Courier New"
                             TextWrapping="WrapWholeWords"
                             Text="\Strings\ar-SA\Resources.resw -- this is a 'toCulture'">
                         </TextBlock>

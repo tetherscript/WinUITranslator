@@ -20,7 +20,6 @@ namespace Translator
             Vm.LoadCache();
             await Task.Delay(500);
             SearchBox.Focus(Microsoft.UI.Xaml.FocusState.Programmatic);
-
             //Vm.CacheSearchSelectionStart = Vm.SearchText.Length;
             //Vm.CacheSearchSelectionLength = 0;
 

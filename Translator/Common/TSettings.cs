@@ -28,6 +28,7 @@ namespace Translator
             public const string ThemeIndex = "ThemeIndex";
             public const string Debug = "Debug";
             public const string TFTestText = "TFTestText";
+            public const string TFCacheEditorSearchText = "TFCacheEditorSearchText";
         }
 
         public static void Load()
@@ -50,6 +51,10 @@ namespace Translator
 
             App.Vm.TFTextToTranslate = (appData.Values.ContainsKey(AppSettingsKeys.TFTestText)) ?
                 (string)appData.Values[AppSettingsKeys.TFTestText] : "@Aperture";
+
+            App.Vm.SearchText = (appData.Values.ContainsKey(AppSettingsKeys.TFCacheEditorSearchText)) ?
+                (string)appData.Values[AppSettingsKeys.TFCacheEditorSearchText] : "";
+            
 
 
             LastNavItemTag = (appData.Values.ContainsKey(AppSettingsKeys.LastNavItemTag)) ?
@@ -84,6 +89,7 @@ namespace Translator
             appData.Values[AppSettingsKeys.Target] = App.Vm.Target;
             appData.Values[AppSettingsKeys.SelectedTranslationFunction] = App.Vm.SelectedTranslationFunction;
             appData.Values[AppSettingsKeys.TFTestText] = App.Vm.TFTextToTranslate;
+            appData.Values[AppSettingsKeys.TFCacheEditorSearchText] = App.Vm.SearchText;
 
             appData.Values[AppSettingsKeys.IsMaximized] = IsMaximized;
             appData.Values[AppSettingsKeys.WindowLeft] = WindowLeft;

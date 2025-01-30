@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -309,6 +310,7 @@ namespace Translator
 
         private void RefreshFilteredEntries(string text)
         {
+            if (TCache._entries == null) return;
             FilteredEntries.Clear();
 
             var matches = string.IsNullOrEmpty(text)
@@ -327,8 +329,10 @@ namespace Translator
                 if (FilteredEntries.Count > 0)
                 {
                     SelectedPair = FilteredEntries.First();
+                    return;
                 }
             }
+
         }
 
         [RelayCommand]
@@ -343,18 +347,20 @@ namespace Translator
         {
             if (SelectedPair == null)
                 return;
-
-            // This example is simplistic:
-            // 1. If the user changed the Key to a new value, we insert/update it in the dictionary.
-            // 2. We do NOT remove the old key. (In real apps, you might want to handle rename logic.)
-            //TCache._entries[SelectedPair.Key] = SelectedPair.Value;
+            _savedPairKey = SelectedPair.Key;
             await TCache.UpdateEntryAsync(SelectedPair.Key, SelectedPair.Value);
-
             _hasPendingChanges = false;
             SaveChangesCommand.NotifyCanExecuteChanged();
-
             // Re-filter to reflect any possible key changes
             RefreshFilteredEntries(SearchText);
+            if (_savedPairKey != null)
+            {
+                Pair found = FilteredEntries.FirstOrDefault(pair => pair.Key == _savedPairKey);
+                if (found != null)
+                {
+                    SelectedPair = found;
+                }
+            }
         }
 
         public async void LoadCache()
@@ -363,10 +369,10 @@ namespace Translator
             StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
             TCache.Init(x);
             await TCache.InitializeAsync();
-            if (SearchText == "")
-            {
-                RefreshFilteredEntries("");
-            }
+            //if (SearchText == "")
+            //{
+                RefreshFilteredEntries(SearchText);
+            //}
         }
 
         // The "dirty" flag indicating if the user has changed something
@@ -381,9 +387,27 @@ namespace Translator
             {
                 if (SetProperty(ref _selectedPair, value))
                 {
-                    // Re-hook property changed events whenever we select a new Pair.
-                    OnSelectedPairChanged();
+                    // Each time we pick a new Pair, reset the "dirty" flag
+                    _hasPendingChanges = false;
+                    SaveChangesCommand.NotifyCanExecuteChanged();
+
+                    if (SelectedPair != null)
+                    {
+                        // Unsubscribe from previous Pair (if needed)
+                        // and subscribe to property changes on the new Pair
+                        SelectedPair.PropertyChanged += OnSelectedPairPropertyChanged;
+                    }
                 }
+            }
+        }
+
+        private void OnSelectedPairPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // If user changes "Value" (or "Key"), set dirty = true
+            if (e.PropertyName == nameof(Pair.Value) || e.PropertyName == nameof(Pair.Key))
+            {
+                _hasPendingChanges = true;
+                SaveChangesCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -413,7 +437,6 @@ namespace Translator
                 }
             };
 
-
         }
 
         private bool CanSaveChanges()
@@ -421,8 +444,10 @@ namespace Translator
             return SelectedPair != null && _hasPendingChanges;
         }
 
-        [RelayCommand(CanExecute = nameof(CanDeleteSelected))]
-        private async void DeleteSelected()
+        private string _savedPairKey;
+
+        [RelayCommand]
+        private async Task DeleteSelected()
         {
             await TCache.RemoveEntryAsync(SelectedPair.Key);
             LoadCache();
