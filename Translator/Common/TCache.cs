@@ -41,6 +41,7 @@ namespace Translator
                 {
 
                     var entryList = JsonSerializer.Deserialize<List<Entry>>(json) ?? new List<Entry>();
+                    _entries.Clear();
 
                     // Populate the dictionary, ensuring no duplicates
                     foreach (var entry in entryList)

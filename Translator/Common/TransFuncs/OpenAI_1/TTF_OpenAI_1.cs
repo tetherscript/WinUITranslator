@@ -90,7 +90,7 @@ namespace Translator
         {
             string s = String.Format("Summary: Used {0} prompt tokens + {1} completion_tokens = {2} total tokens.",
                 _totalSendTokens, _totalReceiveTokens, _totalTokens);
-            Log(mode, TLog.eLogItemType.inf, 2, s);
+            Log(mode, TLog.eLogItemType.inf, 0, s);
             return true;
         }
 

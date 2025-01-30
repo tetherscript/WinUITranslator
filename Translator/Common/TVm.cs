@@ -80,7 +80,7 @@ namespace Translator
 
         [ObservableProperty]
         int _scanLogSelectionLength = 0;
-        
+
         [RelayCommand]
         private async Task StartScan()
         {
@@ -249,14 +249,14 @@ namespace Translator
             {
                 TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Enter text to translate.");
             }
-            else 
-            { 
+            else
+            {
                 if (TUtils.CalcPaths(Target))
                 {
                     IsBusy = true;
                     TFIsTranslating = true;
                     TFLog = "";
-                    await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath, 
+                    await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
                         SelectedTranslationFunction, TFTextToTranslate, TFToCulture);
                 }
                 else
@@ -301,10 +301,6 @@ namespace Translator
         [ObservableProperty]
         private string _searchText = string.Empty;
 
-        // The currently selected pair in the ListView
-        [ObservableProperty]
-        private Pair _selectedPair;
-
         // Called automatically whenever SearchText changes
         partial void OnSearchTextChanged(string value)
         {
@@ -328,8 +324,10 @@ namespace Translator
             // If the currently selected item no longer appears in the filtered list, unselect it
             if (!FilteredEntries.Contains(SelectedPair))
             {
-                SelectedPair = FilteredEntries.First();
-
+                if (FilteredEntries.Count > 0)
+                {
+                    SelectedPair = FilteredEntries.First();
+                }
             }
         }
 
@@ -340,16 +338,20 @@ namespace Translator
             SelectedPair = FilteredEntries.First();
         }
 
-        [RelayCommand]
-        private void SaveChanges()
+        [RelayCommand(CanExecute = nameof(CanSaveChanges))]
+        private async void SaveChanges()
         {
             if (SelectedPair == null)
                 return;
 
-        // This example is simplistic:
-        // 1. If the user changed the Key to a new value, we insert/update it in the dictionary.
-        // 2. We do NOT remove the old key. (In real apps, you might want to handle rename logic.)
-            TCache._entries[SelectedPair.Key] = SelectedPair.Value;
+            // This example is simplistic:
+            // 1. If the user changed the Key to a new value, we insert/update it in the dictionary.
+            // 2. We do NOT remove the old key. (In real apps, you might want to handle rename logic.)
+            //TCache._entries[SelectedPair.Key] = SelectedPair.Value;
+            await TCache.UpdateEntryAsync(SelectedPair.Key, SelectedPair.Value);
+
+            _hasPendingChanges = false;
+            SaveChangesCommand.NotifyCanExecuteChanged();
 
             // Re-filter to reflect any possible key changes
             RefreshFilteredEntries(SearchText);
@@ -361,8 +363,87 @@ namespace Translator
             StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
             TCache.Init(x);
             await TCache.InitializeAsync();
-            RefreshFilteredEntries("");
+            if (SearchText == "")
+            {
+                RefreshFilteredEntries("");
+            }
         }
+
+        // The "dirty" flag indicating if the user has changed something
+        private bool _hasPendingChanges;
+
+        // The currently selected pair in the ListView
+        private Pair _selectedPair;
+        public Pair SelectedPair
+        {
+            get => _selectedPair;
+            set
+            {
+                if (SetProperty(ref _selectedPair, value))
+                {
+                    // Re-hook property changed events whenever we select a new Pair.
+                    OnSelectedPairChanged();
+                }
+            }
+        }
+
+        private void OnSelectedPairChanged()
+        {
+            // Reset the dirty flag whenever the user selects a new Pair
+            _hasPendingChanges = false;
+            SaveChangesCommand.NotifyCanExecuteChanged();
+            DeleteSelectedCommand.NotifyCanExecuteChanged();
+
+            if (SelectedPair == null)
+                return;
+
+            // Unsubscribe from any previous pair's PropertyChanged (if needed)
+            // (In a more advanced scenario, you'd keep track of old pair references.)
+
+            // Subscribe to property changes on the new SelectedPair
+            SelectedPair.PropertyChanged += (s, e) =>
+            {
+                // If the user changes *any* property on the Pair, we assume there's pending changes
+                if (e.PropertyName == nameof(Pair.Value) || e.PropertyName == nameof(Pair.Key))
+                {
+                    _hasPendingChanges = true;
+                    // Let the command system know it can run (or not)
+                    SaveChangesCommand.NotifyCanExecuteChanged();
+                    DeleteSelectedCommand.NotifyCanExecuteChanged();
+                }
+            };
+
+
+        }
+
+        private bool CanSaveChanges()
+        {
+            return SelectedPair != null && _hasPendingChanges;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanDeleteSelected))]
+        private async void DeleteSelected()
+        {
+            await TCache.RemoveEntryAsync(SelectedPair.Key);
+            LoadCache();
+            if (FilteredEntries.Count == 1)
+            {
+                SelectedPair = null;
+                SearchText = "";
+            }
+            RefreshFilteredEntries(SearchText);
+        }
+
+        private bool CanDeleteSelected()
+        {
+            return SelectedPair != null;
+        }
+
+        [ObservableProperty]
+        int _cacheSearchSelectionStart = 0;
+
+        [ObservableProperty]
+        int _cacheSearchSelectionLength = 0;
     }
 }
 
