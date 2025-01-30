@@ -366,6 +366,7 @@ namespace Translator
         public async void LoadCache()
         {
             TUtils.CalcPaths(Target);
+            if (!Directory.Exists(Target)) return;
             StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
             TCache.Init(x);
             await TCache.InitializeAsync();
