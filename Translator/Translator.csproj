@@ -27,7 +27,7 @@
     <Content Remove="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Pages\HelpIntroPage.xaml" />
+    <None Remove="Pages\CacheEditorPage.xaml" />
     <None Remove="Pages\MainPage.xaml" />
     <None Remove="Pages\ScanPage.xaml" />
     <None Remove="Pages\SettingsPage.xaml" />
@@ -252,7 +252,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\HelpIntroPage.xaml">
+    <Page Update="Pages\CacheEditorPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Pages\MainPage.xaml">

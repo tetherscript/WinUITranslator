@@ -12,17 +12,29 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using System.Diagnostics;
 
 namespace Translator
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class HelpIntroPage : Page
+    public sealed partial class CacheEditorPage : Page
     {
-        public HelpIntroPage()
+        private readonly TVm _vm = App.Vm;
+        public TVm Vm { get => _vm; }
+
+        public CacheEditorPage()
         {
             this.InitializeComponent();
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            Vm.LoadCache();
+        }
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            
+        }
+
     }
 }

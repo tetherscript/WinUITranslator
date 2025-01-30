@@ -10,4 +10,4 @@
 0010: D    OpenAI_1: HttpResponseMessage.StatusCode = OK
 0011:      OpenAI_1: Summary: Used 60 prompt tokens + 7 completion_tokens = 67 total tokens.
 0012:      Result: Verschlusszeit
-0013:    Elapsed Time: 00:00:03
+0013:    Elapsed Time: 00:00:01

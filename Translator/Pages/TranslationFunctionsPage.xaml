@@ -60,7 +60,7 @@
             </StackPanel>
             <TextBlock
                 TextWrapping="WrapWholeWords"
-                Text="Test your Translation Function by adjusting settings and testing a translatebable item.">
+                Text="Test your Translation Function by adjusting settings and testing a translateable item.">
             </TextBlock>
 
         </StackPanel>

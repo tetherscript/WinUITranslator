@@ -21,7 +21,7 @@ namespace Translator
         }
 
         private const string FileName = "Cache.json";
-        private static Dictionary<string, string> _entries;
+        public static Dictionary<string, string> _entries;
         private static StorageFolder _folder;
         private static StorageFile _file;
 

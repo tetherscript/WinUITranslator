@@ -58,9 +58,12 @@ namespace Translator
             }
         }
 
+        private string _lastTag = string.Empty;
         public void GotoPage(string tag)
         {
+            if (tag == _lastTag) { return; }
             TSettings.LastNavItemTag = tag;
+            _lastTag = tag;
             switch (tag)
             {
                 case "Target":
@@ -85,6 +88,12 @@ namespace Translator
                     SetActiveNavItem(nviTranslationFunctions);
                     PopulateNavigationViewHeader(Symbol.Bookmarks, "Translation Functions");
                     frMain.Navigate(typeof(TranslationFunctionsPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
+                    break;
+
+                case "CacheEditor":
+                    SetActiveNavItem(nviCacheEditor);
+                    PopulateNavigationViewHeader(Symbol.Edit, "Cache Editor");
+                    frMain.Navigate(typeof(CacheEditorPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
 
                 case "Settings":

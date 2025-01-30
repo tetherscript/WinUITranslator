@@ -68,6 +68,11 @@
                 Icon="Bookmarks"
                 Content="Translation Functions"
                 Tag="TranslationFunctions" />
+            <NavigationViewItem
+                x:Name="nviCacheEditor"
+                Icon="Edit"
+                Content="Cache Editor"
+                Tag="CacheEditor" />
 
         </NavigationView.MenuItems>
         <Frame

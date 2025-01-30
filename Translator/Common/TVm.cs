@@ -3,11 +3,24 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.Storage;
+
 
 namespace Translator
 {
+    public partial class Pair : ObservableObject
+    {
+        [ObservableProperty]
+        private string key;
+
+        [ObservableProperty]
+        private string value;
+    }
+
     public partial class TVm(string[] arguments) : ObservableObject
     {
         public class TTransFuncName(string display, string name)
@@ -277,6 +290,80 @@ namespace Translator
 
         #endregion
 
-    }
 
+
+
+
+        // The collection used by the UI (ListView) to display results
+        public ObservableCollection<Pair> FilteredEntries { get; } = new ObservableCollection<Pair>();
+
+        // Search text in the TextBox
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+
+        // The currently selected pair in the ListView
+        [ObservableProperty]
+        private Pair _selectedPair;
+
+        // Called automatically whenever SearchText changes
+        partial void OnSearchTextChanged(string value)
+        {
+            RefreshFilteredEntries(value);
+        }
+
+        private void RefreshFilteredEntries(string text)
+        {
+            FilteredEntries.Clear();
+
+            var matches = string.IsNullOrEmpty(text)
+                ? TCache._entries
+                : TCache._entries.Where(kvp =>
+                        kvp.Key.Contains(text, System.StringComparison.OrdinalIgnoreCase));
+
+            foreach (var kvp in matches)
+            {
+                FilteredEntries.Add(new Pair { Key = kvp.Key, Value = kvp.Value });
+            }
+
+            // If the currently selected item no longer appears in the filtered list, unselect it
+            if (!FilteredEntries.Contains(SelectedPair))
+            {
+                SelectedPair = FilteredEntries.First();
+
+            }
+        }
+
+        [RelayCommand]
+        private void ClearSearch()
+        {
+            SearchText = string.Empty;
+            SelectedPair = FilteredEntries.First();
+        }
+
+        [RelayCommand]
+        private void SaveChanges()
+        {
+            if (SelectedPair == null)
+                return;
+
+        // This example is simplistic:
+        // 1. If the user changed the Key to a new value, we insert/update it in the dictionary.
+        // 2. We do NOT remove the old key. (In real apps, you might want to handle rename logic.)
+            TCache._entries[SelectedPair.Key] = SelectedPair.Value;
+
+            // Re-filter to reflect any possible key changes
+            RefreshFilteredEntries(SearchText);
+        }
+
+        public async void LoadCache()
+        {
+            TUtils.CalcPaths(Target);
+            StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
+            TCache.Init(x);
+            await TCache.InitializeAsync();
+            RefreshFilteredEntries("");
+        }
+    }
 }
+
+
