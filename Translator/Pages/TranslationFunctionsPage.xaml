@@ -33,7 +33,7 @@
         </Grid.RowDefinitions>
 
 
-
+        <!--SELECT FUNCTION-->
         <StackPanel
             Grid.Row="0"
             Margin="10 10 10 10"
@@ -65,6 +65,7 @@
 
         </StackPanel>
 
+        <!--SETTINGS-->
         <StackPanel
             Grid.Row="1"
             Margin="10 20 10 0"
@@ -74,10 +75,10 @@
                 Spacing="20">
                 <Button
                     IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                    Command="{x:Bind Vm.TFTestSLoadSettingsCommand}"
+                    Command="{x:Bind Vm.TFTestLoadSettingsCommand}"
                     Content="Load Settings" />
                 <Button
-                    IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                    IsEnabled="{x:Bind Vm.TFSettingsModified, Mode=OneWay}"
                     Command="{x:Bind Vm.TFTestSaveSettingsCommand}"
                     Content="Save Settings" />
             </StackPanel>
@@ -92,7 +93,7 @@
                 TextAlignment="Left"
                 MaxHeight="300"
                 IsSpellCheckEnabled="False"
-                Text="{x:Bind Vm.TFSettings, Mode=OneWay}"
+                Text="{x:Bind Vm.TFSettings, Mode=TwoWay}"
                 PlaceholderText=""
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -101,26 +102,39 @@
 
         </StackPanel>
 
+        <!--TRANSLATE-->
         <StackPanel
             Grid.Row="2"
             Margin="10 20 10 10"
             Spacing="10">
 
-            <Button
-                IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                Command="{x:Bind Vm.StartTranslateCommand}"
-                Content="Translate" />
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="20">
+                <Button
+                    IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                    Command="{x:Bind Vm.StartTFTestCommand}"
+                    Content="Translate" />
+                <ToggleSwitch
+                    OffContent="Simple Log"
+                    OnContent="Verbose Log"
+                    IsOn="{x:Bind Vm.Debug, Mode=TwoWay}" />
+                <ProgressRing
+                    IsActive="{x:Bind Vm.TFIsTranslating, Mode=OneWay}">
+                </ProgressRing>
+            </StackPanel>
             <TextBox
                 Margin="0 0 0 10"
                 FontFamily="Courier New"
                 AcceptsReturn="True"
-                TextWrapping="NoWrap"
+                TextWrapping="Wrap"
                 FontWeight="Light"
                 IsReadOnly="false"
                 TextAlignment="Left"
                 MaxHeight="300"
                 IsSpellCheckEnabled="False"
-                Text="{x:Bind Vm.TFTextToTranslate, Mode=OneWay}"
+                PlaceholderForeground="Gray"
+                Text="{x:Bind Vm.TFTextToTranslate, Mode=TwoWay}"
                 PlaceholderText="Enter the text to translate"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -129,6 +143,7 @@
 
         </StackPanel>
 
+        <!--LOG-->
         <TextBox
             Grid.Row="3"
             Margin="10 0 10 10"
@@ -146,8 +161,6 @@
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
             IsTextPredictionEnabled="False">
         </TextBox>
-
-
 
     </Grid>
 </Page>

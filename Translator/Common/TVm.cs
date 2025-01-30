@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
-using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.VoiceCommands;
 
 namespace Translator
 {
@@ -46,6 +46,9 @@ namespace Translator
         }
 
         [ObservableProperty]
+        private bool _navIsPaneOpen;
+
+        [ObservableProperty]
         private bool _debug;
         partial void OnDebugChanged(bool oldValue, bool newValue)
         {
@@ -53,32 +56,18 @@ namespace Translator
         }
 
         [ObservableProperty]
-        private bool _debugRetranslate;
-        partial void OnDebugRetranslateChanged(bool oldValue, bool newValue)
-        {
-            TSettings.DebugRetranslate = newValue;
-        }
-
-        [ObservableProperty]
-        private int _debugRetranslateItemsCount;
-        partial void OnDebugRetranslateItemsCountChanged(int oldValue, int newValue)
-        {
-            TSettings.DebugRetranslateItemsCount = newValue;
-        }
-
-        [ObservableProperty]
         private bool _isBusy = false;
-
-        [ObservableProperty]
-        int _scanLogSelectionStart = 0;
-
-        [ObservableProperty]
-        int _scanLogSelectionLength = 0;
 
         [ObservableProperty]
         private string _target;
 
         #region SCAN
+        [ObservableProperty]
+        int _scanLogSelectionStart = 0;
+
+        [ObservableProperty]
+        int _scanLogSelectionLength = 0;
+        
         [RelayCommand]
         private async Task StartScan()
         {
@@ -178,31 +167,6 @@ namespace Translator
 
         #endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         #region TRANSLATION FUNCTIONS
 
         [ObservableProperty]
@@ -217,53 +181,92 @@ namespace Translator
 
         [ObservableProperty]
         private string _tFSettings;
+        partial void OnTFSettingsChanged(string value)
+        {
+            TFSettingsModified = true;
+        }
+
+        [ObservableProperty]
+        private bool _tFSettingsModified;
+
 
         [RelayCommand]
-        private async Task TFTestSLoadSettings()
+        private void TFTestLoadSettings()
         {
-            TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Loaded settings.");
+            TUtils.CalcPaths(Target);
+            string path = TTransFunc.GetSettingsPath(SelectedTranslationFunction);
+            try
+            {
+                string loadedJson = File.ReadAllText(path);
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Loaded settings: " + path);
+                TFSettings = loadedJson;
+                TFSettingsModified = false;
+            }
+            catch (Exception ex)
+            {
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Load setting failed: " + path + ": " + ex.Message);
+            }
         }
 
         [RelayCommand]
-        private async Task TFTestSaveSettings()
+        private void TFTestSaveSettings()
         {
-            TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Saved settings.");
+            TUtils.CalcPaths(Target);
+            string path = TTransFunc.GetSettingsPath(SelectedTranslationFunction);
+            try
+            {
+                File.WriteAllText(path, TFSettings);
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Saved settings: " + path);
+                TFSettingsModified = false;
+            }
+            catch (Exception ex)
+            {
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Save setting failed: " + path + ": " + ex.Message);
+            }
         }
 
-
+        [ObservableProperty]
+        private string _tFToCulture = "de-DE";
 
         [RelayCommand]
         private async Task StartTFTest()
         {
             TLog.Reset(TLog.eMode.tfTranslate);
-            if (TUtils.CalcPaths(Target))
+            if (TFTextToTranslate.Trim() == "")
             {
-                IsBusy = true;
-                TFIsTranslating = true;
-                TFLog = "";
-                await Task.Delay(1000);
-                await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath, SelectedTranslationFunction, TFTextToTranslate);
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Enter text to translate.");
             }
-            else
-            {
-                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
+            else 
+            { 
+                if (TUtils.CalcPaths(Target))
+                {
+                    IsBusy = true;
+                    TFIsTranslating = true;
+                    TFLog = "";
+                    await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath, 
+                        SelectedTranslationFunction, TFTextToTranslate, TFToCulture);
+                }
+                else
+                {
+                    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
+                }
+                TFTranslateLogScrollToBottom();
+                TFIsTranslating = false;
+                IsBusy = false;
             }
-            TranslateLogScrollToBottom();
-            TFIsTranslating = false;
-            IsBusy = false;
         }
 
         private void TFTranslateLogScrollToBottom()
         {
-            TransLogSelectionStart = TranslateLog.Length;
-            TransLogSelectionLength = 0;
+            TFLogSelectionStart = TFLog.Length;
+            TFLogSelectionLength = 0;
         }
 
         [ObservableProperty]
         private int _tFTranslationFunctionIndex;
 
         [ObservableProperty]
-        private string _tFTextToTranslate;
+        private string _tFTextToTranslate = "@Aperture";
 
         [ObservableProperty]
         private bool _tFIsTranslating;
@@ -273,14 +276,6 @@ namespace Translator
 
 
         #endregion
-
-
-
-
-
-
-
-
 
     }
 

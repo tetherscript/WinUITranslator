@@ -42,30 +42,9 @@
 
                 <ToggleSwitch
                     Margin="0 10 0 0"
-                    Header="Debug Mode"
-                    OffContent="Off"
-                    OnContent="On"
+                    OffContent="Simple Log"
+                    OnContent="Verbose Log"
                     IsOn="{x:Bind Vm.Debug, Mode=TwoWay}" />
-
-                <ToggleSwitch
-                    Margin="20 0 0 0"
-                    Header="Retranslate"
-                    OffContent="Off"
-                    OnContent="On"
-                    IsEnabled="{x:Bind Vm.Debug, Mode=OneWay}"
-                    IsOn="{x:Bind Vm.DebugRetranslate, Mode=TwoWay}" />
-
-                <NumberBox
-                    Margin="40 0 0 0"
-                    Header="Retranslate this number of items"
-                    IsEnabled="{x:Bind Vm.Debug, Mode=OneWay}"
-                    HorizontalAlignment="Left"
-                    Value="{x:Bind Vm.DebugRetranslateItemsCount, Mode=TwoWay}"
-                    SpinButtonPlacementMode="Inline"
-                    Minimum="1"
-                    Maximum="100"
-                    SmallChange="1"
-                    LargeChange="10" />
 
             </StackPanel>
         </ScrollViewer>

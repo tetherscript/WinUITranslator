@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Storage;
-using System.Diagnostics;
 
 namespace Translator
 {
@@ -21,7 +21,7 @@ namespace Translator
             public string Culture { get; set; }
         }
 
-        public static async Task StartTest(TLog.eMode mode, string targetRootPath, string translationFunction, string textToTranslate)
+        public static async Task StartTest(TLog.eMode mode, string targetRootPath, string translationFunction, string textToTranslate, string toCulture)
         {
             IsCancelled = false;
             TLog.Reset(TLog.eMode.tfTranslate);
@@ -33,7 +33,8 @@ namespace Translator
                     mode,
                     translationFunction,
                     targetRootPath,
-                    textToTranslate);
+                    textToTranslate, 
+                    toCulture);
 
                 stopwatch.Stop();
                 TimeSpan elapsed = stopwatch.Elapsed;
@@ -47,32 +48,70 @@ namespace Translator
             TLog.Save(TLog.eMode.tfTranslate, TUtils.TargetTranslateLogPath);
         }
 
-        public static async Task TranslateTestAsync(TLog.eMode mode, string translationFunction, string targetRootPath, string textToTranslate)
+        public async static Task TranslateTestAsync(TLog.eMode mode, string translationFunction, string targetRootPath, string textToTranslate, string toCulture)
         {
+            await Task.Delay(100);
             TUtils.CalcPaths(targetRootPath);
-            App.Vm.TranslateProgress = 0;
-
             string fromCulture = "en-US";
 
-            await Task.Delay(1000);
+            (string valuePrefix, string valueVal) = TScan.SplitPrefix(textToTranslate);
+            string hintToken = valuePrefix;
+            if ((hintToken != "!") && (hintToken != "@") && (hintToken != "@@") && (hintToken != "!!"))
+            {
+                //if there's a x:Uid, we usuall expect hint tokens
+                //if translationHint is not !, !!, @ or @@ prefix, so we won't translate or cache it
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 2, @"Invalid hint token. Valid tokens are { '@@', '@', '!!', '!' }");
+                return;
+            }
 
+            await Task.Delay(100);
+            TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.InitGlobal(mode={0}, translationFunction={1}, fromCulture={2})",
+                mode, translationFunction, fromCulture));
+            if (!TTransFunc.InitGlobal(mode, translationFunction, fromCulture))
+            {
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 2, String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}",
+                    translationFunction, fromCulture));
+                return;
+            }
+
+            await Task.Delay(100);
+            TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.InitPerCulture(mode={0}, translationFunction={1}, fromCulture={2}, toCulture={3})",
+                mode, translationFunction, fromCulture, toCulture));
+            if (!TTransFunc.InitPerCulture(mode, translationFunction, fromCulture, toCulture))
+            {
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 2,
+                    String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}, toCulture={2}",
+                    translationFunction, fromCulture, toCulture));
+                return;
+            }
+
+            await Task.Delay(100);
+            string translatedText;
+            string s1;
+            s1 = String.Format(
+                    "Untranslated: {0}:{1}{2}",
+                    fromCulture,
+                    hintToken,
+                    valueVal
+                    );
+            TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, s1);
+
+            TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.Translate(mode={0}, translationFunction={1}, fromCulture={2}, toCulture={3}, textToTranslate={4}, hintToken={5})",
+                mode, translationFunction, fromCulture, toCulture, valueVal, hintToken));
+            await Task.Delay(100);
+            translatedText = TTransFunc.Translate(mode, translationFunction, fromCulture, toCulture, valueVal, hintToken);
+            if (translatedText == null)
+            {
+                translatedText = "--- FAILED ---";
+            }
+            else
+            {
+                TTransFunc.DeInitGlobal(mode, translationFunction);
+                s1 = String.Format("Result: " + translatedText);
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 2, s1);
+            }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
         public static async Task Start(TLog.eMode mode, string targetRootPath, string translationFunction)
         {
             IsCancelled = false;
@@ -129,8 +168,6 @@ namespace Translator
             TCache.Init(x);
             await TCache.InitializeAsync(); 
             TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 0, "Cache initialized.");
-
-
             #endregion
 
             #region TRANSLATE
@@ -138,9 +175,6 @@ namespace Translator
             int _cacheMissCounter = 0;
             int _failedTranslationCounter = 0;
             int _nonEnUSLanguages = 0;
-
-            int _debugRetranslateCounter = 0;
-            bool _debugRetranslateBypass = false;
 
             if (!File.Exists(TUtils.TargetStrings_enUS_Path))
             {
@@ -176,8 +210,6 @@ namespace Translator
                 {
                     _nonEnUSLanguages++;
                     hasAlreadyInittedThisCulture = false;
-
-                    _debugRetranslateCounter = 0;
 
                     XDocument destDoc = XDocument.Load(destDocFilePath);
                     TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 0, String.Format("Processing {0}...", toCulture));
@@ -216,18 +248,10 @@ namespace Translator
                         }
                         else
                         {
-                            if (TSettings.Debug)
-                            {
-                                if (TSettings.DebugRetranslate)
-                                {
-                                   _debugRetranslateCounter++;
-                                    _debugRetranslateBypass = (_debugRetranslateCounter <= TSettings.DebugRetranslateItemsCount);
-                                }
-                            }
                             
                             string cacheKey = String.Format("{0}:{1}:{2}", toCulture, hintToken, textToTranslate);
                             string cachedData = TCache.GetValue(cacheKey);
-                            if ((cachedData != null) && (!_debugRetranslateBypass))
+                            if (cachedData != null)
                             {
                                 translatedText = cachedData;
                                 TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 2, String.Format("Cache hit: {0}:{1}:{2}", toCulture, hintToken, textToTranslate));
@@ -249,7 +273,7 @@ namespace Translator
                                 TLog.Log(TLog.eMode.translate, (TSettings.Debug ? TLog.eLogItemType.dbg : TLog.eLogItemType.inf), 2, s1);
                                 s2 = String.Format(
                                      "Untranslated: {0}:{1}{2}",
-                                     toCulture,
+                                     fromCulture,
                                      hintToken,
                                      textToTranslate
                                      );
@@ -268,7 +292,7 @@ namespace Translator
                                 }
                                 else
                                 {
-                                    String.Format("Result: " + translatedText);
+                                    s2 = String.Format("Result: " + translatedText);
                                     TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 4, s2);
                                 }
 
@@ -321,15 +345,6 @@ namespace Translator
             TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 0, String.Format("Summary: {0} cache misses", _cacheMissCounter));
             TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 0, String.Format("Summary: {0} translation attempts", _cacheMissCounter));
             TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 0, String.Format("Summary: {0} failed translations", _failedTranslationCounter));
-            if (TSettings.Debug)
-            {
-                if (_debugRetranslateCounter > 0)
-                {
-                    string s = String.Format("Summary: Retranslated the top {0} items for each toCulture.",
-                        TSettings.DebugRetranslateItemsCount.ToString());
-                    TLog.Log(TLog.eMode.translate, TLog.eLogItemType.dbg, 0, s);
-                }
-            }
             TTransFunc.DeInitGlobal(mode, translationFunction);
 
             #endregion

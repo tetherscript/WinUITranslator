@@ -1,87 +1,13 @@
-0001:    Translation Started.
-0002:    Translation function: LMS_llama-3.2-1b-instruct
-0003:    TTF_LMS_llama-3.2-1b-instruct: InitGlobal: fromCulture=en-US
-0004:    TTF_LMS_llama-3.2-1b-instruct: DESCRIPTION: The model is 'llama-3.2-1b-instruct' hosted on LM Studio.
-0005:    TTF_LMS_llama-3.2-1b-instruct: AUTHOR: Tetherscript
-0006:    TTF_LMS_llama-3.2-1b-instruct: CONTACT: support@tetherscript.com
-0007:    TTF_LMS_llama-3.2-1b-instruct: SETTINGS: TTF_LMS_llama-3.2-1b-instruct.json
-0008:    TTF_LMS_llama-3.2-1b-instruct: SETTINGS: loaded.
-0009:    TTF_LMS_llama-3.2-1b-instruct: SETTINGS: max_tokens: 1000
-0010:    TTF_LMS_llama-3.2-1b-instruct: SETTINGS: @: You are a professional language translator.  Translate the following text from American English (en-US) to ({0}).
-0011:    TTF_LMS_llama-3.2-1b-instruct: SETTINGS: @@: You are a professional language translator.  Translate the following text from American English (en-US) to ({0}).  Aim to keep the translated text the same length or shorter, but prioritize accuracy and clarity if a slight increase in length is unavoidable.
-0012:    TTF_LMS_llama-3.2-1b-instruct: SETTINGS: !: You are a professional language translator. These translations are for a photography website, so use terminology and style suitable for photographers and their audience. Translate the following text from American English (en-US) to ({0}).
-0013:    TTF_LMS_llama-3.2-1b-instruct: SETTINGS: !!: You are a professional language translator. These translations are for a photography website, so use terminology and style suitable for photographers and their audience.  Translate the following text from American English (en-US) to ({0}).  Aim to keep the translated text the same length or shorter, but prioritize accuracy and clarity if a slight increase in length is unavoidable.
-0014:    Cache initialized.
-0015:    Found 4 Resources.resw files.
-0016:    Processing ar-SA...
-0017:      Cache hit: ar-SA:!:Aperture
-0018:      Cache hit: ar-SA:@:Enter your name here
-0019:      TTF_LMS_llama-3.2-1b-instruct: InitPerCulture: fromCulture=en-US, toCulture=ar-SA
-0020:      Cache miss: Translating...
-0021:        Untranslated: ar-SA:@@Enter your name here
-0022: E  TTF_LMS_llama-3.2-1b-instruct: Error in response: statusCode = NotFound
-0023:      Cache miss: Translating...
-0024:        Untranslated: ar-SA:@Close
-0025: E  TTF_LMS_llama-3.2-1b-instruct: Error in response: statusCode = NotFound
-0026:      Cache hit: ar-SA:@@:Lock
-0027:      Cache hit: ar-SA:@:Zoom
-0028:      Cache hit: ar-SA:@:100%
-0029:      Cache hit: ar-SA:@:200%
-0030:      Cache hit: ar-SA:!:Image Browser
-0031:      Cache hit: ar-SA:@:Connection
-0032:      Cache hit: ar-SA:@:Disconnected
-0033:      Cache hit: ar-SA:@:Connected
-0034:      Cache hit: ar-SA:@:Loading {0}}, please wait...
-0035:      Cache hit: ar-SA:@:Open the aperture for a shallower depth of field.
-0036:      Cache hit: ar-SA:!:Open the aperture for a shallower depth of field.
-0037:      Cache hit: ar-SA:!!:Open the aperture for a shallower depth of field.
-0038:    Checking for specials...
-0039:    Adding special: SettingsIcon=settings2.ico
-0040:    Processing de-DE...
-0041:      Cache hit: de-DE:!:Aperture
-0042:      Cache hit: de-DE:@:Enter your name here
-0043:      Cache hit: de-DE:@@:Enter your name here
-0044:      Cache hit: de-DE:@:Close
-0045:      Cache hit: de-DE:@@:Lock
-0046:      Cache hit: de-DE:@:Zoom
-0047:      Cache hit: de-DE:@:100%
-0048:      Cache hit: de-DE:@:200%
-0049:      Cache hit: de-DE:!:Image Browser
-0050:      Cache hit: de-DE:@:Connection
-0051:      Cache hit: de-DE:@:Disconnected
-0052:      Cache hit: de-DE:@:Connected
-0053:      Cache hit: de-DE:@:Loading {0}}, please wait...
-0054:      Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
-0055:      Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
-0056:      Cache hit: de-DE:!!:Open the aperture for a shallower depth of field.
-0057:    Checking for specials...
-0058:    Adding special: SettingsIcon=settings1.ico
-0059:    Processing fr-FR...
-0060:      Cache hit: fr-FR:!:Aperture
-0061:      Cache hit: fr-FR:@:Enter your name here
-0062:      Cache hit: fr-FR:@@:Enter your name here
-0063:      Cache hit: fr-FR:@:Close
-0064:      Cache hit: fr-FR:@@:Lock
-0065:      Cache hit: fr-FR:@:Zoom
-0066:      Cache hit: fr-FR:@:100%
-0067:      Cache hit: fr-FR:@:200%
-0068:      Cache hit: fr-FR:!:Image Browser
-0069:      Cache hit: fr-FR:@:Connection
-0070:      Cache hit: fr-FR:@:Disconnected
-0071:      Cache hit: fr-FR:@:Connected
-0072:      Cache hit: fr-FR:@:Loading {0}}, please wait...
-0073:      Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
-0074:      Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
-0075:      Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
-0076:    Checking for specials...
-0077:    Adding special: SettingsIcon=settings1.ico
-0078:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-0079:    Summary: Found 18 translateable items in en-US\Resources.resw
-0080:    Summary: 46 cache hits
-0081:    Summary: 2 cache misses
-0082:    Summary: 2 translation attempts
-0083:    Summary: 2 failed translations
-0084:    Summary: Used 0 prompt tokens + 0 completion_tokens = 0 total tokens.
-0085:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-0086:    Translation complete.
-0087:    Elapsed Time: 00:00:05
+0001:    TTransFunc.InitGlobal(mode=tfTranslate, translationFunction=OpenAI_1, fromCulture=en-US)
+0002: D    OpenAI_1: SETTINGS: loaded.
+0003:    TTransFunc.InitPerCulture(mode=tfTranslate, translationFunction=OpenAI_1, fromCulture=en-US, toCulture=de-DE)
+0004:    Untranslated: en-US:!Shutter Speed
+0005:    TTransFunc.Translate(mode=tfTranslate, translationFunction=OpenAI_1, fromCulture=en-US, toCulture=de-DE, textToTranslate=Shutter Speed, hintToken=!)
+0006: D    OpenAI_1: hintToken=!
+0007: D    OpenAI_1: systemContent=You are a professional language translator. These translations are for a photography website, so use terminology and style suitable for photographers and their audience. Translate the following text from American English (en-US) to (de-DE).
+0008: D    OpenAI_1: userContent='Shutter Speed'
+0009: D    OpenAI_1: max_tokens=1000
+0010: D    OpenAI_1: HttpResponseMessage.StatusCode = OK
+0011:      OpenAI_1: Summary: Used 60 prompt tokens + 7 completion_tokens = 67 total tokens.
+0012:      Result: Verschlusszeit
+0013:    Elapsed Time: 00:00:03

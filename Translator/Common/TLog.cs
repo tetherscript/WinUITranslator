@@ -31,8 +31,13 @@ namespace Translator
             Log(mode, eLogItemType.inf, 0, s);
         }
 
-         public static void Log(eMode mode, eLogItemType logType, int indent, string msg)
+        public static void Log(eMode mode, eLogItemType logType, int indent, string msg)
         {
+            if ((logType == eLogItemType.dbg) && (!App.Vm.Debug))
+            {
+                return;
+            }
+
             //line #
             IncLogCounter(mode);
             string lineNumber = GetLogCounter(mode).ToString("D4"); //0473

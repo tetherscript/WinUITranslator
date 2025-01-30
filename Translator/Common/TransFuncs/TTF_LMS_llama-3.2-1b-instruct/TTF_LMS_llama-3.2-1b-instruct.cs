@@ -62,6 +62,11 @@ namespace Translator
             return true;
         }
 
+        public static string GetSettingsPath()
+        {
+            return Path.Combine(TUtils.TargetTranslatorPath, _settingsFilename);
+        }
+
         private static Dictionary<string, string> Settings = new Dictionary<string, string>();
         private static bool LoadSettings(TLog.eMode mode)
         {

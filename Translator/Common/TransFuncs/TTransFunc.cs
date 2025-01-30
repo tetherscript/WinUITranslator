@@ -17,6 +17,17 @@ namespace Translator
             _sample
         };
 
+        public static string GetSettingsPath(string funcType)
+        {
+            switch (funcType)
+            {
+                case _sample: return string.Empty;
+                case _openAI_1: return TTF_OpenAI_1.GetSettingsPath();
+                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.GetSettingsPath();
+                default: return string.Empty;
+            }
+        }
+
         public static bool InitGlobal(TLog.eMode mode, string funcType, string fromCulture)
         {
             //called at the beginning of the translation task

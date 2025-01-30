@@ -5,8 +5,6 @@ namespace Translator
     public static class TSettings
     {
         public static bool Debug = false;
-        public static int DebugRetranslateItemsCount;
-        public static bool DebugRetranslate;
 
         public static int WindowLeft;
         public static int WindowTop;
@@ -29,8 +27,7 @@ namespace Translator
             public const string SelectedTranslationFunction = "SelectedTranslationFunction";
             public const string ThemeIndex = "ThemeIndex";
             public const string Debug = "Debug";
-            public const string DebugRetranslate = "DebugRetranslate";
-            public const string DebugRetranslateItemsCount = "DebugRetranslateItemsCount";
+            public const string TFTestText = "TFTestText";
         }
 
         public static void Load()
@@ -45,17 +42,15 @@ namespace Translator
             App.Vm.Debug = (appData.Values.ContainsKey(AppSettingsKeys.Debug)) ?
                 (bool)appData.Values[AppSettingsKeys.Debug] : false;
 
-            App.Vm.DebugRetranslate = (appData.Values.ContainsKey(AppSettingsKeys.DebugRetranslate)) ?
-                (bool)appData.Values[AppSettingsKeys.DebugRetranslate] : false;
-            
-            App.Vm.DebugRetranslateItemsCount = (appData.Values.ContainsKey(AppSettingsKeys.DebugRetranslateItemsCount)) ?
-                (int)appData.Values[AppSettingsKeys.DebugRetranslateItemsCount] : 1;
-
             App.Vm.Target = (appData.Values.ContainsKey(AppSettingsKeys.Target)) ?
                 (string)appData.Values[AppSettingsKeys.Target] : @"C:\Repo\WinUITranslator\Sample-Packaged";
 
             App.Vm.SelectedTranslationFunction = (appData.Values.ContainsKey(AppSettingsKeys.SelectedTranslationFunction)) ?
                 (string)appData.Values[AppSettingsKeys.SelectedTranslationFunction] : "OpenAI_1";
+
+            App.Vm.TFTextToTranslate = (appData.Values.ContainsKey(AppSettingsKeys.TFTestText)) ?
+                (string)appData.Values[AppSettingsKeys.TFTestText] : "@Aperture";
+
 
             LastNavItemTag = (appData.Values.ContainsKey(AppSettingsKeys.LastNavItemTag)) ?
                 (string)appData.Values[AppSettingsKeys.LastNavItemTag] : "Target";
@@ -86,12 +81,9 @@ namespace Translator
 
             appData.Values[AppSettingsKeys.ThemeIndex] = App.Vm.ThemeIndex;
             appData.Values[AppSettingsKeys.Debug] = App.Vm.Debug;
-            appData.Values[AppSettingsKeys.DebugRetranslate] = App.Vm.DebugRetranslate;
-            
-            appData.Values[AppSettingsKeys.DebugRetranslateItemsCount] = App.Vm.DebugRetranslateItemsCount;
-
             appData.Values[AppSettingsKeys.Target] = App.Vm.Target;
             appData.Values[AppSettingsKeys.SelectedTranslationFunction] = App.Vm.SelectedTranslationFunction;
+            appData.Values[AppSettingsKeys.TFTestText] = App.Vm.TFTextToTranslate;
 
             appData.Values[AppSettingsKeys.IsMaximized] = IsMaximized;
             appData.Values[AppSettingsKeys.WindowLeft] = WindowLeft;
