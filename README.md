@@ -2,6 +2,10 @@
 ### Translate your WinappSDK WinUI Apps using the OpenAI API, a local model or any other method you can dream up.
 <br/>
 
+- [x] Add Cache Editor
+- [x] Add OpenAI API Translation Function.  
+- [ ] Add LM Studio Translation Function using OpenAI API emulation.  This will run locally.
+ 
 > [!TIP]
 > View the Wiki for the full documentation.
 
