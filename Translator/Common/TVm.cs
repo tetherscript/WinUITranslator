@@ -93,15 +93,17 @@ namespace Translator
             {
                 IsBusy = true;
                 IsScanning = true;
-                ScanLog = "";
+                ScanLog = "Scanning...";
                 ScanLogScrollToBottom();
-                await Task.Delay(1000);
+                await Task.Delay(100);
                 await TScan.Start(TLog.eMode.scan, TUtils.TargetRootPath);
+                TLog.Save(TLog.eMode.scan, TUtils.TargetScanLogPath);
             }
             else
             {
                 TLog.Log(TLog.eMode.scan, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
             }
+            TLog.Flush(TLog.eMode.scan);
             ScanLogScrollToBottom();
             IsScanning = false;
             IsBusy = false;
@@ -143,15 +145,16 @@ namespace Translator
             {
                 IsBusy = true;
                 IsTranslating = true;
-                TranslateLog = "";
+                TranslateLog = "Translating...";
                 TranslateLogScrollToBottom();
-                await Task.Delay(1000);
+                await Task.Delay(100);
                 await TTranslate.Start(TLog.eMode.translate, TUtils.TargetRootPath, SelectedTranslationFunction);
             }
             else
             {
                 TLog.Log(TLog.eMode.translate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
             }
+            TLog.Flush(TLog.eMode.translate);
             TranslateLogScrollToBottom();
             TranslateProgress = 0;
             IsTranslating = false;
@@ -226,9 +229,10 @@ namespace Translator
         }
 
         [RelayCommand]
-        private void TFTestSaveSettings()
+        private async void TFTestSaveSettings()
         {
             TUtils.CalcPaths(Target);
+            TLog.Reset(TLog.eMode.tfTranslate);
             string path = TTransFunc.GetSettingsPath(SelectedTranslationFunction);
             try
             {
@@ -240,6 +244,7 @@ namespace Translator
             {
                 TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Save setting failed: " + path + ": " + ex.Message);
             }
+            TLog.Flush(TLog.eMode.tfTranslate);
         }
 
         [ObservableProperty]
@@ -249,6 +254,8 @@ namespace Translator
         private async Task StartTFTest()
         {
             TLog.Reset(TLog.eMode.tfTranslate);
+            TranslateLog = "Translating...";
+            await Task.Delay(100);
             if (TFTextToTranslate.Trim() == "")
             {
                 TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Enter text to translate.");
@@ -267,6 +274,7 @@ namespace Translator
                 {
                     TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
                 }
+                TLog.Flush(TLog.eMode.tfTranslate);
                 TFTranslateLogScrollToBottom();
                 TFIsTranslating = false;
                 IsBusy = false;
@@ -294,7 +302,7 @@ namespace Translator
 
         #endregion
 
-
+        #region CACHE EDITOR
         // The collection used by the UI (ListView) to display results
         public ObservableCollection<Pair> FilteredEntries { get; } = new ObservableCollection<Pair>();
 
@@ -470,6 +478,7 @@ namespace Translator
 
         [ObservableProperty]
         int _cacheSearchSelectionLength = 0;
+        #endregion
     }
 }
 

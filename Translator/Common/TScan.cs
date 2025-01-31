@@ -41,7 +41,6 @@ namespace Translator
         public static async Task Start(TLog.eMode mode, string targetRootPath)
         {
             IsCancelled = false;
-            TLog.Reset(mode);
             try
             {
                 TLog.Log(mode, TLog.eLogItemType.inf, 0, "Scan started.");
@@ -57,7 +56,6 @@ namespace Translator
             {
                 TLog.Log(mode, TLog.eLogItemType.err, 0, $"An error occurred: {ex.Message}");
             }
-            TLog.Save(mode, TUtils.TargetScanLogPath);
         }
 
         public static void Stop(TLog.eMode mode)

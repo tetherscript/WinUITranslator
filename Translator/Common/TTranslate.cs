@@ -308,7 +308,7 @@ namespace Translator
                         }
 
                         TimeSpan ts = DateTime.Now - _lastASync;
-                        if (ts.TotalMilliseconds > (1000 / 60)) //120hz
+                        if (ts.TotalMilliseconds > (1000 / 30)) //30hz
                         {
                             _lastASync = DateTime.Now;
                             await Task.Delay(1);

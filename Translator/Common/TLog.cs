@@ -95,17 +95,39 @@ namespace Translator
         {
             if (mode == eMode.scan)
             {
-                App.Vm.ScanLog = App.Vm.ScanLog + msg + Environment.NewLine;
+                ScanText = ScanText + msg + Environment.NewLine;
             }
             else
             if (mode == eMode.translate)
             {
-                App.Vm.TranslateLog = App.Vm.TranslateLog + msg + Environment.NewLine;
+                TranslateText = TranslateText + msg + Environment.NewLine;
             }
             else
             if (mode == eMode.tfTranslate)
             {
-                App.Vm.TFLog = App.Vm.TFLog + msg + Environment.NewLine;
+                TfTranslateText = TfTranslateText + msg + Environment.NewLine;
+            }
+        }
+
+        public static string ScanText = string.Empty;
+        public static string TranslateText = string.Empty;
+        public static string TfTranslateText = string.Empty;
+
+        public static void Flush(eMode mode)
+        {
+            if (mode == eMode.scan)
+            {
+                App.Vm.ScanLog = ScanText;
+            }
+            else
+            if (mode == eMode.translate)
+            {
+                App.Vm.TranslateLog = TranslateText;
+            }
+            else
+            if (mode == eMode.tfTranslate)
+            {
+                App.Vm.TFLog = TfTranslateText;
             }
         }
 
@@ -115,18 +137,21 @@ namespace Translator
             {
                 _logScanCounter = 0;
                 App.Vm.ScanLog = "";
+                ScanText = "";
             }
             else
             if (mode == eMode.translate)
             {
                 _logTranslateCounter = 0;
                 App.Vm.TranslateLog = "";
+                TranslateText = "";
             }
             else
             if (mode == eMode.tfTranslate)
             {
                 _logTFCounter = 0;
                 App.Vm.TFLog = "";
+                TfTranslateText = "";
             }
         }
 
@@ -134,9 +159,9 @@ namespace Translator
         {
             switch (mode)
             {
-                case eMode.scan: return App.Vm.ScanLog;
-                case eMode.translate: return App.Vm.TranslateLog;
-                case eMode.tfTranslate: return App.Vm.TFLog;
+                case eMode.scan: return ScanText;
+                case eMode.translate: return TranslateText;
+                case eMode.tfTranslate: return TfTranslateText;
                 default: return "";
             }
         }
