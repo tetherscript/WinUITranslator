@@ -156,7 +156,7 @@ namespace Translator
         }
 
         [RelayCommand]
-        private void CancelTranslate()
+        private static void CancelTranslate()
         {
             TTranslate.Stop();
         }
@@ -292,9 +292,6 @@ namespace Translator
         #endregion
 
 
-
-
-
         // The collection used by the UI (ListView) to display results
         public ObservableCollection<Pair> FilteredEntries { get; } = new ObservableCollection<Pair>();
 
@@ -343,7 +340,7 @@ namespace Translator
         }
 
         [RelayCommand(CanExecute = nameof(CanSaveChanges))]
-        private async void SaveChanges()
+        private async Task SaveChanges()
         {
             if (SelectedPair == null)
                 return;
