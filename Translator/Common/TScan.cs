@@ -41,7 +41,6 @@ namespace Translator
         public static async Task Start(TLog.eMode mode, string targetRootPath)
         {
             IsCancelled = false;
-            TLog.ClearAllFiles();
             TLog.Reset(mode);
             try
             {

@@ -141,15 +141,12 @@ namespace Translator
             }
         }
 
-        public static void ClearAllFiles()
-        {
-            File.WriteAllText(TUtils.TargetTranslateLogPath, "");
-            File.WriteAllText(TUtils.TargetScanLogPath, "");
-        }
-
         public static void Save(eMode mode, string path)
-        {
-            File.WriteAllText(path, GetText(mode));
+        {  
+            if (mode != eMode.tfTranslate)
+            {
+                File.WriteAllText(path, GetText(mode));
+            }
         }
     }
 }
