@@ -112,26 +112,6 @@ This Translator app can do that. Even #8.
 
 You need to create a `/Translator` folder in the target project and add these files to it.
 
-<br/><br/><br/>
-
-# Scanning
-
-- Searches `.xaml` files used by the target project and detects any elements that have a `x:Uid` and are defined in `XamlElements.json`. 
-- It combines this with the items in `TLocalizedGets.json` and `Specials.json` and updates the `target/Strings/en-US/Resources.resw`. 
-- You put a blank `Resources.resw` there earlier, and its data section has been replaced with the scan results. This `.resw` is the "truth" for what needs to be translated later.
-- In that `Resources.resw` file, you'll see that the hint token (`@`, `@@`, `!`, `!!`) have been placed in the comments field. **Don't edit this file.** 
-- No other `.resw` files have been touched. That will happen when you translate.
-- The contents of `DetectedXamlElements.json` have also been replaced.
-> [!NOTE]
-> Scanning is the greatest timesaver over other translation methods. You don't need to manually add items the the .resw files.  That is huge.
-
-## Summary
-
-When a scan is complete, you have found the things that need to be translated, but you have not actually translated anything yet.
-
-Here's what scanning the sample app Sample-Packaged looks like.
-
-<img alt="image" src="https://github.com/user-attachments/assets/48c07526-6ae5-462e-81b4-159ab56bb794" />
 
 
 
