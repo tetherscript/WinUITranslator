@@ -44,6 +44,9 @@ namespace Translator
         public string[] Arguments { get => _arguments; set => _arguments = value; }
 
         [ObservableProperty]
+        private bool _keyLeftControlPressedOnLaunch = false;
+
+        [ObservableProperty]
         private string _title = "Translator";
 
         [ObservableProperty]

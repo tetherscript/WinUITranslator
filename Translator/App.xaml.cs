@@ -1,5 +1,7 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Input;
+using Microsoft.UI.Xaml;
 using System;
+using Windows.UI.Core;
 
 namespace Translator
 {
@@ -26,6 +28,7 @@ namespace Translator
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             _vm = new TVm(Environment.GetCommandLineArgs());
+            _vm.KeyLeftControlPressedOnLaunch = InputKeyboardSource.GetKeyStateForCurrentThread(Windows.System.VirtualKey.LeftControl).HasFlag(CoreVirtualKeyStates.Down);
 
             m_window = new MainWindow();
             m_window.Activate();

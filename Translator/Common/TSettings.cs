@@ -35,7 +35,10 @@ namespace Translator
         {
             var appData = ApplicationData.Current.LocalSettings;
 
-            //appData.Values.Clear(); //wipe settings in case it gets messed up
+            if (App.Vm.KeyLeftControlPressedOnLaunch)
+            {
+                appData.Values.Clear(); //wipe settings in case it gets messed up            
+            }
 
             App.Vm.ThemeIndex = (appData.Values.ContainsKey(AppSettingsKeys.ThemeIndex)) ?
                 (int)appData.Values[AppSettingsKeys.ThemeIndex] : 0;
