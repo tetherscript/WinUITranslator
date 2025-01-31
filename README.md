@@ -176,43 +176,6 @@ Here's what translating the sample app Sample-Packaged looks like.
 
 <img alt="image" src="https://github.com/user-attachments/assets/ee9c1fec-2ff6-4fb0-84de-a22dc7b0fc52" />
 
-</br></br></br>
-
-# Hints
-
-Let's say we are translating for a photography-related app.  When we send a string like `'Aperture'` to a Translation Function, do we mean aperture as in photography, or aperture as in an opening of some kind?  We need to give the function a **hint** to get the best translation results. 
-
-With human translators, we might have included context in the `.resw` comments. But in this Translator app, we'll use the following **hint tokens**:
-
-## Accuracy vs Cost
-
-- **`@`** - A normal, generic translation.  
-  Example: `'@Aperture'` may be translated as an opening of some kind.
-
-- **`!`** - A translation with extra context.  
-  Example: `'!Aperture'` is more likely to be translated in a photography context.
-
-### Why not always use `!`?
-- Longer prompts cost more.  
-- If a generic `@` prompt works, use that instead to save costs.
-
-## Length Constraints
-
-Often, we have limited screen space to display a string, such as the header above a combobox control. It looks good in `en-US`, but translating it may make the string too long, affecting the layout and making it look bad.
-
-To handle this, use the following hint tokens:
-
-- **`@@`** - A normal, generic translation, but where we want the translation to be of similar or shorter length.
-- **`!!`** - A translation with extra context, but where we want the translation to be of similar or shorter length.
-
-## How to Create Prompts with These Hints?
-
-- Enter the prompt corresponding to the hint token in the **Hints tab**.
-- These hints will then be accessible in the Translation Function.
-
-Here are the hints for the OpenAI API.
-
-<img alt="image" src="https://github.com/user-attachments/assets/42fbeb0c-6603-402e-b7f3-0dcd539fc8c3" />
 
 
 
