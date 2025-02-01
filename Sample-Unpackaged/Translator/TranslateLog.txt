@@ -1,13 +1,81 @@
-0001:    TTransFunc.InitGlobal(mode=tfTranslate, translationFunction=OpenAI_1, fromCulture=en-US)
-0002: D    OpenAI_1: SETTINGS: loaded.
-0003:    TTransFunc.InitPerCulture(mode=tfTranslate, translationFunction=OpenAI_1, fromCulture=en-US, toCulture=de-DE)
-0004:    Untranslated: en-US:@test
-0005:    TTransFunc.Translate(mode=tfTranslate, translationFunction=OpenAI_1, fromCulture=en-US, toCulture=de-DE, textToTranslate=test, hintToken=@)
-0006: D    OpenAI_1: hintToken=@
-0007: D    OpenAI_1: systemContent=You are a professional language translator.  Translate the following text from American English (en-US) to (de-DE).
-0008: D    OpenAI_1: userContent='test'
-0009: D    OpenAI_1: max_tokens=1000
-0010: D    OpenAI_1: HttpResponseMessage.StatusCode = OK
-0011:    OpenAI_1: Summary: Used 39 prompt tokens + 6 completion_tokens = 45 total tokens.
-0012:      Result: Prüfung
-0013:    Elapsed Time: 00:00:03
+0001:    Translation Started.
+0002:    Translation function: OpenAI_1
+0003:    OpenAI_1: InitGlobal: fromCulture=en-US
+0004:    OpenAI_1: DESCRIPTION: Calls the OpenAI API chat endpoint
+0005:    OpenAI_1: AUTHOR: Tetherscript
+0006:    OpenAI_1: CONTACT: support@tetherscript.com
+0007:    OpenAI_1: SETTINGS: TTF_OpenAI_1.json
+0008:    OpenAI_1: SETTING: max_tokens: 1000
+0009:    OpenAI_1: SETTING: @: You are a professional language translator.  Translate the following text from American English (en-US) to ({0}).
+0010:    OpenAI_1: SETTING: @@: You are a professional language translator.  Translate the following text from American English (en-US) to ({0}).  Aim to keep the translated text the same length or shorter, but prioritize accuracy and clarity if a slight increase in length is unavoidable.
+0011:    OpenAI_1: SETTING: !: You are a professional language translator. These translations are for a photography website, so use terminology and style suitable for photographers and their audience. Translate the following text from American English (en-US) to ({0}).
+0012:    OpenAI_1: SETTING: !!: You are a professional language translator. These translations are for a photography website, so use terminology and style suitable for photographers and their audience.  Translate the following text from American English (en-US) to ({0}).  Aim to keep the translated text the same length or shorter, but prioritize accuracy and clarity if a slight increase in length is unavoidable.
+0013:    Cache initialized.
+0014:    Found 4 Resources.resw files.
+0015:    Processing ar-SA...
+0016:      Cache hit: ar-SA:!:Aperture
+0017:      Cache hit: ar-SA:@:Enter your name here
+0018:      Cache hit: ar-SA:@@:Enter your name here
+0019:      Cache hit: ar-SA:@:Close
+0020:      Cache hit: ar-SA:@@:Lock
+0021:      Cache hit: ar-SA:@:Zoom
+0022:      Cache hit: ar-SA:@:100%
+0023:      Cache hit: ar-SA:@:200%
+0024:      Cache hit: ar-SA:!:Image Browser
+0025:      Cache hit: ar-SA:@:Connection
+0026:      Cache hit: ar-SA:@:Disconnected
+0027:      Cache hit: ar-SA:@:Connected
+0028:      Cache hit: ar-SA:@:Loading {0}}, please wait...
+0029:      Cache hit: ar-SA:@:Open the aperture for a shallower depth of field.
+0030:      Cache hit: ar-SA:!:Open the aperture for a shallower depth of field.
+0031:      Cache hit: ar-SA:!!:Open the aperture for a shallower depth of field.
+0032:    Checking for specials...
+0033:    Adding special: SettingsIcon=settings2.ico
+0034:    Processing de-DE...
+0035:      Cache hit: de-DE:!:Aperture
+0036:      Cache hit: de-DE:@:Enter your name here
+0037:      Cache hit: de-DE:@@:Enter your name here
+0038:      Cache hit: de-DE:@:Close
+0039:      Cache hit: de-DE:@@:Lock
+0040:      Cache hit: de-DE:@:Zoom
+0041:      Cache hit: de-DE:@:100%
+0042:      Cache hit: de-DE:@:200%
+0043:      Cache hit: de-DE:!:Image Browser
+0044:      Cache hit: de-DE:@:Connection
+0045:      Cache hit: de-DE:@:Disconnected
+0046:      Cache hit: de-DE:@:Connected
+0047:      Cache hit: de-DE:@:Loading {0}}, please wait...
+0048:      Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
+0049:      Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
+0050:      Cache hit: de-DE:!!:Open the aperture for a shallower depth of field.
+0051:    Checking for specials...
+0052:    Adding special: SettingsIcon=settings1.ico
+0053:    Processing fr-FR...
+0054:      Cache hit: fr-FR:!:Aperture
+0055:      Cache hit: fr-FR:@:Enter your name here
+0056:      Cache hit: fr-FR:@@:Enter your name here
+0057:      Cache hit: fr-FR:@:Close
+0058:      Cache hit: fr-FR:@@:Lock
+0059:      Cache hit: fr-FR:@:Zoom
+0060:      Cache hit: fr-FR:@:100%
+0061:      Cache hit: fr-FR:@:200%
+0062:      Cache hit: fr-FR:!:Image Browser
+0063:      Cache hit: fr-FR:@:Connection
+0064:      Cache hit: fr-FR:@:Disconnected
+0065:      Cache hit: fr-FR:@:Connected
+0066:      Cache hit: fr-FR:@:Loading {0}}, please wait...
+0067:      Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
+0068:      Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
+0069:      Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
+0070:    Checking for specials...
+0071:    Adding special: SettingsIcon=settings1.ico
+0072:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0073:    Summary: Found 18 translateable items in en-US\Resources.resw
+0074:    Summary: 48 cache hits
+0075:    Summary: 0 cache misses
+0076:    Summary: 0 translation attempts
+0077:    Summary: 0 failed translations
+0078:    OpenAI_1: Summary: Used 0 prompt tokens + 0 completion_tokens = 0 total tokens.
+0079:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0080:    Translation complete.
+0081:    Elapsed Time: 00:00:00

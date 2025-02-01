@@ -1,5 +1,9 @@
 ﻿[
   {
+    "key": "ar-SA:!:Aperture",
+    "value": "\u0641\u062A\u062D\u0629 \u0627\u0644\u0639\u062F\u0633\u0629"
+  },
+  {
     "key": "ar-SA:@:Enter your name here",
     "value": "\u0623\u062F\u062E\u0644 \u0627\u0633\u0645\u0643 \u0647\u0646\u0627"
   },
@@ -20,6 +24,10 @@
     "value": "\u0632\u0648\u0648\u0645"
   },
   {
+    "key": "ar-SA:@:100%",
+    "value": "100\u066A"
+  },
+  {
     "key": "ar-SA:@:200%",
     "value": "200\u066A"
   },
@@ -29,11 +37,11 @@
   },
   {
     "key": "ar-SA:@:Connection",
-    "value": "\u0627\u062A\u0635\u0627\u0644"
+    "value": "\u0627\u0644\u0627\u062A\u0635\u0627\u0644"
   },
   {
     "key": "ar-SA:@:Disconnected",
-    "value": "\u063A\u064A\u0631 \u0645\u062A\u0635\u0644"
+    "value": "\u0645\u0646\u0642\u0637\u0639 \u0627\u0644\u0627\u062A\u0635\u0627\u0644"
   },
   {
     "key": "ar-SA:@:Connected",
@@ -44,16 +52,16 @@
     "value": "\u062C\u0627\u0631\u064A \u062A\u062D\u0645\u064A\u0644 {0}\u060C \u064A\u0631\u062C\u0649 \u0627\u0644\u0627\u0646\u062A\u0638\u0627\u0631..."
   },
   {
-    "key": "ar-SA:@:Open the shutter for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u063A\u0637\u0627\u0621 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u064A\u062F\u0627\u0646 \u0623\u0642\u0644."
+    "key": "ar-SA:@:Open the aperture for a shallower depth of field.",
+    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
   },
   {
-    "key": "ar-SA:!:Open the shutter for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u063A\u0627\u0644\u0642 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u064A\u062F\u0627\u0646 \u0623\u0642\u0644."
+    "key": "ar-SA:!:Open the aperture for a shallower depth of field.",
+    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
   },
   {
-    "key": "ar-SA:!!:Open the shutter for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u063A\u0627\u0644\u0642 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u064A\u062F\u0627\u0646 \u0623\u0642\u0644."
+    "key": "ar-SA:!!:Open the aperture for a shallower depth of field.",
+    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
   },
   {
     "key": "de-DE:!:Aperture",
@@ -80,6 +88,10 @@
     "value": "Zoom"
   },
   {
+    "key": "de-DE:@:100%",
+    "value": "100%"
+  },
+  {
     "key": "de-DE:@:200%",
     "value": "200%"
   },
@@ -104,16 +116,16 @@
     "value": "Laden von {0}, bitte warten..."
   },
   {
-    "key": "de-DE:@:Open the shutter for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie den Verschluss f\u00FCr eine geringere Tiefensch\u00E4rfe."
+    "key": "de-DE:@:Open the aperture for a shallower depth of field.",
+    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
   },
   {
-    "key": "de-DE:!:Open the shutter for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie den Verschluss f\u00FCr eine geringere Tiefensch\u00E4rfe."
+    "key": "de-DE:!:Open the aperture for a shallower depth of field.",
+    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
   },
   {
-    "key": "de-DE:!!:Open the shutter for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie den Verschluss f\u00FCr eine geringere Tiefensch\u00E4rfe."
+    "key": "de-DE:!!:Open the aperture for a shallower depth of field.",
+    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
   },
   {
     "key": "fr-FR:!:Aperture",
@@ -141,7 +153,7 @@
   },
   {
     "key": "fr-FR:@:100%",
-    "value": "101%"
+    "value": "100%"
   },
   {
     "key": "fr-FR:@:200%",
@@ -160,44 +172,12 @@
     "value": "D\u00E9connect\u00E9"
   },
   {
+    "key": "fr-FR:@:Connected",
+    "value": "Connect\u00E9"
+  },
+  {
     "key": "fr-FR:@:Loading {0}}, please wait...",
     "value": "Chargement de {0}, veuillez patienter..."
-  },
-  {
-    "key": "fr-FR:@:Open the shutter for a shallower depth of field.",
-    "value": "Ouvrez l\u0027obturateur pour une profondeur de champ plus faible."
-  },
-  {
-    "key": "fr-FR:!:Open the shutter for a shallower depth of field.",
-    "value": "Ouvrez l\u0027obturateur pour une profondeur de champ plus faible."
-  },
-  {
-    "key": "fr-FR:!!:Open the shutter for a shallower depth of field.",
-    "value": "Ouvrez l\u0027obturateur pour une profondeur de champ plus faible."
-  },
-  {
-    "key": "ar-SA:@:Open the aperture for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
-  },
-  {
-    "key": "ar-SA:!:Open the aperture for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
-  },
-  {
-    "key": "ar-SA:!!:Open the aperture for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u064A\u062F\u0627\u0646 \u0623\u0642\u0644."
-  },
-  {
-    "key": "de-DE:@:Open the aperture for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
-  },
-  {
-    "key": "de-DE:!:Open the aperture for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
-  },
-  {
-    "key": "de-DE:!!:Open the aperture for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
   },
   {
     "key": "fr-FR:@:Open the aperture for a shallower depth of field.",
@@ -210,13 +190,5 @@
   {
     "key": "fr-FR:!!:Open the aperture for a shallower depth of field.",
     "value": "Ouvrez l\u0027ouverture pour une profondeur de champ plus faible."
-  },
-  {
-    "key": "ar-SA:!:Aperture",
-    "value": "\u0641\u062A\u062D\u0629 \u0627\u0644\u0639\u062F\u0633\u0629"
-  },
-  {
-    "key": "fr-FR:@:Connected",
-    "value": "Connect\u00E9"
   }
 ]

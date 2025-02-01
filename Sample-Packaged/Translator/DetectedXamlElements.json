@@ -1,9 +1,5 @@
 [
   {
-    "Key": "General_tb.Text",
-    "Value": "@General"
-  },
-  {
     "Key": "Aperture_tb.Text",
     "Value": "!Aperture"
   },
@@ -70,9 +66,5 @@
   {
     "Key": "OpenAperture_MoreContext_Constrained",
     "Value": "!!Open the aperture for a shallower depth of field."
-  },
-  {
-    "Key": "FoundXMatches",
-    "Value": "@Found {0} matches."
   }
 ]
