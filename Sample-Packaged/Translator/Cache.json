@@ -36,32 +36,12 @@
     "value": "Geben Sie hier Ihren Namen ein"
   },
   {
-    "key": "de-DE:@:Close",
-    "value": "Schlie\u00DFen"
-  },
-  {
-    "key": "de-DE:@:200%",
-    "value": "200%"
-  },
-  {
     "key": "de-DE:!:Image Browser",
     "value": "Bildbrowser"
   },
   {
-    "key": "de-DE:@:Connection",
-    "value": "Verbindung"
-  },
-  {
     "key": "de-DE:@:Disconnected",
     "value": "Getrennt"
-  },
-  {
-    "key": "de-DE:@:Connected",
-    "value": "Verbunden"
-  },
-  {
-    "key": "de-DE:@:Loading {0}}, please wait...",
-    "value": "Laden von {0}, bitte warten..."
   },
   {
     "key": "fr-FR:@:Enter your name here",
@@ -116,10 +96,6 @@
     "value": "Zoom"
   },
   {
-    "key": "de-DE:@:100%",
-    "value": "100%"
-  },
-  {
     "key": "fr-FR:@:Zoom",
     "value": "Zoom"
   },
@@ -134,10 +110,6 @@
   {
     "key": "ar-SA:@@:Lock",
     "value": "\u0642\u0641\u0644"
-  },
-  {
-    "key": "de-DE:@@:Lock",
-    "value": "Schloss"
   },
   {
     "key": "fr-FR:@@:Lock",
@@ -160,19 +132,11 @@
     "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
   },
   {
-    "key": "de-DE:!:Aperture",
-    "value": "Blende"
-  },
-  {
     "key": "de-DE:@:Open the aperture for a shallower depth of field.",
     "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
   },
   {
     "key": "de-DE:!:Open the aperture for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
-  },
-  {
-    "key": "de-DE:!!:Open the aperture for a shallower depth of field.",
     "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
   },
   {
@@ -190,5 +154,41 @@
   {
     "key": "fr-FR:!!:Open the aperture for a shallower depth of field.",
     "value": "Ouvrez l\u0027ouverture pour une profondeur de champ plus faible."
+  },
+  {
+    "key": "de-DE:@:Close",
+    "value": "Schlie\u00DFen"
+  },
+  {
+    "key": "de-DE:@:200%",
+    "value": "200%"
+  },
+  {
+    "key": "de-DE:@:Connection",
+    "value": "Verbindung"
+  },
+  {
+    "key": "de-DE:!:Aperture",
+    "value": "Blende"
+  },
+  {
+    "key": "de-DE:@@:Lock",
+    "value": "Schloss"
+  },
+  {
+    "key": "de-DE:@:100%",
+    "value": "100%"
+  },
+  {
+    "key": "de-DE:@:Loading {0}}, please wait...",
+    "value": "Laden von {0}, bitte warten..."
+  },
+  {
+    "key": "de-DE:@:Connected",
+    "value": "Verbunden"
+  },
+  {
+    "key": "de-DE:!!:Open the aperture for a shallower depth of field.",
+    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
   }
 ]

@@ -249,12 +249,12 @@ namespace Translator
                         else
                         {
                             
-                            string cacheKey = String.Format("{0}:{1}:{2}", toCulture, hintToken, textToTranslate);
+                            string cacheKey = toCulture + ":" + hintToken + ":" + textToTranslate;
                             string cachedData = TCache.GetValue(cacheKey);
                             if (cachedData != null)
                             {
                                 translatedText = cachedData;
-                                TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 2, String.Format("Cache hit: {0}:{1}:{2}", toCulture, hintToken, textToTranslate));
+                                TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 2, "Cache hit: " + cacheKey);
                                 _cacheHitCounter++;
                             }
                             else
@@ -271,12 +271,7 @@ namespace Translator
                                 string s1, s2;
                                 s1 = "Cache miss: Translating...";
                                 TLog.Log(TLog.eMode.translate, (TSettings.Debug ? TLog.eLogItemType.dbg : TLog.eLogItemType.inf), 2, s1);
-                                s2 = String.Format(
-                                     "Untranslated: {0}:{1}{2}",
-                                     fromCulture,
-                                     hintToken,
-                                     textToTranslate
-                                     );
+                                s2 = "Untranslated: " + hintToken + textToTranslate;
                                 TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 4, s2);
                                 translatedText = TTransFunc.Translate(mode, translationFunction, fromCulture, toCulture, textToTranslate, hintToken);
                                 if (translatedText == null)
@@ -292,7 +287,7 @@ namespace Translator
                                 }
                                 else
                                 {
-                                    s2 = String.Format("Result: " + translatedText);
+                                    s2 = "Translated: " + translatedText;
                                     TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 4, s2);
                                 }
 

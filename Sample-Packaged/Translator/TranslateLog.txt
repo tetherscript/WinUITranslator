@@ -43,39 +43,44 @@
 0043:      Cache hit: de-DE:!:Image Browser
 0044:      Cache hit: de-DE:@:Connection
 0045:      Cache hit: de-DE:@:Disconnected
-0046:      Cache hit: de-DE:@:Connected
-0047:      Cache hit: de-DE:@:Loading {0}}, please wait...
-0048:      Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
-0049:      Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
-0050:      Cache hit: de-DE:!!:Open the aperture for a shallower depth of field.
-0051:    Checking for specials...
-0052:    Adding special: SettingsIcon=settings1.ico
-0053:    Processing fr-FR...
-0054:      Cache hit: fr-FR:!:Aperture
-0055:      Cache hit: fr-FR:@:Enter your name here
-0056:      Cache hit: fr-FR:@@:Enter your name here
-0057:      Cache hit: fr-FR:@:Close
-0058:      Cache hit: fr-FR:@@:Lock
-0059:      Cache hit: fr-FR:@:Zoom
-0060:      Cache hit: fr-FR:@:100%
-0061:      Cache hit: fr-FR:@:200%
-0062:      Cache hit: fr-FR:!:Image Browser
-0063:      Cache hit: fr-FR:@:Connection
-0064:      Cache hit: fr-FR:@:Disconnected
-0065:      Cache hit: fr-FR:@:Connected
-0066:      Cache hit: fr-FR:@:Loading {0}}, please wait...
-0067:      Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
-0068:      Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
-0069:      Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
-0070:    Checking for specials...
-0071:    Adding special: SettingsIcon=settings1.ico
-0072:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-0073:    Summary: Found 18 translateable items in en-US\Resources.resw
-0074:    Summary: 48 cache hits
-0075:    Summary: 0 cache misses
-0076:    Summary: 0 translation attempts
-0077:    Summary: 0 failed translations
-0078:    OpenAI_1: Summary: Used 0 prompt tokens + 0 completion_tokens = 0 total tokens.
-0079:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-0080:    Translation complete.
-0081:    Elapsed Time: 00:00:00
+0046:      OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=de-DE
+0047:      Cache miss: Translating...
+0048:        Untranslated: @Connected
+0049:        Translated: Verbunden
+0050:      Cache hit: de-DE:@:Loading {0}}, please wait...
+0051:      Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
+0052:      Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
+0053:      Cache miss: Translating...
+0054:        Untranslated: !!Open the aperture for a shallower depth of field.
+0055:        Translated: Öffnen Sie die Blende für eine geringere Tiefenschärfe.
+0056:    Checking for specials...
+0057:    Adding special: SettingsIcon=settings1.ico
+0058:    Processing fr-FR...
+0059:      Cache hit: fr-FR:!:Aperture
+0060:      Cache hit: fr-FR:@:Enter your name here
+0061:      Cache hit: fr-FR:@@:Enter your name here
+0062:      Cache hit: fr-FR:@:Close
+0063:      Cache hit: fr-FR:@@:Lock
+0064:      Cache hit: fr-FR:@:Zoom
+0065:      Cache hit: fr-FR:@:100%
+0066:      Cache hit: fr-FR:@:200%
+0067:      Cache hit: fr-FR:!:Image Browser
+0068:      Cache hit: fr-FR:@:Connection
+0069:      Cache hit: fr-FR:@:Disconnected
+0070:      Cache hit: fr-FR:@:Connected
+0071:      Cache hit: fr-FR:@:Loading {0}}, please wait...
+0072:      Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
+0073:      Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
+0074:      Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
+0075:    Checking for specials...
+0076:    Adding special: SettingsIcon=settings1.ico
+0077:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0078:    Summary: Found 18 translateable items in en-US\Resources.resw
+0079:    Summary: 46 cache hits
+0080:    Summary: 2 cache misses
+0081:    Summary: 2 translation attempts
+0082:    Summary: 0 failed translations
+0083:    OpenAI_1: Summary: Used 134 prompt tokens + 26 completion_tokens = 160 total tokens.
+0084:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0085:    Translation complete.
+0086:    Elapsed Time: 00:00:03
