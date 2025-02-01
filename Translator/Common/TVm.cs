@@ -215,16 +215,23 @@ namespace Translator
         {
             TUtils.CalcPaths(Target);
             string path = TTransFunc.GetSettingsPath(SelectedTranslationFunction);
-            try
+            if (path == null)
             {
-                string loadedJson = File.ReadAllText(path);
-                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Loaded settings: " + path);
-                TFSettings = loadedJson;
-                TFSettingsModified = false;
+                TFSettings = "No settings file specified.";
             }
-            catch (Exception ex)
-            {
-                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Load setting failed: " + path + ": " + ex.Message);
+            else 
+            { 
+                try
+                {
+                    string loadedJson = File.ReadAllText(path);
+                    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Loaded settings: " + path);
+                    TFSettings = loadedJson;
+                    TFSettingsModified = false;
+                }
+                catch (Exception ex)
+                {
+                    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Load setting failed: " + path + ": " + ex.Message);
+                }
             }
         }
 
@@ -234,8 +241,9 @@ namespace Translator
             TUtils.CalcPaths(Target);
             TLog.Reset(TLog.eMode.tfTranslate);
             string path = TTransFunc.GetSettingsPath(SelectedTranslationFunction);
+            if (path == null) return;
             try
-            {
+                {
                 File.WriteAllText(path, TFSettings);
                 TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Saved settings: " + path);
                 TFSettingsModified = false;

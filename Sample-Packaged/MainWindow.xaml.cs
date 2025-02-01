@@ -80,11 +80,22 @@ namespace Sample_Packaged
             LogSample("returns");
             LogSample(s ?? "null");
 
+            AddTestItem1();
+
         }
 
         private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
         {
             TLocalized.SaveKeyVals();
+        }
+
+        private void AddTestItem1()
+        {
+        //    LogSample(@"----------------------------------------");
+        //    LogSample(@"----------------------------------------");
+        //    LogSample("Our Test:");
+        //    string s1 = TLocalized.Get("FoundXMatches", "@", "Found {0} matches.");
+        //    LogSample(s1);
         }
     }
 }

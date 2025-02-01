@@ -13,74 +13,84 @@
 0013:    Cache initialized.
 0014:    Found 4 Resources.resw files.
 0015:    Processing ar-SA...
-0016:      Cache hit: ar-SA:!:Aperture
-0017:      Cache hit: ar-SA:@:Enter your name here
-0018:      Cache hit: ar-SA:@@:Enter your name here
-0019:      Cache hit: ar-SA:@:Close
-0020:      Cache hit: ar-SA:@@:Lock
-0021:      Cache hit: ar-SA:@:Zoom
-0022:      Cache hit: ar-SA:@:100%
-0023:      Cache hit: ar-SA:@:200%
-0024:      Cache hit: ar-SA:!:Image Browser
-0025:      Cache hit: ar-SA:@:Connection
-0026:      Cache hit: ar-SA:@:Disconnected
-0027:      Cache hit: ar-SA:@:Connected
-0028:      Cache hit: ar-SA:@:Loading {0}}, please wait...
-0029:      Cache hit: ar-SA:@:Open the aperture for a shallower depth of field.
-0030:      Cache hit: ar-SA:!:Open the aperture for a shallower depth of field.
-0031:      Cache hit: ar-SA:!!:Open the aperture for a shallower depth of field.
-0032:    Checking for specials...
-0033:    Adding special: SettingsIcon=settings2.ico
-0034:    Processing de-DE...
-0035:      Cache hit: de-DE:!:Aperture
-0036:      Cache hit: de-DE:@:Enter your name here
-0037:      Cache hit: de-DE:@@:Enter your name here
-0038:      Cache hit: de-DE:@:Close
-0039:      Cache hit: de-DE:@@:Lock
-0040:      Cache hit: de-DE:@:Zoom
-0041:      Cache hit: de-DE:@:100%
-0042:      Cache hit: de-DE:@:200%
-0043:      Cache hit: de-DE:!:Image Browser
-0044:      Cache hit: de-DE:@:Connection
-0045:      Cache hit: de-DE:@:Disconnected
-0046:      OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=de-DE
-0047:      Cache miss: Translating...
-0048:        Untranslated: @Connected
-0049:        Translated: Verbunden
-0050:      Cache hit: de-DE:@:Loading {0}}, please wait...
-0051:      Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
-0052:      Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
-0053:      Cache miss: Translating...
-0054:        Untranslated: !!Open the aperture for a shallower depth of field.
-0055:        Translated: Öffnen Sie die Blende für eine geringere Tiefenschärfe.
-0056:    Checking for specials...
-0057:    Adding special: SettingsIcon=settings1.ico
-0058:    Processing fr-FR...
-0059:      Cache hit: fr-FR:!:Aperture
-0060:      Cache hit: fr-FR:@:Enter your name here
-0061:      Cache hit: fr-FR:@@:Enter your name here
-0062:      Cache hit: fr-FR:@:Close
-0063:      Cache hit: fr-FR:@@:Lock
-0064:      Cache hit: fr-FR:@:Zoom
-0065:      Cache hit: fr-FR:@:100%
-0066:      Cache hit: fr-FR:@:200%
-0067:      Cache hit: fr-FR:!:Image Browser
-0068:      Cache hit: fr-FR:@:Connection
-0069:      Cache hit: fr-FR:@:Disconnected
-0070:      Cache hit: fr-FR:@:Connected
-0071:      Cache hit: fr-FR:@:Loading {0}}, please wait...
-0072:      Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
-0073:      Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
-0074:      Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
-0075:    Checking for specials...
-0076:    Adding special: SettingsIcon=settings1.ico
-0077:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-0078:    Summary: Found 18 translateable items in en-US\Resources.resw
-0079:    Summary: 46 cache hits
-0080:    Summary: 2 cache misses
-0081:    Summary: 2 translation attempts
-0082:    Summary: 0 failed translations
-0083:    OpenAI_1: Summary: Used 134 prompt tokens + 26 completion_tokens = 160 total tokens.
-0084:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-0085:    Translation complete.
-0086:    Elapsed Time: 00:00:03
+0016:      OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=ar-SA
+0017:      Cache miss: Translating...
+0018:        Untranslated: @General
+0019:        Translated: جنرال
+0020:      Cache hit: ar-SA:!:Aperture
+0021:      Cache hit: ar-SA:@:Enter your name here
+0022:      Cache hit: ar-SA:@@:Enter your name here
+0023:      Cache hit: ar-SA:@:Close
+0024:      Cache hit: ar-SA:@@:Lock
+0025:      Cache hit: ar-SA:@:Zoom
+0026:      Cache hit: ar-SA:@:100%
+0027:      Cache hit: ar-SA:@:200%
+0028:      Cache hit: ar-SA:!:Image Browser
+0029:      Cache hit: ar-SA:@:Connection
+0030:      Cache hit: ar-SA:@:Disconnected
+0031:      Cache hit: ar-SA:@:Connected
+0032:      Cache hit: ar-SA:@:Loading {0}}, please wait...
+0033:      Cache hit: ar-SA:@:Open the aperture for a shallower depth of field.
+0034:      Cache hit: ar-SA:!:Open the aperture for a shallower depth of field.
+0035:      Cache hit: ar-SA:!!:Open the aperture for a shallower depth of field.
+0036:      Cache hit: ar-SA:@:Found {0} matches.
+0037:    Checking for specials...
+0038:    Adding special: SettingsIcon=settings2.ico
+0039:    Processing de-DE...
+0040:      OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=de-DE
+0041:      Cache miss: Translating...
+0042:        Untranslated: @General
+0043:        Translated: Allgemein
+0044:      Cache hit: de-DE:!:Aperture
+0045:      Cache hit: de-DE:@:Enter your name here
+0046:      Cache hit: de-DE:@@:Enter your name here
+0047:      Cache hit: de-DE:@:Close
+0048:      Cache hit: de-DE:@@:Lock
+0049:      Cache hit: de-DE:@:Zoom
+0050:      Cache hit: de-DE:@:100%
+0051:      Cache hit: de-DE:@:200%
+0052:      Cache hit: de-DE:!:Image Browser
+0053:      Cache hit: de-DE:@:Connection
+0054:      Cache hit: de-DE:@:Disconnected
+0055:      Cache hit: de-DE:@:Connected
+0056:      Cache hit: de-DE:@:Loading {0}}, please wait...
+0057:      Cache hit: de-DE:@:Open the aperture for a shallower depth of field.
+0058:      Cache hit: de-DE:!:Open the aperture for a shallower depth of field.
+0059:      Cache hit: de-DE:!!:Open the aperture for a shallower depth of field.
+0060:      Cache hit: de-DE:@:Found {0} matches.
+0061:    Checking for specials...
+0062:    Adding special: SettingsIcon=settings1.ico
+0063:    Processing fr-FR...
+0064:      OpenAI_1: InitPerCulture: fromCulture=en-US, toCulture=fr-FR
+0065:      Cache miss: Translating...
+0066:        Untranslated: @General
+0067:        Translated: Général
+0068:      Cache hit: fr-FR:!:Aperture
+0069:      Cache hit: fr-FR:@:Enter your name here
+0070:      Cache hit: fr-FR:@@:Enter your name here
+0071:      Cache hit: fr-FR:@:Close
+0072:      Cache hit: fr-FR:@@:Lock
+0073:      Cache hit: fr-FR:@:Zoom
+0074:      Cache hit: fr-FR:@:100%
+0075:      Cache hit: fr-FR:@:200%
+0076:      Cache hit: fr-FR:!:Image Browser
+0077:      Cache hit: fr-FR:@:Connection
+0078:      Cache hit: fr-FR:@:Disconnected
+0079:      Cache hit: fr-FR:@:Connected
+0080:      Cache hit: fr-FR:@:Loading {0}}, please wait...
+0081:      Cache hit: fr-FR:@:Open the aperture for a shallower depth of field.
+0082:      Cache hit: fr-FR:!:Open the aperture for a shallower depth of field.
+0083:      Cache hit: fr-FR:!!:Open the aperture for a shallower depth of field.
+0084:      Cache hit: fr-FR:@:Found {0} matches.
+0085:    Checking for specials...
+0086:    Adding special: SettingsIcon=settings1.ico
+0087:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0088:    Summary: Found 20 translateable items in en-US\Resources.resw
+0089:    Summary: 51 cache hits
+0090:    Summary: 3 cache misses
+0091:    Summary: 3 translation attempts
+0092:    Summary: 0 failed translations
+0093:    OpenAI_1: Summary: Used 116 prompt tokens + 18 completion_tokens = 134 total tokens.
+0094:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0095:    Translation complete.
+0096:    Elapsed Time: 00:00:02

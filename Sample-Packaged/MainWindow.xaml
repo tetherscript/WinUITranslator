@@ -35,6 +35,12 @@
             Margin="20 20 20 20"
             Spacing="15">
 
+            <!--<TextBlock
+                x:Uid="General_tb"
+                Text="@General"
+                Foreground="Lime">
+            </TextBlock>-->
+
             <TextBlock
                 x:Uid="dot.tb"
                 Text="@A dot test">
