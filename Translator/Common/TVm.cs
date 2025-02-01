@@ -136,6 +136,10 @@ namespace Translator
 
         [ObservableProperty]
         private string _selectedTranslationFunction;
+        partial void OnSelectedTranslationFunctionChanged(string value)
+        {
+            TFSettings = "";
+        }
 
         [RelayCommand]
         private async Task StartTranslate()
@@ -194,10 +198,6 @@ namespace Translator
 
         [ObservableProperty]
         int _tFLogSelectionLength = 0;
-
-        [ObservableProperty]
-        private string _tFSelectedTranslationFunction;
-
 
         [ObservableProperty]
         private string _tFSettings;

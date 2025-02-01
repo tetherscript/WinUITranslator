@@ -87,7 +87,7 @@
                 Margin="0 0 0 0"
                 FontFamily="Courier New"
                 AcceptsReturn="True"
-                TextWrapping="NoWrap"
+                TextWrapping="Wrap"
                 FontWeight="Light"
                 IsReadOnly="false"
                 TextAlignment="Left"
