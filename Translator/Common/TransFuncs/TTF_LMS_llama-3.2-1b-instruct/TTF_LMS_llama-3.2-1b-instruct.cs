@@ -223,15 +223,25 @@ namespace Translator
                 Encoding.UTF8,
                 "application/json"
             );
-            using HttpResponseMessage response = httpClient.PostAsync(openAiChatEndpoint, requestContent).Result;
-            HttpStatusCode statusCode = response.StatusCode;
-            Log(mode, TLog.eLogItemType.dbg, 2, "HttpResponseMessage.StatusCode = " + statusCode.ToString());
-            if (statusCode != System.Net.HttpStatusCode.OK)
+
+            string jsonResponse = string.Empty;
+            try
             {
-                Log(mode, TLog.eLogItemType.err, 2, "Error in response: statusCode = " + statusCode.ToString());
+                using HttpResponseMessage response = httpClient.PostAsync(openAiChatEndpoint, requestContent).Result;
+                HttpStatusCode statusCode = response.StatusCode;
+                Log(mode, TLog.eLogItemType.dbg, 2, "HttpResponseMessage.StatusCode = " + statusCode.ToString());
+                if (statusCode != System.Net.HttpStatusCode.OK)
+                {
+                    Log(mode, TLog.eLogItemType.err, 2, "Error in response: statusCode = " + statusCode.ToString());
+                    return null;
+                }
+                jsonResponse = response.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception ex)
+            {
+                Log(mode, TLog.eLogItemType.err, 2, "httpClient.PostAsync() error: " + ex.Message);
                 return null;
             }
-            string jsonResponse = response.Content.ReadAsStringAsync().Result;
 
             // The response JSON includes an array of "choices"; we want the "message.content"
             // of the first choice. For structure details, see:

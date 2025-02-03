@@ -27,12 +27,34 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
 
+        <!--VALID HINT TOKENS-->
+        <StackPanel
+            Grid.Row="0"
+            Margin="10 10 10 0"
+            Spacing="20">
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="10">
+                <TextBlock
+                    Text="Valid hint token prefixes are" />
+                <TextBlock
+                    FontFamily="Courier New"
+                    TextWrapping="Wrap"
+                    Text="{x:Bind Vm.ValidHintTokens, Mode=OneTime}" />
+                <TextBlock
+                    Text="and Comment out a line with //" />
+            </StackPanel>
+        </StackPanel>
+
         <!--TEST STRINGS-->
         <TextBox
-            Grid.Row="0"
+            CharacterSpacing="50"
+            Grid.Row="1"
             Margin="10 10 10 10"
             FontFamily="Courier New"
             AcceptsReturn="True"
@@ -49,7 +71,7 @@
 
         <!--TRANSLATE-->
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="10, 10, 0, 10"
             Orientation="Horizontal"
             Spacing="10">
@@ -75,8 +97,6 @@
                 IsEnabled="{x:Bind Vm.TFIsTranslating, Mode=OneWay}"
                 Command="{x:Bind Vm.TFCancelTranslateCommand}"
                 Content="Cancel" />
-
-
             <TextBlock
                 Margin="20, 0, 0, 0"
                 VerticalAlignment="Center"
@@ -88,7 +108,6 @@
                 ToolTipService.ToolTip="The language that the text will be translated into"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top" />
-
             <TextBlock
                 VerticalAlignment="Center"
                 Text="x" />
@@ -101,36 +120,19 @@
                 ToolTipService.ToolTip="The number of repeats per hint token type.  Increase this value to see how consistent (deterministic) the translation is."
                 SmallChange="1"
                 LargeChange="15" />
-
         </StackPanel>
         
         <!--LOG-->
         <TextBox
-            Background="Red"
+            Grid.Row="3"
             AcceptsReturn="True"
             Margin="10 0 10 10"
             FontFamily="Courier New"
-            Text="{x:Bind Vm.TFLog1, Mode=OneWay}"
-            Grid.Row="2" />
-        <!--<TextBox
-            Grid.Row="2"
-            Margin="10 0 10 10"
-            FontFamily="Courier New"
-            AcceptsReturn="False"
-            TextWrapping="NoWrap"
-            FontWeight="Light"
-            Height="300"
-            IsReadOnly="false"
-            IsSpellCheckEnabled="False"
-            TextAlignment="Left"
-            Text="{x:Bind Vm.TFLog1, Mode=OneWay}"
-            SelectionStart="{x:Bind Vm.TFLogSelectionStart, Mode=OneWay}"
-            SelectionLength="{x:Bind Vm.TFLogSelectionLength, Mode=OneWay}"
+            IsReadOnly="True"
+            VerticalAlignment="Stretch"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
-            IsTextPredictionEnabled="False">
-        </TextBox>-->
-
+            Text="{x:Bind Vm.TFLog, Mode=OneWay}" />
     </Grid>
     
 </Page>

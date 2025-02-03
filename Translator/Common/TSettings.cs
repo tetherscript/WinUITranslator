@@ -68,7 +68,7 @@ namespace Translator
             App.Vm.TFTestRepeats = (appData.Values.ContainsKey(AppSettingsKeys.TFTestRepeats)) ?
                 (int)appData.Values[AppSettingsKeys.TFTestRepeats] : 1;
             App.Vm.TFTextToTranslate = (appData.Values.ContainsKey(AppSettingsKeys.TFTextToTranslate)) ?
-                (string)appData.Values[AppSettingsKeys.TFTextToTranslate] : "Light";
+                (string)appData.Values[AppSettingsKeys.TFTextToTranslate] : "@Close\r//@@Click to save save your profile.\r//!Aperture\r//!!Click to adjust white balance.\r//@Loading {0}, please wait...";
 
             LastNavItemTag = (appData.Values.ContainsKey(AppSettingsKeys.LastNavItemTag)) ?
                 (string)appData.Values[AppSettingsKeys.LastNavItemTag] : "Target";

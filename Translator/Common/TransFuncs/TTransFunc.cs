@@ -29,7 +29,6 @@ namespace Translator
                 case _LMS_llama_3_2_1b_instruct: WeakReferenceMessenger.Default.Send(new NavigateMessage(typeof(TTF_LMS_llama_3_2_1b_instruct_SettingsPage))); break;
                 default:break;
             }
-            Debug.Write("Q");
         }
 
         public static string GetSettingsPath(string funcType)

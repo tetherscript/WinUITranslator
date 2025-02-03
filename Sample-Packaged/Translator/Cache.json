@@ -186,5 +186,9 @@
   {
     "key": "de-DE:@:Open the aperture for a shallower depth of field.",
     "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
+  },
+  {
+    "key": "ar-SA:@:Close",
+    "value": "\u0642\u0631\u064A\u0628"
   }
 ]

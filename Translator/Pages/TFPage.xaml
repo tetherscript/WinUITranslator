@@ -29,7 +29,7 @@
                 Height="*" />
         </Grid.RowDefinitions>
             
-            <!--SELECT FUNCTION-->
+        <!--SELECT FUNCTION-->
         <StackPanel
             Grid.Row="0"
             Margin="10 10 10 10"
@@ -54,63 +54,27 @@
                 </StackPanel>
 
             </StackPanel>
-            <TextBlock
-                TextWrapping="WrapWholeWords"
-                Text="Test a Translation Function with a combination of hint tokens and text.">
-            </TextBlock>
-            <StackPanel
-                Orientation="Horizontal"
-                Spacing="10">
-                <TextBlock
-                    Text="Valid test tokens are:">
-                </TextBlock>
-                <TextBlock
-                    TextWrapping="Wrap"
-                    Text="Valid test tokens are:">
-                </TextBlock>
-            </StackPanel>
 
-            <StackPanel
-                Grid.Row="1"
-                Margin="10, 0, 10, 0" >
 
-                <SelectorBar
-                    x:Name="sbTabs"
-                    Loaded="SbTabs_Loaded"  
-                    SelectionChanged="SelectorBar_SelectionChanged">
-                    <SelectorBarItem
-                        Style="{StaticResource SubtitleTextBlockStyle}"
-                        x:Name="sbiTest"
-                        Tag="Test"
-                        Text="Test" />
-                    <SelectorBarItem
-                        x:Name="sbiSettings"
-                        Tag="Settings"
-                        Text="Settings" />
-                </SelectorBar>
-
-                <Frame
-                    x:Name="frContent"
-                    IsNavigationStackEnabled="False" />
-
-            </StackPanel>
 
         </StackPanel>
 
         <!--CONTENT-->
 
         <TabView
-            Visibility="Collapsed"
             Margin="10, 0, 10, 0"
             Grid.Row="1"
             Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
             IsAddTabButtonVisible="False"
-            CloseButtonOverlayMode="OnPointerOver"
-            >
+            TabWidthMode="Equal"
+            VerticalAlignment="Stretch"
+            CloseButtonOverlayMode="OnPointerOver" >
             <TabView.TabItems>
                 
                 <TabViewItem
-                    BorderThickness="1"
+                    MaxWidth="150"
+                    IsClosable="False"
+                    BorderThickness="0"
                     Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
                     BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
                     Header="Test">
@@ -122,8 +86,10 @@
                 </TabViewItem>
 
                 <TabViewItem
+                    Margin="10, 0, 0, 0"
+                    MaxWidth="150"
                     IsClosable="False"
-                    BorderThickness="1"
+                    BorderThickness="0"
                     BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
                     Header="Settings">
                     <TabViewItem.IconSource>

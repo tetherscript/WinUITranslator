@@ -25,7 +25,6 @@ namespace Translator
         public static async Task<string> StartTest(TLog.eMode mode, string targetRootPath, string translationFunction, string textToTranslate, string toCulture)
         {
             IsCancelled = false;
-            TLog.Reset(TLog.eMode.tfTranslate);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             try

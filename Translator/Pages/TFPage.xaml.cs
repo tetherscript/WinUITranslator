@@ -16,42 +16,8 @@ namespace Translator
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            GotoPage(TSettings.TFLastSelectorBarItemTag);
-        }
 
-        private void SelectorBar_SelectionChanged(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
-        {
-            SelectorBarItem item = (SelectorBarItem)sender.SelectedItem;
-            string tag = item.Tag.ToString();
-            GotoPage(tag);
-        }
-
-        private void GotoPage(string tag)
-        {
-            switch (tag)
-            {
-                case "Test":
-                    frContent.Navigate(typeof(TFTestPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
-                    if (!sbiTest.IsSelected) { sbiTest.IsSelected = true; }
-                    TSettings.TFLastSelectorBarItemTag = tag;
-                    break;
-                case "Settings":
-                    frContent.Navigate(typeof(TFSettingsPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
-                    if (!sbiSettings.IsSelected) { sbiSettings.IsSelected = true; }
-                    TSettings.TFLastSelectorBarItemTag = tag;
-                    break;
-                default: break;
-            }
-        }
-
-        private void SbTabs_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-
-        }
     }
 }

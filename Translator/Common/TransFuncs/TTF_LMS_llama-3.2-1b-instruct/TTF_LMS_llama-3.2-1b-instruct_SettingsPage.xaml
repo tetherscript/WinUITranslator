@@ -9,8 +9,42 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <TextBlock
-            Text="TTF_LMS_llama_3_2_1b_instruct_SettingsPage" />
-    </Grid>
+    <StackPanel>
+        
+        <StackPanel
+            Grid.Row="1"
+            Margin="10 20 10 0"
+            Spacing="10">
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="20">
+                <Button
+                    IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                    Command="{x:Bind Vm.TFTestLoadSettingsCommand}"
+                    Content="Load Settings" />
+                <Button
+                    IsEnabled="{x:Bind Vm.TFSettingsModified, Mode=OneWay}"
+                    Command="{x:Bind Vm.TFTestSaveSettingsCommand}"
+                    Content="Save Settings" />
+            </StackPanel>
+
+            <TextBox
+                Margin="0 0 0 0"
+                FontFamily="Courier New"
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                FontWeight="Light"
+                IsReadOnly="false"
+                TextAlignment="Left"
+                MaxHeight="300"
+                IsSpellCheckEnabled="False"
+                Text="{x:Bind Vm.TFSettings, Mode=TwoWay}"
+                PlaceholderText=""
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                IsTextPredictionEnabled="False">
+            </TextBox>
+        </StackPanel>
+        
+    </StackPanel>
 </Page>

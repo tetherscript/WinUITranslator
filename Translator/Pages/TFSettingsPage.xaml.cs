@@ -66,6 +66,9 @@ namespace Translator
         {
             TTransFunc.LoadSettingsPage(App.Vm.SelectedTranslationFunction);
         }
+
+
     }
+
 }
         

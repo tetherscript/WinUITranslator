@@ -130,7 +130,7 @@
     <comment>@@</comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
-    <value>$Close</value>
+    <value>قريب</value>
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">
