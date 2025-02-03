@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Translator
             public string Value { get; set; } = name;
         }
 
-        private nint _mainWindowHandle;
+        private nint _mainWindowHandle; 
         public nint MainWindowHandle
         {
             get { return _mainWindowHandle; }
@@ -139,6 +140,7 @@ namespace Translator
         partial void OnSelectedTranslationFunctionChanged(string value)
         {
             TFSettings = "";
+            GoToTFSettingsPage();
         }
 
         [RelayCommand]
@@ -192,6 +194,9 @@ namespace Translator
         #endregion
 
         #region TRANSLATION FUNCTIONS
+
+        [ObservableProperty]
+        private int _tFLastSelectorBarIndex = 0;
 
         [ObservableProperty]
         int _tFLogSelectionStart = 0;
@@ -255,38 +260,48 @@ namespace Translator
             TLog.Flush(TLog.eMode.tfTranslate);
         }
 
-        [ObservableProperty]
-        private string _tFToCulture = "de-DE";
+        private void PopulateCultures()
+        {
+
+        var cultures = CultureInfo
+             .GetCultures(CultureTypes.AllCultures)
+             .Select(c => c.Name)
+             .Where(name => !string.IsNullOrWhiteSpace(name)) // Filter out empty strings.
+             .Distinct() // Ensure uniqueness.
+             .OrderBy(name => name).ToList(); // Sort alphabetically.
+
+            // Populate the observable collection.
+            foreach (var culture in cultures)
+            {
+                CultureList.Add(culture);
+            }
+
+        }
+
 
         [RelayCommand]
         private async Task StartTFTest()
         {
+            TFIsCancelling = false;
             TLog.Reset(TLog.eMode.tfTranslate);
             TranslateLog = "Translating...";
             await Task.Delay(100);
-            if (TFTextToTranslate.Trim() == "")
+            if (TUtils.CalcPaths(Target))
             {
-                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Enter text to translate.");
+                IsBusy = true;
+                TFIsTranslating = true;
+                TFLog = "";
+                await Task.Delay(10);
+                await TFTranslateBatch();
             }
             else
             {
-                if (TUtils.CalcPaths(Target))
-                {
-                    IsBusy = true;
-                    TFIsTranslating = true;
-                    TFLog = "";
-                    await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
-                        SelectedTranslationFunction, TFTextToTranslate, TFToCulture);
-                }
-                else
-                {
-                    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
-                }
-                TLog.Flush(TLog.eMode.tfTranslate);
-                TFTranslateLogScrollToBottom();
-                TFIsTranslating = false;
-                IsBusy = false;
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
             }
+            TLog.Flush(TLog.eMode.tfTranslate);
+            //TFTranslateLogScrollToBottom();
+            TFIsTranslating = false;
+            IsBusy = false;
         }
 
         private void TFTranslateLogScrollToBottom()
@@ -298,14 +313,326 @@ namespace Translator
         [ObservableProperty]
         private int _tFTranslationFunctionIndex;
 
+        private async Task TFTranslateBatch()
+        {
+            TFLog1 = "";
+
+            string[] lines = TFTextToTranslate.Split(new[] { "\r" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string item in lines)
+            {
+                TFLog1 = TFLog1 + item + Environment.NewLine;
+                for (int i = 0; i < TFTestRepeats; i++)
+                {
+                    if (TFIsCancelling) return;
+                    string trans = await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                            SelectedTranslationFunction, item, TFToCulture);
+                    int prefixLength = 1;
+                    TFLog1 = TFLog1 + new string(' ', prefixLength) + trans + Environment.NewLine;
+                    await Task.Delay(10);
+                }
+                TFLog1 = TFLog1 + Environment.NewLine;
+            }
+        }
+
+        private async Task TFTestMatrixTranslate()
+        {
+            async Task Log1(string msg)
+            {
+                await Task.Delay(10);
+                TFTestResult1 = TFTestResult1 + ((TFTestResult1 == null) ? null : Environment.NewLine) +msg;
+            }
+
+            async Task Log2(string msg)
+            {
+                await Task.Delay(10);
+                TFTestResult2 = TFTestResult2 + ((TFTestResult2 == null) ? null : Environment.NewLine) + msg;
+            }
+
+            async Task Log3(string msg)
+            {
+                await Task.Delay(10);
+                TFTestResult3 = TFTestResult3 + ((TFTestResult3 == null) ? null : Environment.NewLine) + msg;
+            }
+
+            async Task Log4(string msg)
+            {
+                await Task.Delay(10);
+                TFTestResult4 = TFTestResult4 + ((TFTestResult4 == null) ? null : Environment.NewLine) + msg;
+            }
+
+            TFTestResult1 = null;
+            TFTestResult2 = null;
+            TFTestResult3 = null;
+            TFTestResult4 = null;
+
+            if (TFTest1Active)
+            {
+                if (TFTestHint1Active) 
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log1("@  --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                                SelectedTranslationFunction, "@" + TFTextToTranslate1, TFToCulture));
+                    }
+
+                }
+
+                if (TFTestHint2Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log1("@@ --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "@@" + TFTextToTranslate1, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint3Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log1("!  --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "!" + TFTextToTranslate1, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint4Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log1("!! --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "!!" + TFTextToTranslate1, TFToCulture));
+                    }
+                }
+            }
+
+            if (TFTest2Active)
+            {
+                if (TFTestHint2Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log2("@  --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "@" + TFTextToTranslate2, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint2Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log2("@@ --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "@@" + TFTextToTranslate2, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint3Active)
+                {
+                    {
+                        if (TFIsCancelling) return;
+                        for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                            await Log2("!  --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                            SelectedTranslationFunction, "!" + TFTextToTranslate2, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint4Active)
+                {
+                    {
+                        if (TFIsCancelling) return;
+                        for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                            await Log2("!! --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                            SelectedTranslationFunction, "!!" + TFTextToTranslate2, TFToCulture));
+                    }
+                }
+            }
+
+            if (TFTest3Active)
+            {
+                if (TFTestHint3Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log3("@  --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "@" + TFTextToTranslate3, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint3Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log3("@@ --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "@@" + TFTextToTranslate3, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint3Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log3("!  --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "!" + TFTextToTranslate3, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint4Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log3("!! --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "!!" + TFTextToTranslate3, TFToCulture));
+                    }
+                }
+
+            }
+
+            if (TFTest4Active)
+            {
+                if (TFTestHint4Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log4("@  --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "@" + TFTextToTranslate4, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint4Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log4("@@ --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "@@" + TFTextToTranslate4, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint4Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log4("!  --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "!" + TFTextToTranslate4, TFToCulture));
+                    }
+                }
+
+                if (TFTestHint4Active)
+                {
+                    for (global::System.Int32 i = 0; i < TFTestRepeats; i++)
+                    {
+                        if (TFIsCancelling) return;
+                        await Log4("!! --> " + await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                        SelectedTranslationFunction, "!!" + TFTextToTranslate4, TFToCulture));
+                    }
+                }
+            }
+
+        }
+
         [ObservableProperty]
-        private string _tFTextToTranslate = "@Aperture";
+        private string _tFToCulture = "de-DE";
+
+        [ObservableProperty]
+        private int _tFTestRepeats = 1;
+
+        [ObservableProperty]
+        private string _tFTextToTranslate = "Light";
+
+        [ObservableProperty]
+        private string _tFTestResult = null;
+
+        public void GoToTFSettingsPage()
+        {
+            TTransFunc.LoadSettingsPage(SelectedTranslationFunction);
+        }
+
+
+
+        [ObservableProperty]
+        private string _tFTextToTranslate1 = "Light";
+
+        [ObservableProperty]
+        private string _tFTextToTranslate2 = "Select a profile folder";
+
+        [ObservableProperty]
+        private string _tFTextToTranslate3 = "Shutter Speed";
+
+        [ObservableProperty]
+        private string _tFTextToTranslate4 = "Select a white balance.";
+
+        [ObservableProperty]
+        private bool _tFTest1Active = true;
+
+        [ObservableProperty]
+        private bool _tFTest2Active = true;
+
+        [ObservableProperty]
+        private bool _tFTest3Active = false;
+
+        [ObservableProperty]
+        private bool _tFTest4Active = false;
+
+        [ObservableProperty]
+        private bool _tFTestHint1Active = true;
+
+        [ObservableProperty]
+        private bool _tFTestHint2Active = true;
+
+        [ObservableProperty]
+        private bool _tFTestHint3Active = false;
+
+        [ObservableProperty]
+        private bool _tFTestHint4Active = false;
+
+        [ObservableProperty]
+        private string _tFTestResult1 = null;
+
+        [ObservableProperty]
+        private string _tFTestResult2 = null;
+
+        [ObservableProperty]
+        private string _tFTestResult3 = null;
+
+        [ObservableProperty]
+        private string _tFTestResult4 = null;
 
         [ObservableProperty]
         private bool _tFIsTranslating;
 
         [ObservableProperty]
         private string _tFLog;
+
+        [ObservableProperty]
+        private string _tFLog1;
+
+        [ObservableProperty]
+        private List<string> _cultureList = CultureInfo
+             .GetCultures(CultureTypes.AllCultures)
+             .Select(c => c.Name)
+             .Where(name => !string.IsNullOrWhiteSpace(name)) // Filter out empty strings.
+             .Distinct() // Ensure uniqueness.
+             .OrderBy(name => name).ToList();
+
+        [ObservableProperty]
+        private bool _tFIsCancelling = false;
+
+        [RelayCommand]
+        private void TFCancelTranslate()
+        {
+            TFIsCancelling = true;
+        }
 
 
         #endregion

@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.UI.Xaml.Controls;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Translator
 {
@@ -15,6 +19,18 @@ namespace Translator
             _LMS_llama_3_2_1b_instruct,
             _loopback
         };
+
+        public static void LoadSettingsPage(string funcType)
+        {
+            switch (funcType)
+            {
+                case _loopback: WeakReferenceMessenger.Default.Send(new NavigateMessage(typeof(TTF_Loopback_SettingsPage))); break;
+                case _openAI_1: WeakReferenceMessenger.Default.Send(new NavigateMessage(typeof(TTF_OpenAI_1_SettingsPage))); break;
+                case _LMS_llama_3_2_1b_instruct: WeakReferenceMessenger.Default.Send(new NavigateMessage(typeof(TTF_LMS_llama_3_2_1b_instruct_SettingsPage))); break;
+                default:break;
+            }
+            Debug.Write("Q");
+        }
 
         public static string GetSettingsPath(string funcType)
         {

@@ -27,13 +27,14 @@
     <Content Remove="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Common\TransFuncs\Loopback\TTF_Loopback_SettingsPage.xaml" />
     <None Remove="Pages\CacheEditorPage.xaml" />
     <None Remove="Pages\MainPage.xaml" />
     <None Remove="Pages\ScanPage.xaml" />
     <None Remove="Pages\SettingsPage.xaml" />
     <None Remove="Pages\TargetPage.xaml" />
+    <None Remove="Pages\TFSettingsPage.xaml" />
     <None Remove="Pages\TranslatePage.xaml" />
-    <None Remove="Pages\TranslationFunctionsPage.xaml" />
     <None Remove="Test2.xaml" />
   </ItemGroup>
 
@@ -232,11 +233,26 @@
     <None Update="Assets\Wide310x150Logo.scale-200.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Common\TransFuncs\Loopback\TTF_Loopback_SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Common\TransFuncs\OpenAI_1\TTF_OpenAI_1_SettingsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Common\TransFuncs\TTF_LMS_llama-3.2-1b-instruct\TTF_LMS_llama-3.2-1b-instruct_SettingsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\TFSettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Pages\TFTestPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Pages\SettingsPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\TranslationFunctionsPage.xaml">
+    <Page Update="Pages\TFPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

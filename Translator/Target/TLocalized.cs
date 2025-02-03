@@ -108,7 +108,8 @@ namespace TeeLocalized
                 }
             }
             else
-            if ((hint == null) || (hint == "") || ((hint != "!") && (hint != "@") && (hint != "@@") && (hint != "!!")))
+            //if ((hint == null) || (hint == "") || ((hint != "!") && (hint != "@") && (hint != "@@") && (hint != "!!")))
+            if (!IsValidHintToken(hint))
             {
                 if (ThrowExceptionsOnErrors)
                 {
@@ -447,5 +448,38 @@ namespace TeeLocalized
         }
         #endregion
 
+        #region HINT TOKENS
+        //order by length descending
+        public static string[] ValidHintTokens = { "@@", "@", "!!", "!", "##", "#", "0>", "1>", "2>", "3>", "4>", "5>", "6>", "7>", "8>", "9>" };
+
+        public static string ValidHintTokenStr = string.Join(", ", ValidHintTokens);
+
+        //get the hint token prefix, if any, from a string
+        public static (string Prefix, string Suffix) SplitPrefix(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return (string.Empty, input);
+            }
+
+            // Requires list of possible tokens to be ordered by length descending to match longer prefixes first
+            foreach (var prefix in ValidHintTokens)
+            {
+                if (input.StartsWith(prefix))
+                {
+                    string suffix = input.Substring(prefix.Length);
+                    return (prefix, suffix);
+                }
+            }
+
+            return (string.Empty, input);
+        }
+
+        //get the hint token prefix, if any, from a string
+        public static bool IsValidHintToken(string input)
+        {
+            return (ValidHintTokens.Contains(input));
+        }
+        #endregion
     }
 }

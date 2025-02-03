@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Translator.TFPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Translator"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Translator"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <converters:InvBoolConv
+            x:Key="InvBoolConv" />
+        <converters:BoolToOpacityConv
+            x:Key="BoolToOpacityConv" />
+    </Page.Resources>
+
+        
+        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+            
+            <!--SELECT FUNCTION-->
+        <StackPanel
+            Grid.Row="0"
+            Margin="10 10 10 10"
+            Spacing="10">
+            <StackPanel
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+
+                <StackPanel
+                    Spacing="10">
+                    <StackPanel
+                        Spacing="20"
+                        Orientation="Horizontal">
+                        <ComboBox
+                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                            ItemsSource="{x:Bind Vm.TranslationFunctions}"
+                            SelectedValue="{x:Bind Vm.SelectedTranslationFunction, Mode=TwoWay}"
+                            DisplayMemberPath="Display"
+                            SelectedValuePath="Value"
+                            Width="250" />
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+            <TextBlock
+                TextWrapping="WrapWholeWords"
+                Text="Test a Translation Function with a combination of hint tokens and text.">
+            </TextBlock>
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="10">
+                <TextBlock
+                    Text="Valid test tokens are:">
+                </TextBlock>
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Text="Valid test tokens are:">
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="1"
+                Margin="10, 0, 10, 0" >
+
+                <SelectorBar
+                    x:Name="sbTabs"
+                    Loaded="SbTabs_Loaded"  
+                    SelectionChanged="SelectorBar_SelectionChanged">
+                    <SelectorBarItem
+                        Style="{StaticResource SubtitleTextBlockStyle}"
+                        x:Name="sbiTest"
+                        Tag="Test"
+                        Text="Test" />
+                    <SelectorBarItem
+                        x:Name="sbiSettings"
+                        Tag="Settings"
+                        Text="Settings" />
+                </SelectorBar>
+
+                <Frame
+                    x:Name="frContent"
+                    IsNavigationStackEnabled="False" />
+
+            </StackPanel>
+
+        </StackPanel>
+
+        <!--CONTENT-->
+
+        <TabView
+            Visibility="Collapsed"
+            Margin="10, 0, 10, 0"
+            Grid.Row="1"
+            Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+            IsAddTabButtonVisible="False"
+            CloseButtonOverlayMode="OnPointerOver"
+            >
+            <TabView.TabItems>
+                
+                <TabViewItem
+                    BorderThickness="1"
+                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    Header="Test">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource
+                            Symbol="Globe" />
+                    </TabViewItem.IconSource>
+                    <local:TFTestPage />
+                </TabViewItem>
+
+                <TabViewItem
+                    IsClosable="False"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    Header="Settings">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource
+                            Symbol="Setting" />
+                    </TabViewItem.IconSource>
+                    <local:TFSettingsPage />
+                </TabViewItem>
+
+            </TabView.TabItems>
+        </TabView>
+
+        <!--SETTINGS-->
+        <!--
+        <StackPanel
+            Grid.Row="1"
+            Margin="10 20 10 0"
+            Spacing="10">
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="20">
+                <Button
+                    IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                    Command="{x:Bind Vm.TFTestLoadSettingsCommand}"
+                    Content="Load Settings" />
+                <Button
+                    IsEnabled="{x:Bind Vm.TFSettingsModified, Mode=OneWay}"
+                    Command="{x:Bind Vm.TFTestSaveSettingsCommand}"
+                    Content="Save Settings" />
+            </StackPanel>
+            
+            <TextBox
+                Margin="0 0 0 0"
+                FontFamily="Courier New"
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                FontWeight="Light"
+                IsReadOnly="false"
+                TextAlignment="Left"
+                MaxHeight="300"
+                IsSpellCheckEnabled="False"
+                Text="{x:Bind Vm.TFSettings, Mode=TwoWay}"
+                PlaceholderText=""
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                IsTextPredictionEnabled="False">
+            </TextBox>
+
+        </StackPanel>-->
+
+
+        <!--<SelectorBar
+            Grid.Row="1"
+>
+            <SelectorBarItem
+                x:Name="sbiTest"
+                Text="Test"
+                IsSelected="True" />
+            <SelectorBarItem
+                x:Name="sbiSettings"
+                Text="Settings" />
+
+        </SelectorBar>-->
+
+
+        <!--SETTINGS-->
+        <!--
+        <StackPanel
+            Grid.Row="1"
+            Margin="10 20 10 0"
+            Spacing="10">
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="20">
+                <Button
+                    IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                    Command="{x:Bind Vm.TFTestLoadSettingsCommand}"
+                    Content="Load Settings" />
+                <Button
+                    IsEnabled="{x:Bind Vm.TFSettingsModified, Mode=OneWay}"
+                    Command="{x:Bind Vm.TFTestSaveSettingsCommand}"
+                    Content="Save Settings" />
+            </StackPanel>
+            
+            <TextBox
+                Margin="0 0 0 0"
+                FontFamily="Courier New"
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                FontWeight="Light"
+                IsReadOnly="false"
+                TextAlignment="Left"
+                MaxHeight="300"
+                IsSpellCheckEnabled="False"
+                Text="{x:Bind Vm.TFSettings, Mode=TwoWay}"
+                PlaceholderText=""
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                IsTextPredictionEnabled="False">
+            </TextBox>
+
+        </StackPanel>--><!--
+            <StackPanel
+                Grid.Row="1"
+                Height="100"
+                Margin="10 10 10 10"
+                Background="DarkCyan" />
+
+        --><!--TEST STRINGS--><!--    
+        <TextBox
+            Grid.Row="2"
+            Margin="10 0 10 10"
+            FontFamily="Courier New"
+            AcceptsReturn="True"
+            TextWrapping="Wrap"
+            FontWeight="Light"
+            IsReadOnly="false"
+            IsSpellCheckEnabled="False"
+            TextAlignment="Left"
+            Text="{x:Bind Vm.TFTextToTranslate, Mode=TwoWay}"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            IsTextPredictionEnabled="False">
+        </TextBox>
+
+        --><!--TRANSLATE--><!--
+        <StackPanel
+            Grid.Row="3"
+            Margin="10, 10, 0, 10"
+            Orientation="Horizontal"
+            Spacing="10">
+            <Button
+                HorizontalAlignment="Center"
+                IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                Command="{x:Bind Vm.StartTFTestCommand}">
+                <Button.Content>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Spacing="10">
+                        <TextBlock
+                            Text="Translate" />
+                        <ProgressRing
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            IsActive="{x:Bind Vm.TFIsTranslating, Mode=OneWay}" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button
+                IsEnabled="{x:Bind Vm.TFIsTranslating, Mode=OneWay}"
+                Command="{x:Bind Vm.TFCancelTranslateCommand}"
+                Content="Cancel" />
+
+
+            <TextBlock
+                Margin="20, 0, 0, 0"
+                VerticalAlignment="Center"
+                Text="->" />
+            <ComboBox
+                ItemsSource="{x:Bind Vm.CultureList, Mode=OneWay}"
+                SelectedValue="{x:Bind Vm.TFToCulture, Mode=TwoWay}"
+                SelectedIndex="0"
+                ToolTipService.ToolTip="The language that the text will be translated into"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top" />
+
+            <TextBlock
+                VerticalAlignment="Center"
+                Text="x" />
+            <NumberBox
+                x:Name="NumberBoxSpinButtonPlacementExample"
+                Minimum="1"
+                Maximum="100"
+                Value="{x:Bind Vm.TFTestRepeats, Mode=TwoWay}"
+                SpinButtonPlacementMode="Hidden"
+                ToolTipService.ToolTip="The number of repeats per hint token type.  Increase this value to see how consistent (deterministic) the translation is."
+                SmallChange="1"
+                LargeChange="15" />
+
+        </StackPanel>
+
+        --><!--LOG--><!--
+        <TextBox
+            Grid.Row="4"
+            Margin="10 0 10 10"
+            FontFamily="Courier New"
+            AcceptsReturn="True"
+            TextWrapping="NoWrap"
+            FontWeight="Light"
+             IsReadOnly="false"
+            IsSpellCheckEnabled="False"
+            TextAlignment="Left"
+            Text="{x:Bind Vm.TFLog, Mode=OneWay}"
+            SelectionStart="{x:Bind Vm.TFLogSelectionStart, Mode=OneWay}"
+            SelectionLength="{x:Bind Vm.TFLogSelectionLength, Mode=OneWay}"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            IsTextPredictionEnabled="False">
+        </TextBox>-->
+
+    </Grid>
+  
+</Page>

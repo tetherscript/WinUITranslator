@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Storage;
+using TeeLocalized;
 
 namespace Translator
 {
@@ -21,7 +22,7 @@ namespace Translator
             public string Culture { get; set; }
         }
 
-        public static async Task StartTest(TLog.eMode mode, string targetRootPath, string translationFunction, string textToTranslate, string toCulture)
+        public static async Task<string> StartTest(TLog.eMode mode, string targetRootPath, string translationFunction, string textToTranslate, string toCulture)
         {
             IsCancelled = false;
             TLog.Reset(TLog.eMode.tfTranslate);
@@ -29,7 +30,7 @@ namespace Translator
             stopwatch.Start();
             try
             {
-                await TranslateTestAsync(
+                string translatedText = await TranslateTestAsync(
                     mode,
                     translationFunction,
                     targetRootPath,
@@ -40,41 +41,39 @@ namespace Translator
                 TimeSpan elapsed = stopwatch.Elapsed;
                 string elapsedCustomFormat = elapsed.ToString(@"hh\:mm\:ss");
                 TLog.Log(mode, TLog.eLogItemType.inf, 0, "Elapsed Time: " + elapsedCustomFormat);
+                return translatedText;
             }
             catch (Exception ex)
             {
                 TLog.Log(mode, TLog.eLogItemType.err, 0, $"An error occurred: {ex.Message}");
             }
             TLog.Save(TLog.eMode.tfTranslate, TUtils.TargetTranslateLogPath);
+            return null;
         }
 
-        public async static Task TranslateTestAsync(TLog.eMode mode, string translationFunction, string targetRootPath, string textToTranslate, string toCulture)
+        public async static Task<string> TranslateTestAsync(TLog.eMode mode, string translationFunction, string targetRootPath, string textToTranslate, string toCulture)
         {
-            await Task.Delay(100);
             TUtils.CalcPaths(targetRootPath);
             string fromCulture = "en-US";
 
-            (string valuePrefix, string valueVal) = TScan.SplitPrefix(textToTranslate);
+            (string valuePrefix, string valueVal) = TLocalized.SplitPrefix(textToTranslate);
             string hintToken = valuePrefix;
-            if ((hintToken != "!") && (hintToken != "@") && (hintToken != "@@") && (hintToken != "!!"))
+            if (!TLocalized.IsValidHintToken(hintToken))
             {
-                //if there's a x:Uid, we usuall expect hint tokens
-                //if translationHint is not !, !!, @ or @@ prefix, so we won't translate or cache it
-                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 2, @"Invalid hint token. Valid tokens are { '@@', '@', '!!', '!' }");
-                return;
+                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 2, @"Invalid hint token. Valid tokens are " + 
+                "{ " + TLocalized.ValidHintTokenStr + " }");
+                return null;
             }
 
-            await Task.Delay(100);
             TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.InitGlobal(mode={0}, translationFunction={1}, fromCulture={2})",
                 mode, translationFunction, fromCulture));
             if (!TTransFunc.InitGlobal(mode, translationFunction, fromCulture))
             {
                 TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 2, String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}",
                     translationFunction, fromCulture));
-                return;
+                return null;
             }
 
-            await Task.Delay(100);
             TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.InitPerCulture(mode={0}, translationFunction={1}, fromCulture={2}, toCulture={3})",
                 mode, translationFunction, fromCulture, toCulture));
             if (!TTransFunc.InitPerCulture(mode, translationFunction, fromCulture, toCulture))
@@ -82,10 +81,9 @@ namespace Translator
                 TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 2,
                     String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}, toCulture={2}",
                     translationFunction, fromCulture, toCulture));
-                return;
+                return null;
             }
 
-            await Task.Delay(100);
             string translatedText;
             string s1;
             s1 = String.Format(
@@ -98,17 +96,19 @@ namespace Translator
 
             TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.Translate(mode={0}, translationFunction={1}, fromCulture={2}, toCulture={3}, textToTranslate={4}, hintToken={5})",
                 mode, translationFunction, fromCulture, toCulture, valueVal, hintToken));
-            await Task.Delay(100);
             translatedText = TTransFunc.Translate(mode, translationFunction, fromCulture, toCulture, valueVal, hintToken);
             if (translatedText == null)
             {
-                translatedText = "--- FAILED ---";
+                translatedText = null;
+                return translatedText;
             }
             else
             {
                 TTransFunc.DeInitGlobal(mode, translationFunction);
-                s1 = String.Format("Result: " + translatedText);
+                s1 = "Result: " + translatedText;
                 TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 2, s1);
+
+                return translatedText;
             }
         }
 
@@ -187,6 +187,8 @@ namespace Translator
 
             TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 0, String.Format("Found {0} Resources.resw files.", reswFiles.Count().ToString()));
 
+            List<string> _unTranslateables = [];
+
             //load specials
             List<SpecialItem> SpecialItems;
             string loadedJson = File.ReadAllText(TUtils.TargetTranslatorSpecialsPath);
@@ -241,10 +243,15 @@ namespace Translator
 
                         //reject names with periods in it 'close.btn' or 'loading....';
 
-                        if ((hintToken != "!") && (hintToken != "@") && (hintToken != "@@") && (hintToken != "!!"))
+                        if (!TLocalized.IsValidHintToken(hintToken))
                         {
-                            //if there's a x:Uid, we usuall expect hint tokens
-                            //if translationHint is not !, !!, @ or @@ prefix, so we won't translate or cache it
+                            //if there's a x:Uid, only properties with hint token prefixes will be translated
+                            XElement dataElement = new XElement(item);
+                            string nameValue = dataElement.Attribute("name")?.Value;
+                            if (!_unTranslateables.Contains(nameValue))
+                            {
+                                _unTranslateables.Add(nameValue);
+                            }
                         }
                         else
                         {
@@ -291,7 +298,10 @@ namespace Translator
                                     TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 4, s2);
                                 }
 
-                            await TCache.AddEntryAsync(cacheKey, translatedText);
+                                if (App.Vm.SelectedTranslationFunction != "Loopback")
+                                {
+                                    await TCache.AddEntryAsync(cacheKey, translatedText);
+                                }
                             }
                             var desDocDataElement = new XElement("data",
                                 new XAttribute("name", item.Attribute("name").Value),
@@ -328,11 +338,23 @@ namespace Translator
 
                         destDoc.Root.Add(desDocDataElement1);
 
+                        _unTranslateables.Remove(item.Key.ToString());
+
                     }
+
                     destDoc.Save(destDocFilePath);
 
                 }
             }
+
+            TLog.LogSeparator(TLog.eMode.translate, TLog.eLogSeparatorType.lineWide);
+            TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 0, "Missing Xaml element property hint tokens: " + _unTranslateables.Count().ToString());
+            foreach (var item in _unTranslateables)
+            {
+                TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 2, item);
+            }
+
+
 
             TLog.LogSeparator(TLog.eMode.translate, TLog.eLogSeparatorType.lineWide);
             TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 0, String.Format(@"Summary: Found {0} translateable items in en-US\Resources.resw", _translateableCount));

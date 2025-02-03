@@ -279,8 +279,8 @@ namespace Translator
                                 string value = textAttribute.Value;
                                 if (!string.IsNullOrWhiteSpace(value))
                                 {
-                                    //don't map x:Bind's
-                                    if (!value.StartsWith("{x:Bind"))
+                                    //don't map x:Bind's or Binding
+                                    if (!value.StartsWith("{x:Bind") || !value.StartsWith("{Binding"))
                                     {
                                         // Combine x:Uid + "." + Property -> "MyButton.Content"
                                         string resourceKey = $"{uid}.{prop}";
@@ -317,28 +317,6 @@ namespace Translator
             File.WriteAllText(path, jsonOutput);
         }
 
-        public static (string Prefix, string Suffix) SplitPrefix(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                return (string.Empty, input);
-            }
-
-            // Define the possible prefixes, ordered by length descending to match longer prefixes first
-            string[] possiblePrefixes = { "@@", "@", "!!", "!" };
-
-            foreach (var prefix in possiblePrefixes)
-            {
-                if (input.StartsWith(prefix))
-                {
-                    string suffix = input.Substring(prefix.Length);
-                    return (prefix, suffix);
-                }
-            }
-
-            return (string.Empty, input);
-        }
-
         private static void UpdateEnUSReswFile(TLog.eMode mode, Dictionary<string, string> entriesMap, string path)
         {
             int _counter = 0;
@@ -362,7 +340,7 @@ namespace Translator
             TLog.Log(mode, TLog.eLogItemType.inf, 4, "Adding entries to en-US/Resources.resw...");
             foreach (var item in entriesMap)
             {
-                (string valuePrefix, string valueVal) = SplitPrefix(item.Value.Substring(0));
+                (string valuePrefix, string valueVal) = TLocalized.SplitPrefix(item.Value.Substring(0));
                 var dataElement = new XElement("data",
                     new XAttribute("name", item.Key),
                     new XAttribute(XNamespace.Xml + "space", "preserve"),

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Translator.TTF_Loopback_SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Translator"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel 
+        Margin="10, 20, 10, 20"
+        Spacing="20">
+        <TextBlock
+            Style="{StaticResource SubtitleTextBlockStyle}"
+            Text="Loopback" />
+        <TextBlock
+            Text="This function returns the text to translate with a $ prefix." />
+        <TextBlock
+            Text="  TextToTranslate = 'Hello' "/>
+        <TextBlock
+            Text="  returns TranslatedText = '$Hello'" />
+        <TextBox />
+        <TextBlock
+            Text="Use it to simulate receiving a translation from an API.  You can run the Translate function and it will not cache the result." />
+    </StackPanel>
+</Page>

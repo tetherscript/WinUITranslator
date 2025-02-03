@@ -127,7 +127,7 @@ namespace Translator
             else
             if (mode == eMode.tfTranslate)
             {
-                App.Vm.TFLog = TfTranslateText;
+                //App.Vm.TFLog = App.Vm.TFLog + Environment.NewLine + TfTranslateText;
             }
         }
 

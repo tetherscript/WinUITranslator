@@ -88,7 +88,28 @@ namespace Translator
         }
         #endregion
 
+
+        // Escapes {0} to {9} by converting them to {{0}} to {{9}}
+        public static string EscapePlaceholders(string input)
+        {
+            for (int i = 0; i <= 9; i++)
+            {
+                input = input.Replace($"{{{i}}}", $"{{{{{i}}}}}");
+            }
+            return input;
+        }
+
+        // Unescapes {{0}} to {0}, {{1}} to {1}, etc.
+        public static string UnescapePlaceholders(string input)
+        {
+            for (int i = 0; i <= 9; i++)
+            {
+                input = input.Replace($"{{{{{i}}}}}", $"{{{i}}}");
+            }
+            return input;
+        }
     }
+
 
     public class InvBoolConv : IValueConverter
     {

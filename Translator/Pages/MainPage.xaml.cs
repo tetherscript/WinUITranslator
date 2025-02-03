@@ -25,6 +25,7 @@ namespace Translator
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             GotoPage(TSettings.LastNavItemTag);
+            Vm.GoToTFSettingsPage();
         }
 
         private void NvMain_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -87,7 +88,7 @@ namespace Translator
                 case "TranslationFunctions":
                     SetActiveNavItem(nviTranslationFunctions);
                     PopulateNavigationViewHeader(Symbol.Bookmarks, "Translation Functions");
-                    frMain.Navigate(typeof(TranslationFunctionsPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
+                    frMain.Navigate(typeof(TFPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
 
                 case "CacheEditor":

@@ -188,7 +188,10 @@ namespace Translator
                 Log(mode, TLog.eLogItemType.err, 2, "Hint token not found in: " + _settingsFilename);
                 return null;
             }
-            
+
+            //need to escape these placeholders in case we are merging them into the hint which always has it's own {0} for the toCulture.
+            textToTranslate = TUtils.EscapePlaceholders(textToTranslate);
+
             string systemContent = String.Format(token, _toCulture);
             string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
 
@@ -273,8 +276,26 @@ namespace Translator
                 string finish_reason =  firstChoice.GetProperty("finish_reason").GetString();
                 switch (finish_reason) {
                     case "stop":
+                        translatedText = translatedText.Trim();
                         translatedText = translatedText.Substring(1, translatedText.Length - 2);
-                        return translatedText.Trim();
+                        string r = translatedText.Trim();
+                        r = TUtils.UnescapePlaceholders(r);
+                        //sometimes models like to surround the reponse with double-quotes.  We'll remove them only if the textToTranslate did not have them.
+                        if (r.StartsWith("\"") && r.EndsWith("\""))
+                        {
+                            if (r.StartsWith("\"") && r.EndsWith("\""))
+                            {
+                                return r;
+                            }
+                            else
+                            {
+                                return r.Substring(1, r.Length - 2);
+                            }
+                        }
+                        else
+                        {
+                            return r;
+                        }
                     case "length": Log(mode, TLog.eLogItemType.err, 2, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent);
                         return null;
                     case "content_filter": Log(mode, TLog.eLogItemType.err, 2, "The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent); 

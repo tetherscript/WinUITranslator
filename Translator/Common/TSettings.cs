@@ -13,6 +13,7 @@ namespace Translator
         public static double WindowScale;
         public static string LastNavItemTag;
         public static bool IsMaximized;
+        public static string TFLastSelectorBarItemTag;
 
         public static class AppSettingsKeys
         {
@@ -27,8 +28,15 @@ namespace Translator
             public const string SelectedTranslationFunction = "SelectedTranslationFunction";
             public const string ThemeIndex = "ThemeIndex";
             public const string Debug = "Debug";
-            public const string TFTestText = "TFTestText";
-            public const string TFCacheEditorSearchText = "TFCacheEditorSearchText";
+            public const string CacheEditorSearchText = "CacheEditorSearchText";
+
+            public const string TFToCulture = "TFToCulture";
+            public const string TFTestRepeats = "TFTestRepeats";
+            public const string TFTextToTranslate = "TFTextToTranslate";
+            public const string TFLastSelectorBarItemTag = "TFLastSelectorBarItemTag";
+
+            public const string TFTestText = "TFTestText"; //?
+
         }
 
         public static void Load()
@@ -52,16 +60,21 @@ namespace Translator
             App.Vm.SelectedTranslationFunction = (appData.Values.ContainsKey(AppSettingsKeys.SelectedTranslationFunction)) ?
                 (string)appData.Values[AppSettingsKeys.SelectedTranslationFunction] : "OpenAI_1";
 
-            App.Vm.TFTextToTranslate = (appData.Values.ContainsKey(AppSettingsKeys.TFTestText)) ?
-                (string)appData.Values[AppSettingsKeys.TFTestText] : "@Aperture";
+            App.Vm.SearchText = (appData.Values.ContainsKey(AppSettingsKeys.CacheEditorSearchText)) ?
+                (string)appData.Values[AppSettingsKeys.CacheEditorSearchText] : "";
 
-            App.Vm.SearchText = (appData.Values.ContainsKey(AppSettingsKeys.TFCacheEditorSearchText)) ?
-                (string)appData.Values[AppSettingsKeys.TFCacheEditorSearchText] : "";
-            
-
+            App.Vm.TFToCulture = (appData.Values.ContainsKey(AppSettingsKeys.TFToCulture)) ?
+                (string)appData.Values[AppSettingsKeys.TFToCulture] : "de-DE";
+            App.Vm.TFTestRepeats = (appData.Values.ContainsKey(AppSettingsKeys.TFTestRepeats)) ?
+                (int)appData.Values[AppSettingsKeys.TFTestRepeats] : 1;
+            App.Vm.TFTextToTranslate = (appData.Values.ContainsKey(AppSettingsKeys.TFTextToTranslate)) ?
+                (string)appData.Values[AppSettingsKeys.TFTextToTranslate] : "Light";
 
             LastNavItemTag = (appData.Values.ContainsKey(AppSettingsKeys.LastNavItemTag)) ?
                 (string)appData.Values[AppSettingsKeys.LastNavItemTag] : "Target";
+
+            TFLastSelectorBarItemTag = (appData.Values.ContainsKey(AppSettingsKeys.TFLastSelectorBarItemTag)) ?
+                (string)appData.Values[AppSettingsKeys.TFLastSelectorBarItemTag] : "Test";
 
             IsMaximized = (appData.Values.ContainsKey(AppSettingsKeys.IsMaximized)) ?
                 (bool)appData.Values[AppSettingsKeys.IsMaximized] : false;
@@ -92,7 +105,14 @@ namespace Translator
             appData.Values[AppSettingsKeys.Target] = App.Vm.Target;
             appData.Values[AppSettingsKeys.SelectedTranslationFunction] = App.Vm.SelectedTranslationFunction;
             appData.Values[AppSettingsKeys.TFTestText] = App.Vm.TFTextToTranslate;
-            appData.Values[AppSettingsKeys.TFCacheEditorSearchText] = App.Vm.SearchText;
+            appData.Values[AppSettingsKeys.CacheEditorSearchText] = App.Vm.SearchText;
+
+            appData.Values[AppSettingsKeys.TFToCulture] = App.Vm.TFToCulture;
+            appData.Values[AppSettingsKeys.TFTestRepeats] = App.Vm.TFTestRepeats;
+            appData.Values[AppSettingsKeys.TFTextToTranslate] = App.Vm.TFTextToTranslate;
+
+
+
 
             appData.Values[AppSettingsKeys.IsMaximized] = IsMaximized;
             appData.Values[AppSettingsKeys.WindowLeft] = WindowLeft;
@@ -101,6 +121,9 @@ namespace Translator
             appData.Values[AppSettingsKeys.WindowHeight] = WindowHeight;
             appData.Values[AppSettingsKeys.WindowScale] = WindowScale;
             appData.Values[AppSettingsKeys.LastNavItemTag] = LastNavItemTag;
+
+            appData.Values[AppSettingsKeys.TFLastSelectorBarItemTag] = TFLastSelectorBarItemTag;
+
         }
 
     }
