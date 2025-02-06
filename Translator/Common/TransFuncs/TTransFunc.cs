@@ -9,38 +9,8 @@ namespace Translator
 {
     public static class TTransFunc
     {
-        private const string _loopback = "Loopback";
-        private const string _openAI_1 = "OpenAI_1";
-        private const string _LMS_llama_3_2_1b_instruct = "LMS_llama-3.2-1b-instruct";
-
-        public static List<string> Types = new List<string>
-        {
-            _openAI_1,
-            _LMS_llama_3_2_1b_instruct,
-            _loopback
-        };
-
-        public static void LoadSettingsPage(string funcType)
-        {
-            switch (funcType)
-            {
-                case _loopback: WeakReferenceMessenger.Default.Send(new NavigateMessage(typeof(TTF_Loopback_SettingsPage))); break;
-                case _openAI_1: WeakReferenceMessenger.Default.Send(new NavigateMessage(typeof(TTF_OpenAI_1_SettingsPage))); break;
-                case _LMS_llama_3_2_1b_instruct: WeakReferenceMessenger.Default.Send(new NavigateMessage(typeof(TTF_LMS_llama_3_2_1b_instruct_SettingsPage))); break;
-                default:break;
-            }
-        }
-
-        public static string GetSettingsPath(string funcType)
-        {
-            switch (funcType)
-            {
-                case _loopback: return TTF_Loopback.GetSettingsPath();
-                case _openAI_1: return TTF_OpenAI_1.GetSettingsPath();
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.GetSettingsPath();
-                default: return string.Empty;
-            }
-        }
+        private const string _loopback = "loopback";
+        private const string _openaiapi = "openai-api";
 
         public static bool InitGlobal(TLog.eMode mode, string funcType, string fromCulture)
         {
@@ -48,8 +18,7 @@ namespace Translator
             switch (funcType)
             {
                 case _loopback: return TTF_Loopback.InitGlobal(mode, fromCulture);
-                case _openAI_1: return TTF_OpenAI_1.InitGlobal(mode, fromCulture);
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.InitGlobal(mode, fromCulture);
+                case _openaiapi: return TTF_OpenAI_1.InitGlobal(mode, fromCulture);
                 default: return false;
             }
         }
@@ -60,8 +29,7 @@ namespace Translator
             switch (funcType)
             {
                 case _loopback: return TTF_Loopback.InitPerCulture(mode, fromCulture, toCulture);
-                case _openAI_1: return TTF_OpenAI_1.InitPerCulture(mode, fromCulture, toCulture); 
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.InitPerCulture(mode, fromCulture, toCulture);
+                case _openaiapi: return TTF_OpenAI_1.InitPerCulture(mode, fromCulture, toCulture); 
                 default: return false;
             }
         }
@@ -73,8 +41,7 @@ namespace Translator
             switch (funcType)
             {
                 case _loopback: return TTF_Loopback.Translate(mode, fromCulture, toCulture, textToTranslate, hintToken);
-                case _openAI_1: return TTF_OpenAI_1.Translate(mode, fromCulture, toCulture, textToTranslate, hintToken);
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.Translate(mode, fromCulture, toCulture, textToTranslate, hintToken);
+                case _openaiapi: return TTF_OpenAI_1.Translate(mode, fromCulture, toCulture, textToTranslate, hintToken);
                 default: return null;
             }
         }
@@ -85,11 +52,23 @@ namespace Translator
             switch (funcType)
             {
                 case _loopback: return TTF_Loopback.DeInitGlobal(mode);
-                case _openAI_1: return TTF_OpenAI_1.DeInitGlobal(mode);
-                case _LMS_llama_3_2_1b_instruct: return TTF_LMS_llama_3_2_1b_instruct.DeInitGlobal(mode);
+                case _openaiapi: return TTF_OpenAI_1.DeInitGlobal(mode);
                 default: return false;
             }
         }
 
     }
 }
+
+/*
+ChatGPT 4
+You are a professional translator who translates from en-US to strict de-DE.  Always respond in JSON format and name your text value 'response' and give a confidence rating 1-100 and name it's integer value 'confidence'. Place your reasoning text in the 'reasoning' property. Do the translation in the context of the text displayed on a photography software user interface.
+
+
+LM STUDIO
+llama-3.2-1b-instruct
+You are a professional translator who translates from en-US to strict de-DE.  Always respond in JSON format and place your translated text the the 'translated' property and your confidence 1-100 integer in the 'confidence' property.  Do the translation in the context of the text displayed on a photography software user interface.
+
+DeepSeek R1 Distill Llama 8B
+You are a professional translator who translates from en-US to strict de-DE.  Always respond in JSON format and place your translated text the the 'translated' property and your confidence 1-100 integer in the 'confidence' property.  Do the translation in the context of the text displayed on a photography software user interface.
+*/

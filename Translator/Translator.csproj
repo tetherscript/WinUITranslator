@@ -10,7 +10,9 @@
     <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &lt; 8">win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <PublishProfile>win-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\app.ico" />
@@ -27,7 +29,6 @@
     <Content Remove="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Common\TransFuncs\Loopback\TTF_Loopback_SettingsPage.xaml" />
     <None Remove="Pages\CacheEditorPage.xaml" />
     <None Remove="Pages\MainPage.xaml" />
     <None Remove="Pages\ScanPage.xaml" />
@@ -233,15 +234,6 @@
     <None Update="Assets\Wide310x150Logo.scale-200.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Page Update="Common\TransFuncs\Loopback\TTF_Loopback_SettingsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Common\TransFuncs\OpenAI_1\TTF_OpenAI_1_SettingsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Common\TransFuncs\TTF_LMS_llama-3.2-1b-instruct\TTF_LMS_llama-3.2-1b-instruct_SettingsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Pages\TFSettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -283,6 +275,10 @@
     <None Update="Translator\ReswHeader.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TTranslatorEx\LMStudio\" />
+    <Folder Include="TTranslatorEx\OpenAI\" />
   </ItemGroup>
 
   <!--

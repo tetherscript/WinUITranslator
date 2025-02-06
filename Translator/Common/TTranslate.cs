@@ -191,7 +191,7 @@ namespace Translator
             //load specials
             List<SpecialItem> SpecialItems;
             string loadedJson = File.ReadAllText(TUtils.TargetTranslatorSpecialsPath);
-            var newEntries = JsonSerializer.Deserialize<List<TUtils.HintKeyValEntry>>(
+            var newEntries = JsonSerializer.Deserialize<List<TUtils.SettingsKeyValEntry>>(
                 loadedJson,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );
@@ -297,10 +297,10 @@ namespace Translator
                                     TLog.Log(TLog.eMode.translate, TLog.eLogItemType.inf, 4, s2);
                                 }
 
-                                if (App.Vm.SelectedTranslationFunction != "Loopback")
-                                {
-                                    await TCache.AddEntryAsync(cacheKey, translatedText);
-                                }
+                                //if (App.Vm.SelectedTranslationFunction != "Loopback")
+                                //{
+                                //    await TCache.AddEntryAsync(cacheKey, translatedText);
+                                //}
                             }
                             var desDocDataElement = new XElement("data",
                                 new XAttribute("name", item.Attribute("name").Value),

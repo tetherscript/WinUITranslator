@@ -11,10 +11,48 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using TeeLocalized;
+using System.Threading;
+using System.Data.SqlTypes;
+using Windows.Devices.Sensors;
+
 
 
 namespace Translator
 {
+
+
+    public partial class TTranslateLogItem(TLog.eLogItemType type, bool? isSuccessful, string untranslatedText, string? translatedText, int? confidence, string? reasoning, int indent, string? message) : ObservableObject
+    {
+        [ObservableProperty]
+        private DateTime _timeStamp = DateTime.Now;
+
+        [ObservableProperty]
+        private TLog.eLogItemType _type = type;
+
+        [ObservableProperty]
+        private bool? _isSuccessful = isSuccessful;
+
+        [ObservableProperty]
+        private string _untranslatedText = untranslatedText;
+
+        [ObservableProperty]
+        private string? _translatedText = translatedText;
+
+        [ObservableProperty]
+        private int? _confidence = confidence;
+
+        [ObservableProperty]
+        private string? _reasoning = reasoning;
+
+        [ObservableProperty]
+        private int? _indent = indent;
+
+        [ObservableProperty]
+        private string? _message = message;
+    }
+
+
+
     public partial class Pair : ObservableObject
     {
         [ObservableProperty]
@@ -26,6 +64,8 @@ namespace Translator
 
     public partial class TVm(string[] arguments) : ObservableObject
     {
+
+
         public class TTransFuncName(string display, string name)
         {
             public string Display { get; set; } = display;
@@ -79,6 +119,40 @@ namespace Translator
 
         [ObservableProperty]
         private string _target;
+        partial void OnTargetChanged(string value)
+        {
+            GetProfiles();
+        }
+
+
+        #region PROFILES
+        [ObservableProperty]
+        List<string> _profiles = new();
+
+        public void GetProfiles()
+        {
+            if (TUtils.CalcPaths(Target))
+            {
+                var prfFiles = Directory.EnumerateFiles(TUtils.TargetProfilesPath, "*.prf")
+                                        .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
+                                        .OrderBy(fileName => fileName)
+                                        .ToList();
+                Profiles.Clear();
+                foreach (string file in prfFiles)
+                {
+                    Profiles.Add(file);
+                }
+            }
+        }
+
+        [ObservableProperty]
+        private string _selectedProfile;
+
+
+
+        #endregion
+
+
 
         #region SCAN
         [ObservableProperty]
@@ -126,6 +200,12 @@ namespace Translator
 
         #region TRANSLATE
 
+
+
+
+
+
+
         [ObservableProperty]
         int _transLogSelectionStart = 0;
 
@@ -133,16 +213,16 @@ namespace Translator
         int _transLogSelectionLength = 0;
 
 
-        [ObservableProperty]
-        List<TTransFuncName> _translationFunctions = new();
+
+
+
+
+
+        
+        private CancellationTokenSource? _translateCts;
 
         [ObservableProperty]
-        private string _selectedTranslationFunction;
-        partial void OnSelectedTranslationFunctionChanged(string value)
-        {
-            TFSettings = "";
-            GoToTFSettingsPage();
-        }
+        private bool _translateSaveToCache;
 
         [RelayCommand]
         private async Task StartTranslate()
@@ -152,10 +232,16 @@ namespace Translator
             {
                 IsBusy = true;
                 IsTranslating = true;
-                TranslateLog = "Translating...";
+                //TranslateLog = "Translating...";
                 TranslateLogScrollToBottom();
+                FilteredTranslateLog.Clear();
+                Sss = "";
                 await Task.Delay(100);
-                await TTranslate.Start(TLog.eMode.translate, TUtils.TargetRootPath, SelectedTranslationFunction);
+                //await TTranslate.Start(TLog.eMode.translate, TUtils.TargetRootPath, SelectedProfile);
+                _translateCts = new();
+                TTranslatorExProc translatorExProc = new ();
+                await translatorExProc.Start(TLog.eMode.translate, TUtils.TargetRootPath, SelectedProfile, _translateCts, TranslateSaveToCache);
+                _translateCts.Dispose();
             }
             else
             {
@@ -169,15 +255,22 @@ namespace Translator
         }
 
         [RelayCommand]
-        private static void CancelTranslate()
+        private void CancelTranslate()
         {
-            TTranslate.Stop();
+            _translateCts.TryReset();
+            _translateCts.Cancel();
         }
+
+
+
+
+
+
 
         private void TranslateLogScrollToBottom()
         {
-            TransLogSelectionStart = TranslateLog.Length;
-            TransLogSelectionLength = 0;
+            //TransLogSelectionStart = TranslateLog.Length;
+            //TransLogSelectionLength = 0;
         }
 
         [ObservableProperty]
@@ -186,8 +279,8 @@ namespace Translator
         [ObservableProperty]
         private bool _isTranslating;
 
-        [ObservableProperty]
-        private string _translateLog;
+        //[ObservableProperty]
+        //private string _translateLog;
 
         [ObservableProperty]
         private int _translateProgress = 0;
@@ -197,7 +290,7 @@ namespace Translator
         #region TRANSLATION FUNCTIONS
 
         [ObservableProperty]
-        private int _tFLastSelectorBarIndex = 0;
+        private int _tFLastTabIndex = 0;
 
         [ObservableProperty]
         int _tFLogSelectionStart = 0;
@@ -219,46 +312,46 @@ namespace Translator
         [RelayCommand]
         private void TFTestLoadSettings()
         {
-            TUtils.CalcPaths(Target);
-            string path = TTransFunc.GetSettingsPath(SelectedTranslationFunction);
-            if (path == null)
-            {
-                TFSettings = "No settings file specified.";
-            }
-            else 
-            { 
-                try
-                {
-                    string loadedJson = File.ReadAllText(path);
-                    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Loaded settings: " + path);
-                    TFSettings = loadedJson;
-                    TFSettingsModified = false;
-                }
-                catch (Exception ex)
-                {
-                    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Load setting failed: " + path + ": " + ex.Message);
-                }
-            }
+            //TUtils.CalcPaths(Target);
+            //string path = TTransFunc.GetSettingsPath(SelectedProfile);
+            //if (path == null)
+            //{
+            //    TFSettings = "No settings file specified.";
+            //}
+            //else 
+            //{ 
+            //    try
+            //    {
+            //        string loadedJson = File.ReadAllText(path);
+            //        TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Loaded settings: " + path);
+            //        TFSettings = loadedJson;
+            //        TFSettingsModified = false;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Load setting failed: " + path + ": " + ex.Message);
+            //    }
+            //}
         }
 
         [RelayCommand]
         private async void TFTestSaveSettings()
         {
-            TUtils.CalcPaths(Target);
-            TLog.Reset(TLog.eMode.tfTranslate);
-            string path = TTransFunc.GetSettingsPath(SelectedTranslationFunction);
-            if (path == null) return;
-            try
-                {
-                File.WriteAllText(path, TFSettings);
-                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Saved settings: " + path);
-                TFSettingsModified = false;
-            }
-            catch (Exception ex)
-            {
-                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Save setting failed: " + path + ": " + ex.Message);
-            }
-            TLog.Flush(TLog.eMode.tfTranslate);
+            //TUtils.CalcPaths(Target);
+            //TLog.Reset(TLog.eMode.tfTranslate);
+            //string path = TTransFunc.GetSettingsPath(SelectedProfile);
+            //if (path == null) return;
+            //try
+            //    {
+            //    File.WriteAllText(path, TFSettings);
+            //    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Saved settings: " + path);
+            //    TFSettingsModified = false;
+            //}
+            //catch (Exception ex)
+            //{
+            //    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Save setting failed: " + path + ": " + ex.Message);
+            //}
+            //TLog.Flush(TLog.eMode.tfTranslate);
         }
 
         private void PopulateCultures()
@@ -285,7 +378,7 @@ namespace Translator
         {
             TFIsCancelling = false;
             TLog.Reset(TLog.eMode.tfTranslate);
-            TranslateLog = "Translating...";
+            //TranslateLog = "Translating...";
             await Task.Delay(100);
             if (TUtils.CalcPaths(Target))
             {
@@ -335,7 +428,7 @@ namespace Translator
                     await Task.Delay(10);
                     if (TFIsCancelling) return;
                     string trans = await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
-                            SelectedTranslationFunction, item, TFToCulture);
+                            SelectedProfile, item, TFToCulture);
                     TFLog = TFLog + (trans == null ? "err" : trans) + Environment.NewLine;
                     if (trans == null)
                     {
@@ -362,11 +455,6 @@ namespace Translator
 
         [ObservableProperty]
         private string _tFTestResult = null;
-
-        public void GoToTFSettingsPage()
-        {
-            TTransFunc.LoadSettingsPage(SelectedTranslationFunction);
-        }
 
         [ObservableProperty]
         private bool _tFIsTranslating;
@@ -576,6 +664,114 @@ namespace Translator
         [ObservableProperty]
         int _cacheSearchSelectionLength = 0;
         #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [ObservableProperty]
+        string _sss = "";
+
+
+
+
+
+        //public List<TTranslateLogItem> TranslateLog = new();
+        //public AdvancedCollectionView<TTranslateLogItem> = new(TTranslateLogItem, SqlTruncateException);
+
+        // The collection used by the UI (ListView) to display results
+        public ObservableCollection<TTranslateLogItem> TranslateLog { get; } = new ObservableCollection<TTranslateLogItem>();
+        public ObservableCollection<TTranslateLogItem> FilteredTranslateLog { get; } = new ObservableCollection<TTranslateLogItem>();
+
+
+        public void AddTranslateLogItem(TranslateProgressReport item)
+        {
+            //Sss = Sss + item.LogItem.Message + Environment.NewLine;
+            //return;
+            //Sss.Append(');
+
+            TTranslateLogItem x;
+            if (item.TranslatorResult == null)
+            {
+                x = new TTranslateLogItem(
+                    item.LogItem.itemType,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    item.LogItem.indent,
+                    item.LogItem.Message
+                    );
+            }
+            else
+            {
+                x = new TTranslateLogItem(
+                    item.LogItem.itemType,
+                    item.TranslatorResult.IsSuccessful,
+                    item.TranslatorResult.UntranslatedText,
+                    item.TranslatorResult.TranslatedText,
+                    item.TranslatorResult.Confidence,
+                    item.TranslatorResult.Reasoning,
+                    item.LogItem.indent,
+                    item.LogItem.Message
+                    );
+            }
+            FilteredTranslateLog.Add(x);
+        }
+
+
+        //public partial class TTranslateLogItem(TLog.eLogItemType type, bool isSuccessful, string untranslatedText, string? translatedText, int? confidence, string? reasoning, int indent, string? message) : ObservableObject
+
+    // Search text in the TextBox
+    [ObservableProperty]
+        private string _translateSearchText = string.Empty;
+        partial void OnTranslateSearchTextChanged(string value)
+        {
+            RefreshFilteredTranslationLog(value);
+        }
+
+        private void RefreshFilteredTranslationLog(string text)
+        {
+            if (TranslateLog == null) return;
+            FilteredTranslateLog.Clear();
+
+            var matches = string.IsNullOrEmpty(text)
+                ? TCache._entries
+                : TCache._entries.Where(kvp =>
+                        kvp.Key.Contains(text, System.StringComparison.OrdinalIgnoreCase));
+
+            foreach (var kvp in matches)
+            {
+                FilteredEntries.Add(new Pair { Key = kvp.Key, Value = kvp.Value });
+            }
+
+        }
+
+        [RelayCommand]
+        private void ClearTranslationSearch()
+        {
+            TranslateSearchText = string.Empty;
+        }
     }
 }
 

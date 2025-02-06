@@ -1,23 +1,7 @@
 ﻿[
   {
-    "key": "ar-SA:!:Aperture",
-    "value": "\u0641\u062A\u062D\u0629 \u0627\u0644\u0639\u062F\u0633\u0629"
-  },
-  {
-    "key": "ar-SA:@:Enter your name here",
-    "value": "\u0623\u062F\u062E\u0644 \u0627\u0633\u0645\u0643 \u0647\u0646\u0627"
-  },
-  {
-    "key": "ar-SA:@@:Enter your name here",
-    "value": "\u0623\u062F\u062E\u0644 \u0627\u0633\u0645\u0643 \u0647\u0646\u0627"
-  },
-  {
     "key": "ar-SA:@@:Lock",
     "value": "\u0642\u0641\u0644"
-  },
-  {
-    "key": "ar-SA:@:Zoom",
-    "value": "\u0632\u0648\u0648\u0645"
   },
   {
     "key": "ar-SA:@:100%",
@@ -72,10 +56,6 @@
     "value": "Geben Sie hier Ihren Namen ein"
   },
   {
-    "key": "de-DE:@:Close",
-    "value": "Schlie\u00DFen"
-  },
-  {
     "key": "de-DE:@:Zoom",
     "value": "Zoom"
   },
@@ -124,10 +104,6 @@
     "value": "Entrez votre nom ici"
   },
   {
-    "key": "fr-FR:@:Close",
-    "value": "Fermer"
-  },
-  {
     "key": "fr-FR:@@:Lock",
     "value": "Verrou"
   },
@@ -154,10 +130,6 @@
   {
     "key": "fr-FR:@:Disconnected",
     "value": "D\u00E9connect\u00E9"
-  },
-  {
-    "key": "fr-FR:@:Connected",
-    "value": "Connect\u00E9"
   },
   {
     "key": "fr-FR:@:Loading {0}}, please wait...",
@@ -188,7 +160,23 @@
     "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
   },
   {
-    "key": "ar-SA:@:Close",
-    "value": "\u0642\u0631\u064A\u0628"
+    "key": "ar-SA:@@:Enter your name here",
+    "value": "Enter your name here"
+  },
+  {
+    "key": "ar-SA:@:Zoom",
+    "value": "Zoom"
+  },
+  {
+    "key": "ar-SA:@:Enter your name here",
+    "value": "\u0022translated\u0022: \u0022Please enter your name\u0022,\n  \u0022confidence\u0022: 80"
+  },
+  {
+    "key": "de-DE:@:Close",
+    "value": "Schlie\u00DFen"
+  },
+  {
+    "key": "fr-FR:@:Connected",
+    "value": "Connect\u00E9"
   }
 ]

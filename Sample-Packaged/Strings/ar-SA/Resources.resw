@@ -117,20 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Aperture_tb.Text" xml:space="preserve">
-    <value>فتحة العدسة</value>
-    <comment>!</comment>
-  </data>
   <data name="EnterYourNameHere_tb.Text" xml:space="preserve">
-    <value>أدخل اسمك هنا</value>
+    <value>"translated": "Please enter your name",
+  "confidence": 80</value>
     <comment>@</comment>
   </data>
   <data name="EnterYourNameHere_short_tb.Text" xml:space="preserve">
-    <value>أدخل اسمك هنا</value>
+    <value>Enter your name here</value>
     <comment>@@</comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
-    <value>قريب</value>
+    <value></value>
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">
@@ -138,7 +135,7 @@
     <comment>@@</comment>
   </data>
   <data name="Zoom_rbs.Header" xml:space="preserve">
-    <value>زووم</value>
+    <value>Zoom</value>
     <comment>@</comment>
   </data>
   <data name="Zoom100_rb.Content" xml:space="preserve">

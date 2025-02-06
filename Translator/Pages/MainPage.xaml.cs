@@ -25,7 +25,6 @@ namespace Translator
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             GotoPage(TSettings.LastNavItemTag);
-            Vm.GoToTFSettingsPage();
         }
 
         private void NvMain_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -69,7 +68,7 @@ namespace Translator
             {
                 case "Target":
                     SetActiveNavItem(nviTarget);
-                    PopulateNavigationViewHeader(Symbol.Folder, "1. Target a Project");
+                    PopulateNavigationViewHeader(Symbol.Home, "1. Target a Project");
                     frMain.Navigate(typeof(TargetPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
 

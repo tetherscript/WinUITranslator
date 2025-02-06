@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -14,6 +15,78 @@
             x:Key="InvBoolConv" />
         <converters:BoolToOpacityConv
             x:Key="BoolToOpacityConv" />
+
+        <DataTemplate
+            x:Key="LogItemTemplate"
+            x:DataType="local:TTranslateLogItem">
+
+            <Grid
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="50" />
+                    <ColumnDefinition
+                        Width="100" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    Text="{x:Bind Indent}"
+                    FontSize="16"
+                    Margin="4,2,4,2"
+                    TextWrapping="Wrap"
+                    FontFamily="Courier New" />
+                
+                <TextBlock
+                    Grid.Column="1"
+                    Text="{x:Bind Type}"
+                    FontSize="16"
+                    Margin="4,2,4,2"
+                    TextWrapping="Wrap"
+                    FontFamily="Courier New" />
+
+                <TextBlock
+                    Grid.Column="2"
+                    Text="{x:Bind Message}"
+                    FontSize="16"
+                    Margin="4,2,4,2"
+                    TextWrapping="Wrap"
+                    FontFamily="Courier New" />
+                
+            </Grid>
+                    
+                <!--<StackPanel
+                Orientation="Horizontal"
+                Spacing="8">
+                --><!--<TextBlock
+                    Text="{x:Bind Indent}"
+                    FontFamily="Courier New"
+                     />--><!--
+                <TextBlock
+                    Text="{x:Bind Message}"
+                    FontSize="16"
+                    Margin="4,2,4,2"
+                    TextWrapping="Wrap"
+                    FontFamily="Courier New"
+                     />
+                --><!--<TextBlock
+                    FontFamily="Courier New"
+                    FontSize="16"
+                    Text="> " />
+                <TextBlock
+                    Opacity="0.7"
+                    FontFamily="Courier New"
+                    FontSize="16"
+                    TextWrapping="Wrap"
+                    Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />--><!--
+            </StackPanel>-->
+        </DataTemplate>
     </Page.Resources>
 
     <Grid>
@@ -42,22 +115,41 @@
                     Spacing="10">
                     <StackPanel
                         Spacing="20"
+                        VerticalAlignment="Center"
                         Orientation="Horizontal">
                         <Button
+                            HorizontalAlignment="Center"
                             IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                            Command="{x:Bind Vm.StartTranslateCommand}"
-                            Content="Translate" />
+                            Command="{x:Bind Vm.StartTranslateCommand}">
+                            <Button.Content>
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Spacing="10">
+                                    <TextBlock
+                                        Text="Translate" />
+                                    <ProgressRing
+                                        Width="16"
+                                        Height="16"
+                                        HorizontalAlignment="Center"
+                                        IsActive="{x:Bind Vm.IsTranslating, Mode=OneWay}" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
                         <Button
                             IsEnabled="{x:Bind Vm.IsTranslating, Mode=OneWay}"
                             Command="{x:Bind Vm.CancelTranslateCommand}"
                             Content="Cancel" />
                         <ComboBox
                             IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                            ItemsSource="{x:Bind Vm.TranslationFunctions}"
-                            SelectedValue="{x:Bind Vm.SelectedTranslationFunction, Mode=TwoWay}"
-                            DisplayMemberPath="Display"
-                            SelectedValuePath="Value"
-                            Width="250" />
+                            ItemsSource="{x:Bind Vm.Profiles}"
+                            SelectedValue="{x:Bind Vm.SelectedProfile, Mode=TwoWay}"/>
+                        <CheckBox
+                            Padding="8, 0, 0, 0"
+                            Margin="0"
+                            Content="Save to cache"
+                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                            IsChecked="{x:Bind Vm.TranslateSaveToCache, Mode=TwoWay}" 
+                            VerticalContentAlignment="Center" />
                     </StackPanel>
                     <ProgressBar
                         Value="{x:Bind Vm.TranslateProgress, Mode=OneWay}"
@@ -73,9 +165,39 @@
                 Text="For each language listed in the target project's \Strings folder, excluding en-US, every translatable item is sent to the selected Translation Function for processing. The resulting translations are then stored in their corresponding Resources.resw files.  When complete, run the target project and you should see the translations.  See the sample app code for language testing tips.">
             </TextBlock>
 
+
+
+                <StackPanel 
+                    Orientation="Horizontal"
+                    Margin="10,10,0,0">
+
+                    <RadioButtons
+                        x:Name="rbTheme"
+                        IsTabStop="False"
+                        MaxColumns="3"
+                        SelectedIndex="{x:Bind Vm.ThemeIndex, Mode=TwoWay}">
+                        <RadioButton
+                            x:Uid="Default_rb"
+                            Content="Default" />
+                        <RadioButton
+                            x:Uid="Light_rb"
+                            Content="Light" />
+                        <RadioButton
+                            x:Uid="Dark_rb"
+                            Content="Dark" />
+                    </RadioButtons>
+
+                    <ToggleSwitch
+                        OffContent="Simple Log"
+                        OnContent="Verbose Log"
+                        IsOn="{x:Bind Vm.Debug, Mode=TwoWay}" />
+
+                </StackPanel>
+
         </StackPanel>
 
         <TextBox
+            Visibility="Collapsed"
             Grid.Row="1"
             Margin="10 0 10 10"
             FontFamily="Courier New"
@@ -84,7 +206,7 @@
             FontWeight="Light"
             IsReadOnly="false"
             TextAlignment="Left"
-            Text="{x:Bind Vm.TranslateLog, Mode=OneWay}"
+            Text="{x:Bind Vm.Sss, Mode=OneWay}"
             SelectionStart="{x:Bind Vm.TransLogSelectionStart, Mode=OneWay}"
             SelectionLength="{x:Bind Vm.TransLogSelectionLength, Mode=OneWay}"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -93,6 +215,14 @@
         </TextBox>
 
 
+        <!--ItemTemplate="{StaticResource LogItemTemplate}"-->
+
+        <ListView
+            Grid.Row="1"
+            Visibility="Visible"
+            Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+            ItemsSource="{x:Bind Vm.FilteredTranslateLog}"
+            ItemTemplate="{StaticResource LogItemTemplate}" />
 
     </Grid>
 </Page>

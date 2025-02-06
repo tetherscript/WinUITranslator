@@ -109,7 +109,7 @@ namespace Translator
                 {
                     string loadedJson = File.ReadAllText(path);
                     // Deserialize to a list of LocalizedEntry
-                    var newEntries = JsonSerializer.Deserialize<List<TUtils.HintKeyValEntry>>(
+                    var newEntries = JsonSerializer.Deserialize<List<TUtils.SettingsKeyValEntry>>(
                         loadedJson,
                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
                     );
@@ -141,7 +141,7 @@ namespace Translator
             {
                 try
                 {
-                    var entries = Settings.Select(kvp => new TUtils.HintKeyValEntry
+                    var entries = Settings.Select(kvp => new TUtils.SettingsKeyValEntry
                     {
                         Key = kvp.Key,
                         Value = kvp.Value

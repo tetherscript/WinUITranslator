@@ -25,15 +25,18 @@ namespace Translator
             public const string WindowScale = "WindowScale";
             public const string LastNavItemTag = "LastNavItemTag";
             public const string Target = "Target";
-            public const string SelectedTranslationFunction = "SelectedTranslationFunction";
+            public const string SelectedProfile = "SelectedTranslationFunction";
             public const string ThemeIndex = "ThemeIndex";
             public const string Debug = "Debug";
             public const string CacheEditorSearchText = "CacheEditorSearchText";
+            public const string TranslateSaveToCache = "TranslateSaveToCache";
+
+            
 
             public const string TFToCulture = "TFToCulture";
             public const string TFTestRepeats = "TFTestRepeats";
             public const string TFTextToTranslate = "TFTextToTranslate";
-            public const string TFLastSelectorBarItemTag = "TFLastSelectorBarItemTag";
+            public const string TFLastTabIndex = "TFLastTabIndex";
 
             public const string TFTestText = "TFTestText"; //?
 
@@ -57,24 +60,36 @@ namespace Translator
             App.Vm.Target = (appData.Values.ContainsKey(AppSettingsKeys.Target)) ?
                 (string)appData.Values[AppSettingsKeys.Target] : @"C:\Repo\WinUITranslator\Sample-Packaged";
 
-            App.Vm.SelectedTranslationFunction = (appData.Values.ContainsKey(AppSettingsKeys.SelectedTranslationFunction)) ?
-                (string)appData.Values[AppSettingsKeys.SelectedTranslationFunction] : "OpenAI_1";
+            App.Vm.GetProfiles();
+
+            App.Vm.SelectedProfile = (appData.Values.ContainsKey(AppSettingsKeys.SelectedProfile)) ?
+                (string)appData.Values[AppSettingsKeys.SelectedProfile] : "Loopback";
+
 
             App.Vm.SearchText = (appData.Values.ContainsKey(AppSettingsKeys.CacheEditorSearchText)) ?
                 (string)appData.Values[AppSettingsKeys.CacheEditorSearchText] : "";
 
             App.Vm.TFToCulture = (appData.Values.ContainsKey(AppSettingsKeys.TFToCulture)) ?
                 (string)appData.Values[AppSettingsKeys.TFToCulture] : "de-DE";
+
             App.Vm.TFTestRepeats = (appData.Values.ContainsKey(AppSettingsKeys.TFTestRepeats)) ?
                 (int)appData.Values[AppSettingsKeys.TFTestRepeats] : 1;
+
             App.Vm.TFTextToTranslate = (appData.Values.ContainsKey(AppSettingsKeys.TFTextToTranslate)) ?
                 (string)appData.Values[AppSettingsKeys.TFTextToTranslate] : "@Close\r//@@Click to save save your profile.\r//!Aperture\r//!!Click to adjust white balance.\r//@Loading {0}, please wait...";
 
+            App.Vm.TFLastTabIndex = (appData.Values.ContainsKey(AppSettingsKeys.TFLastTabIndex)) ?
+                (int)appData.Values[AppSettingsKeys.TFLastTabIndex] : 0;
+
+            App.Vm.TranslateSaveToCache = (appData.Values.ContainsKey(AppSettingsKeys.TranslateSaveToCache)) ?
+                (bool)appData.Values[AppSettingsKeys.TranslateSaveToCache] : false;
+
+            
+
+
+
             LastNavItemTag = (appData.Values.ContainsKey(AppSettingsKeys.LastNavItemTag)) ?
                 (string)appData.Values[AppSettingsKeys.LastNavItemTag] : "Target";
-
-            TFLastSelectorBarItemTag = (appData.Values.ContainsKey(AppSettingsKeys.TFLastSelectorBarItemTag)) ?
-                (string)appData.Values[AppSettingsKeys.TFLastSelectorBarItemTag] : "Test";
 
             IsMaximized = (appData.Values.ContainsKey(AppSettingsKeys.IsMaximized)) ?
                 (bool)appData.Values[AppSettingsKeys.IsMaximized] : false;
@@ -103,7 +118,7 @@ namespace Translator
             appData.Values[AppSettingsKeys.ThemeIndex] = App.Vm.ThemeIndex;
             appData.Values[AppSettingsKeys.Debug] = App.Vm.Debug;
             appData.Values[AppSettingsKeys.Target] = App.Vm.Target;
-            appData.Values[AppSettingsKeys.SelectedTranslationFunction] = App.Vm.SelectedTranslationFunction;
+            appData.Values[AppSettingsKeys.SelectedProfile] = App.Vm.SelectedProfile;
             appData.Values[AppSettingsKeys.TFTestText] = App.Vm.TFTextToTranslate;
             appData.Values[AppSettingsKeys.CacheEditorSearchText] = App.Vm.SearchText;
 
@@ -111,8 +126,9 @@ namespace Translator
             appData.Values[AppSettingsKeys.TFTestRepeats] = App.Vm.TFTestRepeats;
             appData.Values[AppSettingsKeys.TFTextToTranslate] = App.Vm.TFTextToTranslate;
 
+            appData.Values[AppSettingsKeys.TranslateSaveToCache] = App.Vm.TranslateSaveToCache;
 
-
+            
 
             appData.Values[AppSettingsKeys.IsMaximized] = IsMaximized;
             appData.Values[AppSettingsKeys.WindowLeft] = WindowLeft;
@@ -122,7 +138,8 @@ namespace Translator
             appData.Values[AppSettingsKeys.WindowScale] = WindowScale;
             appData.Values[AppSettingsKeys.LastNavItemTag] = LastNavItemTag;
 
-            appData.Values[AppSettingsKeys.TFLastSelectorBarItemTag] = TFLastSelectorBarItemTag;
+            appData.Values[AppSettingsKeys.TFLastTabIndex] = App.Vm.TFLastTabIndex;
+
 
         }
 

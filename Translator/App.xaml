@@ -11,6 +11,14 @@
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+
+            <x:Double
+                x:Key="ListViewItemMinHeight">16</x:Double>
+
+
         </ResourceDictionary>
+
+
+
     </Application.Resources>
 </Application>

@@ -50,7 +50,7 @@
         <NavigationView.MenuItems>
             <NavigationViewItem
                 x:Name="nviTarget"
-                Icon="Folder"
+                Icon="Home"
                 Content="1. Target a Project"
                 Tag="Target" />
             <NavigationViewItem

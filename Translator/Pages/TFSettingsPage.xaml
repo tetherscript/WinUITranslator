@@ -6,11 +6,59 @@
     xmlns:local="using:Translator"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Translator"
     mc:Ignorable="d">
 
-    <Grid>
-        <Frame
-            Loaded="FrTFSettings_Loaded"
-            x:Name="frTFSettings" />
+    <Page.Resources>
+        <converters:InvBoolConv
+            x:Key="InvBoolConv" />
+        <converters:BoolToOpacityConv
+            x:Key="BoolToOpacityConv" />
+    </Page.Resources>
+
+    <Grid
+        Margin="10 20 10 10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel
+            Grid.Row="0"
+            Orientation="Horizontal"
+            Spacing="20">
+            <Button
+                IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                Command="{x:Bind Vm.TFTestLoadSettingsCommand}"
+                Content="Load" />
+            <Button
+                IsEnabled="{x:Bind Vm.TFSettingsModified, Mode=OneWay}"
+                Command="{x:Bind Vm.TFTestSaveSettingsCommand}"
+                Content="Save" />
+        </StackPanel>
+
+        <TextBox
+            Grid.Row="1"
+            Margin="0 10 0 0"
+            FontFamily="Courier New"
+            AcceptsReturn="True"
+            TextWrapping="Wrap"
+            FontWeight="Light"
+            IsReadOnly="false"
+            TextAlignment="Left"
+            VerticalAlignment="Stretch"
+            IsSpellCheckEnabled="False"
+            Text="{x:Bind Vm.TFSettings, Mode=TwoWay}"
+            PlaceholderText=""
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            IsTextPredictionEnabled="False">
+        </TextBox>
     </Grid>
 </Page>

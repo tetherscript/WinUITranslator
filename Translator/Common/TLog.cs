@@ -9,6 +9,9 @@ namespace Translator
         public enum eLogItemType { inf, err, dbg, sep };
         public enum eLogSeparatorType { lineWide, lineShort };
 
+        public static  string SepWide = new string ('━', 60);
+        public static string SepNarrow = new string ('━', 30);
+
         private static int _logScanCounter = 0;
         private static int _logTranslateCounter = 0;
         private static int _logTFCounter = 0;
@@ -122,7 +125,7 @@ namespace Translator
             else
             if (mode == eMode.translate)
             {
-                App.Vm.TranslateLog = TranslateText;
+                //App.Vm.TranslateLog = TranslateText;
             }
             else
             if (mode == eMode.tfTranslate)
@@ -143,7 +146,7 @@ namespace Translator
             if (mode == eMode.translate)
             {
                 _logTranslateCounter = 0;
-                App.Vm.TranslateLog = "";
+                //App.Vm.TranslateLog = "";
                 TranslateText = "";
             }
             else

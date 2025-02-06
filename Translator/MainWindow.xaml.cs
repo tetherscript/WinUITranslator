@@ -39,11 +39,6 @@ namespace Translator
             var appWindow = AppWindow.GetFromWindowId(windowId);
             appWindow.Closing += AppWindow_Closing;
 
-            Vm.TranslationFunctions.Clear();
-            foreach (var item in TTransFunc.Types)
-            {
-                Vm.TranslationFunctions.Add(new TVm.TTransFuncName(item, item));
-            }
             TSettings.Load();
 
             nint MainWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(this);

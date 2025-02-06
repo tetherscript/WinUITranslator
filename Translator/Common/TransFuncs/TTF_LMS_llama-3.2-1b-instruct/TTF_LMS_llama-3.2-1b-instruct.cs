@@ -110,7 +110,7 @@ namespace Translator
                 {
                     string loadedJson = File.ReadAllText(path);
                     // Deserialize to a list of LocalizedEntry
-                    var newEntries = JsonSerializer.Deserialize<List<TUtils.HintKeyValEntry>>(
+                    var newEntries = JsonSerializer.Deserialize<List<TUtils.SettingsKeyValEntry>>(
                         loadedJson,
                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
                     );
@@ -142,7 +142,7 @@ namespace Translator
             {
                 try
                 {
-                    var entries = Settings.Select(kvp => new TUtils.HintKeyValEntry
+                    var entries = Settings.Select(kvp => new TUtils.SettingsKeyValEntry
                     {
                         Key = kvp.Key,
                         Value = kvp.Value
@@ -164,6 +164,27 @@ namespace Translator
             else
                 return false;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //OPENAI API TRANSLATION FUNCTION
         public static string Translate(TLog.eMode mode, string fromCulture, string toCulturestring,
@@ -315,6 +336,160 @@ namespace Translator
                 return null;
             }
         }
+
+
+
+
+        ////OPENAI API TRANSLATION FUNCTION
+        //public static string Translate(TLog.eMode mode, string fromCulture, string toCulturestring,
+        //    string textToTranslate, string hintToken)
+        //{
+        //    string openAiApiKey = "lm-studio";
+
+        //    const string openAiChatEndpoint = "http://localhost:1234/v1/chat/completions";
+
+        //    using HttpClient httpClient = new HttpClient();
+
+        //    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", openAiApiKey);
+        //    if (!Settings.TryGetValue(hintToken, out string hint))
+        //    {
+        //        Log(mode, TLog.eLogItemType.err, 2, "Hint token not found in: " + _settingsFilename);
+        //        return null;
+        //    }
+
+
+        //    //need to escape these placeholders in case we are merging them into the hint which always has it's own {0} for the toCulture.
+        //    textToTranslate = TUtils.EscapePlaceholders(textToTranslate);
+
+        //    string systemContent = "";
+        //    string userContent = String.Format(hint, textToTranslate, _toCulture);
+
+        //    if (!Settings.TryGetValue("max_tokens", out string mt))
+        //    {
+        //        Log(mode, TLog.eLogItemType.err, 2, "max_tokens not found in: " + _settingsFilename);
+        //        return null;
+        //    }
+        //    if (!int.TryParse(mt, out _requestBodyMaxTokens))
+        //    {
+        //        _requestBodyMaxTokens = 1000;
+        //    }
+
+        //    Log(mode, TLog.eLogItemType.dbg, 2, "hintToken=" + hintToken);
+        //    Log(mode, TLog.eLogItemType.dbg, 2, "systemContent=" + systemContent);
+        //    Log(mode, TLog.eLogItemType.dbg, 2, "userContent=" + userContent);
+        //    Log(mode, TLog.eLogItemType.dbg, 2, "max_tokens=" + _requestBodyMaxTokens.ToString());
+
+
+        //    var requestBody = new
+        //    {
+        //        model = "llama-3.2-1b-instruct",
+        //        messages = new[]
+        //        {
+        //            new { role = "system", content = systemContent},
+        //            new { role = "user", content = userContent}
+        //            },
+        //        temperature = 0.0,  //keep it at zero so it is deterministic
+        //        max_tokens = _requestBodyMaxTokens   //=data sent + data returned
+        //    };
+
+        //    //COMPOSE AND SEND REQUEST
+        //    var requestContent = new StringContent(
+        //        JsonSerializer.Serialize(requestBody),
+        //        Encoding.UTF8,
+        //        "application/json"
+        //    );
+
+        //    string jsonResponse = string.Empty;
+        //    try
+        //    {
+        //        using HttpResponseMessage response = httpClient.PostAsync(openAiChatEndpoint, requestContent).Result;
+        //        HttpStatusCode statusCode = response.StatusCode;
+        //        Log(mode, TLog.eLogItemType.dbg, 2, "HttpResponseMessage.StatusCode = " + statusCode.ToString());
+        //        if (statusCode != System.Net.HttpStatusCode.OK)
+        //        {
+        //            Log(mode, TLog.eLogItemType.err, 2, "Error in response: statusCode = " + statusCode.ToString());
+        //            return null;
+        //        }
+        //        jsonResponse = response.Content.ReadAsStringAsync().Result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log(mode, TLog.eLogItemType.err, 2, "httpClient.PostAsync() error: " + ex.Message);
+        //        return null;
+        //    }
+
+        //    // The response JSON includes an array of "choices"; we want the "message.content"
+        //    // of the first choice. For structure details, see:
+        //    // https://platform.openai.com/docs/guides/chat/introduction
+        //    string doctxt = string.Empty;
+        //    try
+        //    {
+        //        using JsonDocument doc = JsonDocument.Parse(jsonResponse);
+        //        JsonElement root = doc.RootElement;
+        //        JsonElement choices = root.GetProperty("choices");
+        //        JsonElement error;
+        //        if (root.TryGetProperty("error", out error))
+        //        {
+        //            string errorMsg = error.GetProperty("message").GetString() ?? string.Empty;
+        //            string errortype = error.GetProperty("type").GetString() ?? string.Empty;
+        //            Log(mode, TLog.eLogItemType.err, 2, errortype + ": " + errorMsg);
+        //            Log(mode, TLog.eLogItemType.err, 2, userContent);
+        //            return null;
+        //        }
+
+        //        JsonElement firstChoice = choices[0];
+        //        JsonElement message = firstChoice.GetProperty("message");
+        //        string translatedText = message.GetProperty("content").GetString() ?? string.Empty;
+        //        doctxt = root.GetRawText();
+
+        //        //usage
+        //        JsonElement usage = root.GetProperty("usage");
+        //        int promptSendTokens = usage.GetProperty("prompt_tokens").GetInt32();
+        //        int completion_tokens = usage.GetProperty("completion_tokens").GetInt32();
+        //        int total_tokens = usage.GetProperty("total_tokens").GetInt32();
+        //        _totalSendTokens = _totalSendTokens + promptSendTokens;
+        //        _totalReceiveTokens = _totalReceiveTokens + completion_tokens;
+        //        _totalTokens = _totalTokens + total_tokens;
+
+        //        //status
+        //        string finish_reason = firstChoice.GetProperty("finish_reason").GetString();
+        //        switch (finish_reason)
+        //        {
+        //            case "stop":
+        //                string r = translatedText.Trim();
+        //                r = TUtils.UnescapePlaceholders(r);
+        //                //sometimes models like to surround the reponse with double-quotes.  We'll remove them only if the textToTranslate did not have them.
+        //                if (r.StartsWith("\"") && r.EndsWith("\""))
+        //                {
+        //                    if (r.StartsWith("\"") && r.EndsWith("\""))
+        //                    {
+        //                        return r;
+        //                    }
+        //                    else
+        //                    {
+        //                        return r.Substring(1, r.Length - 2);
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    return r;
+        //                }
+        //            case "length":
+        //                Log(mode, TLog.eLogItemType.err, 2, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent);
+        //                return null;
+        //            case "content_filter":
+        //                Log(mode, TLog.eLogItemType.err, 2, "The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent);
+        //                return null;
+        //            default: return null;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        // Fallback in case of any unexpected structure
+        //        Log(mode, TLog.eLogItemType.err, 2, _logPrefix + ": Bad API return structure: " + Environment.NewLine + doctxt);
+        //        return null;
+        //    }
+        //}
     }
 }
 

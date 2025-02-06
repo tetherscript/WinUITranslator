@@ -20,6 +20,7 @@ namespace Translator
         public static string TargetStrings_enUS_Path = string.Empty;
         public static string TargetScanLogPath = string.Empty;
         public static string TargetTranslateLogPath = string.Empty;
+        public static string TargetProfilesPath = string.Empty;
 
         public static bool CalcPaths(string targetRootPath)
         {
@@ -38,6 +39,7 @@ namespace Translator
                     TargetStrings_enUS_Path = Path.Combine(TargetStringsPath, @"en-US\Resources.resw");
                     TargetScanLogPath = Path.Combine(TargetRootPath, @"Translator\ScanLog.txt");
                     TargetTranslateLogPath = Path.Combine(TargetRootPath, @"Translator\TranslateLog.txt");
+                    TargetProfilesPath = Path.Combine(TargetRootPath, @"Translator\Profiles");
                     return true;
                 }
                 else
@@ -52,13 +54,14 @@ namespace Translator
                     TargetStrings_enUS_Path = "";
                     TargetScanLogPath = "";
                     TargetTranslateLogPath = "";
+                    TargetProfilesPath = "";
                     return false;
                 }
             }
             else return false;
         }
 
-        public class HintKeyValEntry
+        public class SettingsKeyValEntry
         {
             public string Key { get; set; }
             public string Value { get; set; }
@@ -80,7 +83,7 @@ namespace Translator
         {
             string loadedJson = File.ReadAllText(path);
             // Deserialize to a list of LocalizedEntry
-            var newEntries = JsonSerializer.Deserialize<List<HintKeyValEntry>>(
+            var newEntries = JsonSerializer.Deserialize<List<SettingsKeyValEntry>>(
                 loadedJson,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );
