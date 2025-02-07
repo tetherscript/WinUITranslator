@@ -34,6 +34,7 @@ namespace Translator
             public const string TargetList = "TargetList";
             public const string SelectedProfile = "SelectedTranslationFunction";
             public const string ThemeIndex = "ThemeIndex";
+            public const string IsDarkTheme = "IsDarkTheme";
             public const string Debug = "Debug";
             public const string CacheEditorSearchText = "CacheEditorSearchText";
 
@@ -63,9 +64,14 @@ namespace Translator
                 appData.Values.Clear(); //wipe settings in case it gets messed up            
             }
 
-            App.Vm.ThemeIndex = (appData.Values.ContainsKey(AppSettingsKeys.ThemeIndex)) ?
-                (int)appData.Values[AppSettingsKeys.ThemeIndex] : 0;
+            //App.Vm.ThemeIndex = (appData.Values.ContainsKey(AppSettingsKeys.ThemeIndex)) ?
+            //    (int)appData.Values[AppSettingsKeys.ThemeIndex] : 0;
 
+            bool isDarkTheme = (appData.Values.ContainsKey(AppSettingsKeys.IsDarkTheme)) ?
+                (bool)appData.Values[AppSettingsKeys.IsDarkTheme] : true;
+            App.Vm.IsDarkTheme = isDarkTheme;
+            App.Vm.Theme = isDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
+            
             App.Vm.Debug = (appData.Values.ContainsKey(AppSettingsKeys.Debug)) ?
                 (bool)appData.Values[AppSettingsKeys.Debug] : false;
 
@@ -138,7 +144,8 @@ namespace Translator
         {
             var appData = ApplicationData.Current.LocalSettings;
 
-            appData.Values[AppSettingsKeys.ThemeIndex] = App.Vm.ThemeIndex;
+            appData.Values[AppSettingsKeys.IsDarkTheme] = App.Vm.IsDarkTheme;
+            
             appData.Values[AppSettingsKeys.Debug] = App.Vm.Debug;
 
             appData.Values[AppSettingsKeys.Target] = App.Vm.Target;

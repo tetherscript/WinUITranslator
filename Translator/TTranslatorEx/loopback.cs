@@ -7,7 +7,7 @@ namespace Translator;
 
 public partial class TTranslatorEx
 {
-    public async Task<TTranslatorResult> Translate_Loopback(TLog.eMode mode, string fromCulture, string toCulture, string textToTranslate, string hintToken, Dictionary<string, string> settings, IProgress<TranslateProgressReport> report, CancellationToken cancellationToken)
+    public async Task<TTranslatorResult> Translate_Loopback(TLog.eLogType mode, string fromCulture, string toCulture, string textToTranslate, string hintToken, Dictionary<string, string> settings, IProgress<ProgressReport> report, CancellationToken cancellationToken)
     {
         return new TTranslatorResult(
             true,

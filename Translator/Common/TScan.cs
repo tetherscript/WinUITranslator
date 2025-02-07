@@ -38,7 +38,7 @@ namespace Translator
             //{ "ToggleButton", new[] { "Content" } }
         };
 
-        public static async Task Start(TLog.eMode mode, string targetRootPath)
+        public static async Task Start(TLog.eLogType mode, string targetRootPath)
         {
             IsCancelled = false;
             try
@@ -58,12 +58,12 @@ namespace Translator
             }
         }
 
-        public static void Stop(TLog.eMode mode)
+        public static void Stop(TLog.eLogType mode)
         {
             IsCancelled = true;
         }
 
-        public static async Task ScanAsync(TLog.eMode mode, string targetRootPath)
+        public static async Task ScanAsync(TLog.eLogType mode, string targetRootPath)
         {
             TUtils.CalcPaths(targetRootPath);
             ProgressPerc = 0;
@@ -227,7 +227,7 @@ namespace Translator
 
         }
 
-        private static void ProcessXamlFile(TLog.eMode mode, string filePath, Dictionary<string, string> entriesMap)
+        private static void ProcessXamlFile(TLog.eLogType mode, string filePath, Dictionary<string, string> entriesMap)
         {
             try
             {
@@ -304,7 +304,7 @@ namespace Translator
             }
         }
 
-        private static void SaveAsJson(TLog.eMode mode, string path, Dictionary<string, string> entriesMap)
+        private static void SaveAsJson(TLog.eLogType mode, string path, Dictionary<string, string> entriesMap)
         {
             var entries = entriesMap.Select(kvp => new LocalizedEntry
             {
@@ -317,7 +317,7 @@ namespace Translator
             File.WriteAllText(path, jsonOutput);
         }
 
-        private static void UpdateEnUSReswFile(TLog.eMode mode, Dictionary<string, string> entriesMap, string path)
+        private static void UpdateEnUSReswFile(TLog.eLogType mode, Dictionary<string, string> entriesMap, string path)
         {
             int _counter = 0;
 

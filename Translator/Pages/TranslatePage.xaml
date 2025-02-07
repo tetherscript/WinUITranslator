@@ -18,61 +18,6 @@
             x:Key="BoolToOpacityConv" />
         <converters:BoolToVisibilityConv
             x:Key="BoolToVisibilityConv" />
-        <DataTemplate
-            x:Key="LogItemTemplate"
-            x:DataType="local:TTranslateLogItem">
-
-            <Grid ColumnSpacing="10" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="Auto" />
-                    <ColumnDefinition
-                        Width="Auto" />
-                    <ColumnDefinition
-                        Width="Auto" />
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <TextBlock
-                    Grid.Column="0"
-                    Text="{x:Bind LineNumber}"
-                    Margin="4,2,4,2"
-                    FontFamily="Courier New"
-                    FontWeight="ExtraLight"
-                    TextAlignment="Right"
-                    Opacity="0.5"/>
-               
-                <TextBlock
-                    Grid.Column="1"
-                    Text="{x:Bind Type}"
-                    Margin="4,3,4,3"
-                    TextWrapping="Wrap"
-                    FontFamily="Courier New"
-                    FontWeight="ExtraLight"
-                    Opacity="0.75"/>
-
-                <StackPanel
-                    Grid.Column="2"
-                    Spacing="10">
-                    <TextBlock
-                        Text="{x:Bind Message}"
-                        Margin="4,2,4,2"
-                        FontFamily="Courier New"
-                        TextWrapping="Wrap"/>
-                    <TextBlock
-                        Text="sdfdsf"
-                        Visibility="{x:Bind HasProfileResults, Converter={StaticResource BoolToVisibilityConv}}"
-                        Margin="4,2,4,2"
-                        FontFamily="Courier New"
-                        TextWrapping="Wrap" />
-                </StackPanel>
-            </Grid>
-         </DataTemplate>
     </Page.Resources>
 
     <Grid>

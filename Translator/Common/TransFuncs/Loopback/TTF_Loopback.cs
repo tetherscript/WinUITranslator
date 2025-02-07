@@ -19,14 +19,14 @@ namespace Translator
         private static string _logPrefix = "Loopback";
         private const string _settingsFilename = null;
 
-        private static void Log(TLog.eMode mode, TLog.eLogItemType type, int indent, string msg)
+        private static void Log(TLog.eLogType mode, TLog.eLogItemType type, int indent, string msg)
         {
             TLog.Log(mode, type, indent, _logPrefix + ": " + msg);
         }
 
-        public static bool InitGlobal(TLog.eMode mode, string fromCulture)
+        public static bool InitGlobal(TLog.eLogType mode, string fromCulture)
         {
-            if (mode == TLog.eMode.translate)
+            if (mode == TLog.eLogType.Translate)
             {
                 Log(mode, TLog.eLogItemType.inf, 0, String.Format("InitGlobal: fromCulture={0}", _fromCulture));
                 Log(mode, TLog.eLogItemType.inf, 0, "DESCRIPTION: Just returns the text to translate with a $ prefix.");
@@ -37,12 +37,12 @@ namespace Translator
             return true;
         }
 
-        public static bool InitPerCulture(TLog.eMode mode, string fromCulture, string toCulture)
+        public static bool InitPerCulture(TLog.eLogType mode, string fromCulture, string toCulture)
         {
             return true;
         }
 
-        public static bool DeInitGlobal(TLog.eMode mode)
+        public static bool DeInitGlobal(TLog.eLogType mode)
         {
             return true;
         }
@@ -52,7 +52,7 @@ namespace Translator
             return null;
         }
 
-        public static string Translate(TLog.eMode mode, string fromCulture, string toCulturestring, 
+        public static string Translate(TLog.eLogType mode, string fromCulture, string toCulturestring, 
             string textToTranslate, string hintToken)
         {
             return "$" + textToTranslate;

@@ -23,7 +23,7 @@
             <StackPanel
                 Margin="10,10,10,10">
 
-                <RadioButtons
+                <!--<RadioButtons
                     x:Name="rbTheme"
                     IsTabStop="False"
                     Header="Theme"
@@ -44,7 +44,7 @@
                     Margin="0 10 0 0"
                     OffContent="Simple Log"
                     OnContent="Verbose Log"
-                    IsOn="{x:Bind Vm.Debug, Mode=TwoWay}" />
+                    IsOn="{x:Bind Vm.Debug, Mode=TwoWay}" />-->
 
             </StackPanel>
         </ScrollViewer>

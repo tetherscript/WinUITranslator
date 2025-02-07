@@ -19,13 +19,13 @@ public partial class TTranslatorEx
         public int confidence { get; set; }
     }
 
-    public async Task<TTranslatorResult> Translate_OpenAIAPI(TLog.eMode mode, string fromCulture, string toCulture, string textToTranslate, string hintToken, Dictionary<string, string> settings, IProgress<TranslateProgressReport> report, CancellationToken cancellationToken)
+    public async Task<TTranslatorResult> Translate_OpenAIAPI(TLog.eLogType mode, string fromCulture, string toCulture, string textToTranslate, string hintToken, Dictionary<string, string> settings, IProgress<ProgressReport> report, CancellationToken cancellationToken)
     {
 
         void Log(TLog.eLogItemType logType, int indent, string msg)
         {
-            report?.Report(new TranslateProgressReport(null,
-                new TLogItem(TLog.eMode.translate, logType, indent, msg)));
+            report?.Report(new ProgressReport(null,
+                new TLogItem(TLog.eLogType.Translate, logType, indent, msg, null)));
         }
 
         int _totalSendTokens = 0;
@@ -163,12 +163,26 @@ public partial class TTranslatorEx
         {
 
 
-            using HttpResponseMessage response = httpClient.PostAsync(host, requestContent).Result;
-            HttpStatusCode statusCode = response.StatusCode;
-            Log(TLog.eLogItemType.dbg, 2, "HttpResponseMessage.StatusCode = " + statusCode.ToString());
-            if (statusCode != System.Net.HttpStatusCode.OK)
+            try
             {
-                Log(TLog.eLogItemType.err, 2, "Error in response: statusCode = " + statusCode.ToString());
+                using HttpResponseMessage response = await httpClient.PostAsync(host, requestContent, cancellationToken);
+                jsonResponse = response.Content.ReadAsStringAsync().Result;
+                HttpStatusCode statusCode = response.StatusCode;
+                Log(TLog.eLogItemType.dbg, 2, "HttpResponseMessage.StatusCode = " + statusCode.ToString());
+                if (statusCode != System.Net.HttpStatusCode.OK)
+                {
+                    Log(TLog.eLogItemType.err, 2, "Error in response: statusCode = " + statusCode.ToString());
+                    return new TTranslatorResult(
+                        false,
+                        textToTranslate,
+                        null,
+                        null,
+                        null);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                Log(TLog.eLogItemType.err, 2, "Cancelled.");
                 return new TTranslatorResult(
                     false,
                     textToTranslate,
@@ -176,7 +190,6 @@ public partial class TTranslatorEx
                     null,
                     null);
             }
-            jsonResponse = response.Content.ReadAsStringAsync().Result;
         }
         catch (Exception ex)
         {

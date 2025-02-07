@@ -15,6 +15,23 @@
             <x:Double
                 x:Key="ListViewItemMinHeight">16</x:Double>
 
+            <Color
+                x:Key="SolidBackgroundFillColorBaseAltBrush">#000000</Color>
+
+
+            <Color
+              x:Key="SystemAccentColorLight1">#8888FF</Color>
+            <Color
+                x:Key="SystemAccentColorLight2">#FFFFFF</Color>
+            <!--<Color
+              x:Key="SystemAccentColorLight3">#808080</Color>-->
+            
+            <Color
+                x:Key="SystemAccentColorDark1">#808080</Color>
+            <Color
+                x:Key="SystemAccentColorDark2">#000000</Color>
+            <Color
+                x:Key="SystemAccentColorDark3">#808080</Color>
 
         </ResourceDictionary>
 

@@ -12,7 +12,7 @@ namespace Translator
         private const string _loopback = "loopback";
         private const string _openaiapi = "openai-api";
 
-        public static bool InitGlobal(TLog.eMode mode, string funcType, string fromCulture)
+        public static bool InitGlobal(TLog.eLogType mode, string funcType, string fromCulture)
         {
             //called at the beginning of the translation task
             switch (funcType)
@@ -23,7 +23,7 @@ namespace Translator
             }
         }
 
-        public static bool InitPerCulture(TLog.eMode mode, string funcType, string fromCulture, string toCulture)
+        public static bool InitPerCulture(TLog.eLogType mode, string funcType, string fromCulture, string toCulture)
         {
             //called just before calling the first .Translate call for a culture ex: 'de-DE'
             switch (funcType)
@@ -34,7 +34,7 @@ namespace Translator
             }
         }
 
-        public static string Translate(TLog.eMode mode, string funcType, string fromCulture, string toCulture, string textToTranslate, 
+        public static string Translate(TLog.eLogType mode, string funcType, string fromCulture, string toCulture, string textToTranslate, 
             string hintToken)
         {
             //called for each translateable item
@@ -46,7 +46,7 @@ namespace Translator
             }
         }
 
-        public static bool DeInitGlobal(TLog.eMode mode, string funcType)
+        public static bool DeInitGlobal(TLog.eLogType mode, string funcType)
         {
             //called at the beginning of the translation task
             switch (funcType)

@@ -1,16 +1,20 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.WinUI.Collections;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.Windows.Widgets.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Windows.UI.ViewManagement;
 
 namespace Translator.Log
 {
-    public partial class TLogItemEx(string lineNumber, TLog.eLogItemType type, bool? isSuccessful, string untranslatedText, string? translatedText, int? confidence, string? reasoning, int indent, string? message, SolidColorBrush textColor, bool hasProfileResults) : ObservableObject
+    public partial class TLogItemEx(SolidColorBrush textColor, string lineNumber, TLog.eLogItemType type, int indent, string message,
+        bool hasDetail, List<string> details, string filterableStr) : ObservableObject
     {
         [ObservableProperty]
         private string _lineNumber = lineNumber;
@@ -22,35 +26,25 @@ namespace Translator.Log
         private TLog.eLogItemType _type = type;
 
         [ObservableProperty]
-        private bool? _isSuccessful = isSuccessful;
+        private int _indent = indent;
 
         [ObservableProperty]
-        private string _untranslatedText = untranslatedText;
+        private Thickness _margin = new Thickness(indent * 10, 2, 4, 2);  //Margin="4,2,4,2"
 
         [ObservableProperty]
-        private string? _translatedText = translatedText;
+        private string _message = message;
 
         [ObservableProperty]
-        private int? _confidence = confidence;
+        private bool _hasDetail = hasDetail;
 
         [ObservableProperty]
-        private string? _reasoning = reasoning;
+        private List<string> _details = details;
 
         [ObservableProperty]
-        private int? _indent = indent;
-
-        [ObservableProperty]
-        private string? _message = message;
-
-        [ObservableProperty]
-        private string _filterableStr = untranslatedText + ":" + translatedText + ":" + reasoning + ":" + message;
+        private string _filterableStr = filterableStr;
 
         [ObservableProperty]
         SolidColorBrush _textColor = textColor;
-
-        [ObservableProperty]
-        private bool _hasProfileResults = hasProfileResults;
-
     }
 
     public partial class TLogItemExFilter(string display, string value, bool isChecked) : ObservableObject
@@ -60,7 +54,6 @@ namespace Translator.Log
 
         [ObservableProperty]
         private bool _isChecked = isChecked;
-        
     }
 
     public partial class TVm : ObservableObject
@@ -130,7 +123,6 @@ namespace Translator.Log
         public ucLog()
         {
             this.InitializeComponent();
-
         }
 
         #region LOGITEMS

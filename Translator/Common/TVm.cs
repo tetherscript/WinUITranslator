@@ -24,53 +24,6 @@ using Translator.Log;
 namespace Translator
 {
 
-
-    public partial class TTranslateLogItem(string lineNumber, TLog.eLogItemType type, bool? isSuccessful, string untranslatedText, string? translatedText, int? confidence, string? reasoning, int indent, string? message, SolidColorBrush textColor, bool hasProfileResults) : ObservableObject
-    {
-        [ObservableProperty]
-        private string _lineNumber = lineNumber;
-
-        [ObservableProperty]
-        private DateTime _timeStamp = DateTime.Now;
-
-        [ObservableProperty]
-        private TLog.eLogItemType _type = type;
-
-        [ObservableProperty]
-        private bool? _isSuccessful = isSuccessful;
-
-        [ObservableProperty]
-        private string _untranslatedText = untranslatedText;
-
-        [ObservableProperty]
-        private string? _translatedText = translatedText;
-
-        [ObservableProperty]
-        private int? _confidence = confidence;
-
-        [ObservableProperty]
-        private string? _reasoning = reasoning;
-
-        [ObservableProperty]
-        private int? _indent = indent;
-
-        [ObservableProperty]
-        private string? _message = message;
-
-        [ObservableProperty]
-        private string _filterableStr = untranslatedText + ":" + translatedText + ":" + reasoning + ":" + message;
-
-        [ObservableProperty]
-        SolidColorBrush _textColor = textColor;
-
-
-        [ObservableProperty]
-        private bool _hasProfileResults = hasProfileResults;
-
-    }
-
-
-
     public partial class Pair : ObservableObject
     {
         [ObservableProperty]
@@ -116,13 +69,10 @@ namespace Translator
         private ElementTheme _theme;
 
         [ObservableProperty]
-        private int _themeIndex;
-        partial void OnThemeIndexChanged(int value)
+        private bool _isDarkTheme;
+        partial void OnIsDarkThemeChanged(bool oldValue, bool newValue)
         {
-            if (value != -1)
-            {
-                Theme = (ElementTheme)ThemeIndex;
-            }
+            Theme = newValue ? ElementTheme.Dark : ElementTheme.Light;
         }
 
         [ObservableProperty]
@@ -251,7 +201,7 @@ namespace Translator
         [RelayCommand]
         private async Task StartScan()
         {
-            TLog.Reset(TLog.eMode.scan);
+            TLog.Reset(TLog.eLogType.Scan);
             if (TUtils.CalcPaths(Target))
             {
                 IsBusy = true;
@@ -259,14 +209,14 @@ namespace Translator
                 ScanLog = "Scanning...";
                 ScanLogScrollToBottom();
                 await Task.Delay(100);
-                await TScan.Start(TLog.eMode.scan, TUtils.TargetRootPath);
-                TLog.Save(TLog.eMode.scan, TUtils.TargetScanLogPath);
+                await TScan.Start(TLog.eLogType.Scan, TUtils.TargetRootPath);
+                TLog.Save(TLog.eLogType.Scan, TUtils.TargetScanLogPath);
             }
             else
             {
-                TLog.Log(TLog.eMode.scan, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
+                TLog.Log(TLog.eLogType.Scan, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
             }
-            TLog.Flush(TLog.eMode.scan);
+            TLog.Flush(TLog.eLogType.Scan);
             ScanLogScrollToBottom();
             IsScanning = false;
             IsBusy = false;
@@ -306,7 +256,7 @@ namespace Translator
             await Task.Delay(100);
             _translateCts = new();
             TTranslatorExProc translatorExProc = new ();
-            await translatorExProc.Start(TLog.eMode.translate, Target, SelectedProfile, _translateCts, TranslateSaveToCache);
+            await translatorExProc.Start(TLog.eLogType.Translate, Target, SelectedProfile, _translateCts, TranslateSaveToCache);
             _translateCts.Dispose();
             TranslateProgress = 0;
             IsTranslating = false;
@@ -321,9 +271,29 @@ namespace Translator
         }
 
         #region LOG
-        public void AddTranslateLogItem(TranslateProgressReport item)
+        public void AddLogItem(TLogItem item)
         {
-            SolidColorBrush CalcBrush(string res)
+            int lineNumber = TranslateLogItems.Count;
+            TLogItemEx newItem = new TLogItemEx(
+                GetLogTextColor(item.ItemType),
+                lineNumber.ToString(),
+                item.ItemType,
+                item.Indent,
+                item.Message,
+                (((item.Details == null) || (item.Details.Count == 0)) ? false : true),
+                item.Details,
+                item.ItemType.ToString() + ":" + item.Message
+            );
+            switch (item.LogType)
+            {
+                case TLog.eLogType.Translate: TranslateLogItems.Add(newItem); break;
+                default: break;
+            };
+        }
+
+        private SolidColorBrush GetLogTextColor(TLog.eLogItemType type)
+        {
+            SolidColorBrush GetResourceBrush(string res)
             {
                 if (Application.Current.Resources.TryGetValue(res, out var resource) && resource is SolidColorBrush brush)
                 {
@@ -332,49 +302,16 @@ namespace Translator
                 return new SolidColorBrush(Colors.Gray);
             }
 
-            int lineNumber = TranslateLogItems.Count;
-
-            SolidColorBrush textColor;
-            switch (item.LogItem.itemType.ToString())
+            switch (type)
             {
-                case "sum": textColor = CalcBrush("SystemFillColorSuccessBrush"); break;
-                default: textColor = CalcBrush("TextFillColorPrimaryBrush"); break;
+                case TLog.eLogItemType.inf: return GetResourceBrush("SystemFillColorSuccessBrush");
+                case TLog.eLogItemType.sum: return GetResourceBrush("SystemFillColorSuccessBrush");
+                case TLog.eLogItemType.dbg: return GetResourceBrush("SystemFillColorNeutralBrush");
+                case TLog.eLogItemType.wrn: return GetResourceBrush("SystemFillColorCautionBrush");
+                case TLog.eLogItemType.err: return GetResourceBrush("SystemFillColorCriticalBrush");
+                case TLog.eLogItemType.tra: return GetResourceBrush("AccentTextFillColorSecondaryBrush");
+                default: return GetResourceBrush("TextFillColorPrimaryBrush");
             }
-
-            TLogItemEx x;
-            if (item.TranslatorResult == null)
-            {
-                x = new TLogItemEx(
-                    lineNumber.ToString().PadLeft(4, ' '),
-                    item.LogItem.itemType,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    item.LogItem.indent,
-                    new string(' ', item.LogItem.indent) + item.LogItem.Message,
-                    textColor,
-                    false
-                    );
-            }
-            else
-            {
-                x = new TLogItemEx(
-                    lineNumber.ToString().PadLeft(4, ' '),
-                    item.LogItem.itemType,
-                    item.TranslatorResult.IsSuccessful,
-                    item.TranslatorResult.UntranslatedText,
-                    item.TranslatorResult.TranslatedText,
-                    item.TranslatorResult.Confidence,
-                    item.TranslatorResult.Reasoning,
-                    item.LogItem.indent,
-                    new string(' ', item.LogItem.indent) + item.LogItem.Message,
-                    textColor,
-                    true
-                    );
-            }
-            TranslateLogItems.Add(x);
         }
 
         public ObservableCollection<TLogItemEx> TranslateLogItems = new();
@@ -398,6 +335,8 @@ namespace Translator
                 item.IsChecked = activeFilters.Contains(item.Value);
             }
         }
+
+
 
         public string GetTranslateLogFilter()
         {
@@ -504,7 +443,7 @@ namespace Translator
         private async Task StartTFTest()
         {
             TFIsCancelling = false;
-            TLog.Reset(TLog.eMode.tfTranslate);
+            TLog.Reset(TLog.eLogType.tfTranslate);
             //TranslateLog = "Translating...";
             await Task.Delay(100);
             if (TUtils.CalcPaths(Target))
@@ -517,9 +456,9 @@ namespace Translator
             }
             else
             {
-                TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
+                TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
             }
-            TLog.Flush(TLog.eMode.tfTranslate);
+            TLog.Flush(TLog.eLogType.tfTranslate);
             TFIsTranslating = false;
             IsBusy = false;
         }
@@ -554,7 +493,7 @@ namespace Translator
                 {
                     await Task.Delay(10);
                     if (TFIsCancelling) return;
-                    string trans = await TTranslate.StartTest(TLog.eMode.tfTranslate, TUtils.TargetRootPath,
+                    string trans = await TTranslate.StartTest(TLog.eLogType.tfTranslate, TUtils.TargetRootPath,
                             SelectedProfile, item, TFToCulture);
                     TFLog = TFLog + (trans == null ? "err" : trans) + Environment.NewLine;
                     if (trans == null)

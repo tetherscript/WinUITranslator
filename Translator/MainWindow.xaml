@@ -19,6 +19,8 @@
         Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
+                Width="Auto" />
+            <ColumnDefinition
                 Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -28,6 +30,7 @@
                 Height="*" />
         </Grid.RowDefinitions>
 
+        
         <TextBlock
             Grid.Column="0"
             Grid.Row="0"
@@ -38,6 +41,8 @@
 
         <Frame
             x:Name="frMainPage"
+            Grid.ColumnSpan="2"
+            Grid.Column="0"
             Grid.Row="1"
             Margin="0,0,0,0" />
         

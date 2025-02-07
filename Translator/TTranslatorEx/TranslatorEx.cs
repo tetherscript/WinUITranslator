@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using TeeLocalized;
 using Windows.Storage;
+using Translator.Log;
 
 namespace Translator;
 
@@ -41,25 +42,23 @@ public class TTranslatorResult(bool isSuccessful, string UntranslatedText, strin
 }
 
 
-public class TLogItem(TLog.eMode logType, TLog.eLogItemType itemType, int indent, string message)
+public class TLogItem(TLog.eLogType logType, TLog.eLogItemType itemType, int indent, string message, List<string> details)
 {
-    public DateTime timeStamp { get; set; }
-    public TLog.eMode logType { get; set; } = logType;
-    public TLog.eLogItemType itemType { get; set; } = itemType;
-    public int indent { get; set; } = indent;
+    public TLog.eLogType LogType { get; set; } = logType;
+    public TLog.eLogItemType ItemType { get; set; } = itemType;
+    public int Indent { get; set; } = indent;
     public string Message { get; set; } = message;
+    public List<string> Details { get; set; } = details;
 }
 
-public class TranslateProgressReport
+public class ProgressReport
 {
     public int? PercentComplete { get; set; }
     public TLogItem LogItem { get; set; }
-    public TTranslatorResult TranslatorResult { get; set; }
-    public TranslateProgressReport(int? percentComplete, TLogItem logItem, TTranslatorResult? translatorResult = null)
+    public ProgressReport(int? percentComplete, TLogItem logItem)
     {
         PercentComplete = percentComplete;
         LogItem = logItem;
-        TranslatorResult = translatorResult;
     }
 }
 
@@ -67,24 +66,17 @@ public class TTranslatorExProc
 {
     private CancellationTokenSource? cts = new();
 
-    public async Task Start(TLog.eMode mode, string target, string profile, CancellationTokenSource cancellationToken, bool saveToCache)
+    public async Task Start(TLog.eLogType mode, string target, string profile, CancellationTokenSource cancellationToken, bool saveToCache)
     {
 
         string s = TUtils.TargetTranslatorPath;
-        var progressReporter = new Progress<TranslateProgressReport>(report =>
+        var progressReporter = new Progress<ProgressReport>(report =>
         {
             if (report.PercentComplete != null)
             {
                 App.Vm.TranslateProgress = (int)report.PercentComplete;
             }
-            App.Vm.AddTranslateLogItem(report);
-            //App.Vm.FilteredTranslateLog.Add(new TTranslateLogItem(
-            //    report.LogItem.itemType,
-            //    report.LogItem.
-            //    report.LogItem.Message
-            //    ));
-
-
+            App.Vm.AddLogItem(report.LogItem);
         });
 
         try
@@ -102,7 +94,7 @@ public class TTranslatorExProc
 
 public partial class TTranslatorEx
 {
-    public async Task RunBackgroundTaskAsync(TLog.eMode mode, string target, string profile, IProgress<TranslateProgressReport> progressReport, CancellationToken cancellationToken, bool saveToCache)
+    public async Task RunBackgroundTaskAsync(TLog.eLogType mode, string target, string profile, IProgress<ProgressReport> progressReport, CancellationToken cancellationToken, bool saveToCache)
     {
         TTranslateBatchResult result = await Task.Run(async () =>
         {
@@ -116,36 +108,32 @@ public partial class TTranslatorEx
         return;
     }
 
-    private async Task<bool> TranslateBatch(string target, string profile, IProgress<TranslateProgressReport> report, CancellationToken cancellationToken, bool saveToCache)
+    private async Task<bool> TranslateBatch(string target, string profile, IProgress<ProgressReport> report, CancellationToken cancellationToken, bool saveToCache)
     {
 
         int _progress = 0;
 
-        void Log(TLog.eLogItemType logType, int indent, string msg, TTranslatorResult translatorResult = null)
+        void Log(TLog.eLogItemType logType, int indent, string msg, List<string> details)
         {
-            if (translatorResult == null)
-            {
-
-            }
-            report?.Report(new TranslateProgressReport(_progress,
-                new TLogItem(TLog.eMode.translate, logType, indent, msg), translatorResult));
+            report?.Report(new ProgressReport(_progress,
+                new TLogItem(TLog.eLogType.Translate, logType, indent, msg, details)));
         }
 
         if (cancellationToken.IsCancellationRequested)
         {
-            Log(TLog.eLogItemType.err, 0, "Cancelled.");
+            Log(TLog.eLogItemType.err, 0, "Cancelled.", null);
             return false;
         }
 
 
         if (!TUtils.CalcPaths(target))
         {
-            Log(TLog.eLogItemType.err, 0, "Target root path does not exist: " + Environment.NewLine + target);
+            Log(TLog.eLogItemType.err, 0, "Target root path does not exist: " + Environment.NewLine + target, null);
             return false;
         }
         else
         {
-            Log(TLog.eLogItemType.inf, 0, "Target: " + target);
+            Log(TLog.eLogItemType.inf, 0, "Target: " + target, null);
         }
 
 
@@ -166,12 +154,12 @@ public partial class TTranslatorEx
                 {
                     Settings[entry.Key] = entry.Value;
                 }
-                Log(TLog.eLogItemType.inf, 0, "Profile: " + profile);
+                Log(TLog.eLogItemType.inf, 0, "Profile: " + profile, null);
             }
             catch (Exception ex)
             {
                 Log(TLog.eLogItemType.err, 0, String.Format(
-                    "Error loading profile settings: {0} : {1}", ex.Message, path));
+                    "Error loading profile settings: {0} : {1}", ex.Message, path), null);
                 return false;
             }
         }
@@ -181,14 +169,14 @@ public partial class TTranslatorEx
         stopwatch.Start();
         TUtils.CalcPaths(target);
         string fromCulture = "en-US";
-        Log(TLog.eLogItemType.inf, 0, "fromCulture: " + fromCulture);
+        Log(TLog.eLogItemType.inf, 0, "fromCulture: " + fromCulture, null);
 
 
         #region CACHE
         StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
         TCache.Init(x);
         TCache.InitializeAsync().Wait();
-        Log(TLog.eLogItemType.dbg, 0, "Cache initialized.");
+        Log(TLog.eLogItemType.dbg, 0, "Cache initialized.", null);
         #endregion
 
         #region TRANSLATE
@@ -199,13 +187,13 @@ public partial class TTranslatorEx
 
         if (!File.Exists(TUtils.TargetStrings_enUS_Path))
         {
-            Log(TLog.eLogItemType.err, 0, String.Format("File does not exist: {0}", TUtils.TargetStrings_enUS_Path));
+            Log(TLog.eLogItemType.err, 0, String.Format("File does not exist: {0}", TUtils.TargetStrings_enUS_Path), null);
         }
         XDocument enUSDoc = XDocument.Load(TUtils.TargetStrings_enUS_Path);
 
         var reswFiles = Directory.GetFiles(TUtils.TargetStringsPath, "Resources.resw", SearchOption.AllDirectories);
 
-        Log(TLog.eLogItemType.inf, 0, String.Format("Found {0} Resources.resw files.", reswFiles.Count().ToString()));
+        Log(TLog.eLogItemType.inf, 0, String.Format("Found {0} Resources.resw files.", reswFiles.Count().ToString()), null);
 
         List<string> _unTranslateables = [];
 
@@ -232,7 +220,7 @@ public partial class TTranslatorEx
                 _nonEnUSLanguages++;
 
                 XDocument destDoc = XDocument.Load(destDocFilePath);
-                Log(TLog.eLogItemType.inf, 0, String.Format("Processing {0}...", toCulture));
+                Log(TLog.eLogItemType.inf, 0, String.Format("Processing {0}...", toCulture), null);
 
                 //reset destDoc
                 destDoc.Descendants("data")
@@ -249,7 +237,7 @@ public partial class TTranslatorEx
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        Log(TLog.eLogItemType.err, 0, "Cancelled.");
+                        Log(TLog.eLogItemType.err, 0, "Cancelled.", null);
                         return false;
                     }
 
@@ -279,7 +267,7 @@ public partial class TTranslatorEx
                         if (cachedData != null)
                         {
                             translatedText = cachedData;
-                            Log(TLog.eLogItemType.dbg, 2, "Cache hit: " + cacheKey);
+                            Log(TLog.eLogItemType.dbg, 2, "Cache hit: " + cacheKey, null);
                             _cacheHitCounter++;
                         }
                         else
@@ -288,13 +276,13 @@ public partial class TTranslatorEx
 
                             string s1, s2;
                             s1 = "Cache miss: Translating...";
-                            Log((TSettings.Debug ? TLog.eLogItemType.dbg : TLog.eLogItemType.dbg), 2, s1);
+                            Log((TSettings.Debug ? TLog.eLogItemType.dbg : TLog.eLogItemType.dbg), 2, s1, null);
                             s2 = "Translating: " + hintToken + textToTranslate;
-                            Log(TLog.eLogItemType.tra, 2, s2);
+                            Log(TLog.eLogItemType.tra, 2, s2, null);
 
                             TTranslatorResult translatorResult;
                             textToTranslate = TUtils.EscapePlaceholders(textToTranslate);
-                            translatorResult = await Translate(TLog.eMode.translate, profile, fromCulture, toCulture, textToTranslate, hintToken, Settings, report, cancellationToken);
+                            translatorResult = await Translate(TLog.eLogType.Translate, profile, fromCulture, toCulture, textToTranslate, hintToken, Settings, report, cancellationToken);
 
 
                             if (!translatorResult.IsSuccessful)
@@ -311,7 +299,7 @@ public partial class TTranslatorEx
                             else
                             {
                                 translatedText = TUtils.UnescapePlaceholders(translatorResult.TranslatedText.Trim());
-                                Log(TLog.eLogItemType.tra, 4, "Translation: " + translatedText, translatorResult);
+                                Log(TLog.eLogItemType.tra, 4, "Translation: " + translatedText, null);
                             }
 
                             if ((profile != "loopback") && (saveToCache))
@@ -341,14 +329,14 @@ public partial class TTranslatorEx
                 }
 
                 //add the specials
-                Log(TLog.eLogItemType.inf, 2, "Checking for specials...");
+                Log(TLog.eLogItemType.inf, 2, "Checking for specials...", null);
                 if (SpecialItems.Count == 0)
                 {
-                    Log(TLog.eLogItemType.inf, 4, SpecialItems.Count.ToString() + " specials found.");
+                    Log(TLog.eLogItemType.inf, 4, SpecialItems.Count.ToString() + " specials found.", null);
                 }
                 foreach (var item in SpecialItems.Where(item => item.Culture == toCulture))
                 {
-                    Log(TLog.eLogItemType.inf, 4, "Adding special: " + item.Key.ToString() + "=" + item.Value.ToString());
+                    Log(TLog.eLogItemType.inf, 4, "Adding special: " + item.Key.ToString() + "=" + item.Value.ToString(), null);
 
                     var desDocDataElement1 = new XElement("data",
                         new XAttribute("name", item.Key.ToString()),
@@ -367,30 +355,30 @@ public partial class TTranslatorEx
             }
         }
         await Task.Delay(300);
-        Log(TLog.eLogItemType.sep, 0, TLog.SepWide);
+        Log(TLog.eLogItemType.sep, 0, TLog.SepWide, null);
         if (_unTranslateables.Count > 0)
         {
-            Log(TLog.eLogItemType.sum, 0, "Missing the following xaml element property hint tokens: " + _unTranslateables.Count().ToString());
+            Log(TLog.eLogItemType.sum, 0, "Missing the following xaml element property hint tokens: " + _unTranslateables.Count().ToString(), null);
             foreach (var item in _unTranslateables)
             {
-                Log(TLog.eLogItemType.sum, 2, "  " + item);
+                Log(TLog.eLogItemType.sum, 2, "  " + item, null);
             }
         }
-        Log(TLog.eLogItemType.sum, 0, String.Format(@"Found {0} translateable items in en-US\Resources.resw", _translateableCount));
-        Log(TLog.eLogItemType.sum, 0, String.Format("{0} cache hits", _cacheHitCounter));
-        Log(TLog.eLogItemType.sum, 0, String.Format("{0} cache misses", _cacheMissCounter));
-        Log(TLog.eLogItemType.sum, 0, String.Format("{0} translation attempts", _cacheMissCounter));
-        Log(TLog.eLogItemType.sum, 0, String.Format("{0} failed translations", _failedTranslationCounter));
+        Log(TLog.eLogItemType.sum, 0, String.Format(@"Found {0} translateable items in en-US\Resources.resw", _translateableCount), null);
+        Log(TLog.eLogItemType.sum, 0, String.Format("{0} cache hits", _cacheHitCounter), null);
+        Log(TLog.eLogItemType.sum, 0, String.Format("{0} cache misses", _cacheMissCounter), null);
+        Log(TLog.eLogItemType.sum, 0, String.Format("{0} translation attempts", _cacheMissCounter), null);
+        Log(TLog.eLogItemType.sum, 0, String.Format("{0} failed translations", _failedTranslationCounter), null);
 
         #endregion
 
         //DONE
-        Log(TLog.eLogItemType.inf, 0, TLog.SepWide);
-        Log(TLog.eLogItemType.inf, 0, "Translation complete.");
+        Log(TLog.eLogItemType.inf, 0, TLog.SepWide, null);
+        Log(TLog.eLogItemType.inf, 0, "Translation complete.", null);
         stopwatch.Stop();
         TimeSpan elapsed = stopwatch.Elapsed;
         string elapsedCustomFormat = elapsed.ToString(@"hh\:mm\:ss");
-        Log(TLog.eLogItemType.inf, 0, "Elapsed Time: " + elapsedCustomFormat);
+        Log(TLog.eLogItemType.inf, 0, "Elapsed Time: " + elapsedCustomFormat, null);
 
         return true;
     }

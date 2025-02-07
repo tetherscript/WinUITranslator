@@ -21,12 +21,12 @@ namespace Translator
         private static int _totalTokens = 0;
         private static int _requestBodyMaxTokens = 1000;
 
-        private static void Log(TLog.eMode mode, TLog.eLogItemType type, int indent, string msg)
+        private static void Log(TLog.eLogType mode, TLog.eLogItemType type, int indent, string msg)
         {
             TLog.Log(mode, type, indent, _logPrefix + ": " + msg);
         }
 
-        public static bool InitGlobal(TLog.eMode mode, string fromCulture)
+        public static bool InitGlobal(TLog.eLogType mode, string fromCulture)
         {
             bool res = true;
             _totalSendTokens = 0;
@@ -38,7 +38,7 @@ namespace Translator
                 bool settingsLoaded = LoadSettings(mode);
                 if (settingsLoaded)
                 {
-                    if (mode == TLog.eMode.translate)
+                    if (mode == TLog.eLogType.Translate)
                     {
                         Log(mode, TLog.eLogItemType.inf, 0, String.Format("InitGlobal: fromCulture={0}", _fromCulture));
                         Log(mode, TLog.eLogItemType.inf, 0, "DESCRIPTION: Calls the OpenAI API chat endpoint");
@@ -67,14 +67,14 @@ namespace Translator
             return res;
         }
 
-        public static bool InitPerCulture(TLog.eMode mode, string fromCulture, string toCulture)
+        public static bool InitPerCulture(TLog.eLogType mode, string fromCulture, string toCulture)
         {
             bool res = true;
             _fromCulture = fromCulture;
             _toCulture = toCulture;
             try
             {
-                if (mode == TLog.eMode.translate)
+                if (mode == TLog.eLogType.Translate)
                 {
                     Log(mode, TLog.eLogItemType.inf, 2, String.Format("InitPerCulture: fromCulture={0}, toCulture={1}", _fromCulture, _toCulture));
                 }
@@ -86,7 +86,7 @@ namespace Translator
             return res;
         }
 
-        public static bool DeInitGlobal(TLog.eMode mode)
+        public static bool DeInitGlobal(TLog.eLogType mode)
         {
             string s = String.Format("Summary: Used {0} prompt tokens + {1} completion_tokens = {2} total tokens.",
                 _totalSendTokens, _totalReceiveTokens, _totalTokens);
@@ -100,7 +100,7 @@ namespace Translator
         }
 
         private static Dictionary<string, string> Settings = new Dictionary<string, string>();
-        private static bool LoadSettings(TLog.eMode mode)
+        private static bool LoadSettings(TLog.eLogType mode)
         {
             string path = Path.Combine(TUtils.TargetTranslatorPath, _settingsFilename);
             if (File.Exists(path))
@@ -134,7 +134,7 @@ namespace Translator
                 return false;
         }
 
-        public static bool SaveSettings(TLog.eMode mode)
+        public static bool SaveSettings(TLog.eLogType mode)
         {
             string path = Path.Combine(TUtils.TargetTranslatorPath, _settingsFilename);
             if (File.Exists(path))
@@ -165,7 +165,7 @@ namespace Translator
         }
 
         //OPENAI API TRANSLATION FUNCTION
-        public static string Translate(TLog.eMode mode, string fromCulture, string toCulturestring, 
+        public static string Translate(TLog.eLogType mode, string fromCulture, string toCulturestring, 
             string textToTranslate, string hintToken)
         {
             //returning null means this function has failed, but it could have several causes.

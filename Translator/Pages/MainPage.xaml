@@ -44,6 +44,7 @@
         IsBackButtonVisible="Collapsed"
         IsTabStop="False"
         OpenPaneLength="250"
+        IsSettingsVisible="False"
         SelectionChanged="NvMain_SelectionChanged"
         AlwaysShowHeader="True">
         
@@ -79,6 +80,18 @@
                 Tag="CacheEditor" />
 
         </NavigationView.MenuItems>
+        <NavigationView.PaneFooter>
+            <StackPanel
+                Orientation="Vertical"
+                Margin="10, 0, 10, 0"
+                Visibility="Visible">
+                <ToggleSwitch
+                    IsOn="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}"
+                    OnContent="Dark Mode"
+                    OffContent="Light Mode" />
+            </StackPanel>
+        </NavigationView.PaneFooter>
+
         <Frame
             x:Name="frMain" />
     </NavigationView>
