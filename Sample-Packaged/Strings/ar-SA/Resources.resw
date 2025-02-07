@@ -127,7 +127,7 @@
     <comment>@@</comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
-    <value></value>
+    <value>إغلاق</value>
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">

@@ -56,21 +56,25 @@
             <NavigationViewItem
                 x:Name="nviScan"
                 Icon="Find"
+                IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
                 Content="2. Scan Target Project"
                 Tag="Scan" />
             <NavigationViewItem
                 x:Name="nviTranslate"
                 Icon="Globe"
+                IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
                 Content="3. Translate Scan Results"
                 Tag="Translate" />
             <NavigationViewItem
                 x:Name="nviTranslationFunctions"
                 Icon="Bookmarks"
+                IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
                 Content="Translation Functions"
                 Tag="TranslationFunctions" />
             <NavigationViewItem
                 x:Name="nviCacheEditor"
                 Icon="Edit"
+                IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
                 Content="Cache Editor"
                 Tag="CacheEditor" />
 

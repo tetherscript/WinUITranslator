@@ -7,11 +7,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converters:InvBoolConv
             x:Key="InvBoolConv" />
+        <converters:BoolToOpacityConv
+            x:Key="BoolToOpacityConv" />
+        <converters:BoolToVisibilityConv
+            x:Key="BoolToVisibilityConv" />
     </Page.Resources>
     
     <Grid>
@@ -31,27 +36,81 @@
                 Margin="10,10,10,10">
 
                 <StackPanel
-                    Spacing="20">
+                    Spacing="10">
                     <TextBlock
                         Text="Target Project Root Path">
                     </TextBlock>
+
                     <StackPanel
-                        VerticalAlignment="Top"
-                        Orientation="Horizontal">
-                        <TextBox
-                            x:Name="tbScanPath"
-                            Width="800"
-                            IsReadOnly="False"
-                            FontFamily="Courier New"
-                            HorizontalAlignment="Left"
-                            Text="{x:Bind Vm.Target, Mode=TwoWay}"
-                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                            PlaceholderText="C:\Repo\WinUITranslator\Sample-Packaged"
-                            TextAlignment="Left">
-                        </TextBox>
+                        Spacing="20">
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Spacing="10">
+
+                            <Button
+                                IsEnabled="{x:Bind Vm.IsAddingTarget, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                                Command="{x:Bind Vm.AddTargetCommand}"
+                                Content="Add">
+                            </Button>
+                            <Button
+                                IsEnabled="{x:Bind Vm.IsAddingTarget, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                                Command="{x:Bind Vm.RemoveTargetCommand}"
+                                Content="Remove">
+                            </Button>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Visibility="{x:Bind Vm.IsTargetPathInvalid, Mode=OneWay, Converter={StaticResource BoolToVisibilityConv}}"
+                                Text="&#x274C; Invalid target root path" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Visibility="{x:Bind Vm.TargetNotConfigured, Mode=OneWay, Converter={StaticResource BoolToVisibilityConv}}"
+                                Text="&#x274C; Target not configured" />
+                        </StackPanel>
 
                     </StackPanel>
-                
+                    
+                    <ComboBox
+                        MinWidth="600"
+                        SelectedItem="{x:Bind Vm.Target, Mode=TwoWay}" 
+                        IsEnabled="{x:Bind Vm.IsAddingTarget, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                        ItemsSource="{x:Bind Vm.TargetList}" />
+
+                    <StackPanel
+                        Visibility="{x:Bind Vm.IsAddingTarget, Mode=OneWay}"
+                        Spacing="10">
+                        <StackPanel
+                            VerticalAlignment="Top"
+                            Orientation="Horizontal">
+                            <TextBox
+                                x:Name="tbScanPath"
+                                Width="800"
+                                IsReadOnly="False"
+                                FontFamily="Courier New"
+                                HorizontalAlignment="Left"
+                                Text="{x:Bind Vm.InputTarget, Mode=TwoWay}"
+                                IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                                PlaceholderText="Enter path..."
+                                TextAlignment="Left">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel
+                            VerticalAlignment="Top"
+                            Spacing="60"
+                            Orientation="Horizontal">
+                            <Button
+                                IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                                Command="{x:Bind Vm.AddTargetSaveCommand}"
+                                Content="Save">
+                            </Button>
+                            <Button
+                                IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                                Command="{x:Bind Vm.AddTargetCancelCommand}"
+                                Content="Cancel">
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+
+
                     <TextBlock
                         FontFamily="Courier New"
                         Text="ex: C:\Repo\WinUITranslator\Sample-Packaged">
@@ -69,7 +128,7 @@
 
                     <TextBlock
                         TextWrapping="WrapWholeWords"
-                        Text="Note: If the target project needs to do any dynamic translation (like a status message that you compose programmatically), you must include thisApp\Target\Translator\TLocalized.cs.  You can copy it to the target project, or link to it (recommended).">
+                        Text="Note: If the target project needs to do any dynamic translation (like a status message that you compose programmatically), you must include thisApp\Target\Translator\TLocalized.cs.  You can copy it to the target project, or link to it.">
                     </TextBlock>
 
                     <TextBlock
@@ -111,17 +170,17 @@
                         <StackPanel>
                             <TextBlock
                                 TextWrapping="WrapWholeWords"
-                                Text="  en is the Language">
+                                Text="  en is a Language">
                             </TextBlock>
 
                             <TextBlock
                                 TextWrapping="WrapWholeWords"
-                                Text="  US is the Culture">
+                                Text="  US is a Culture">
                             </TextBlock>
 
                             <TextBlock
                                 TextWrapping="WrapWholeWords"
-                                Text="  en-US is also considered the 'Culture'">
+                                Text="  en-US is also considered a 'Culture'">
                             </TextBlock>
 
                         </StackPanel>

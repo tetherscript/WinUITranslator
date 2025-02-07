@@ -14,6 +14,10 @@ using TeeLocalized;
 using System.Threading;
 using System.Data.SqlTypes;
 using Windows.Devices.Sensors;
+using CommunityToolkit.WinUI.Collections;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI;
+using Translator.Log;
 
 
 
@@ -21,8 +25,11 @@ namespace Translator
 {
 
 
-    public partial class TTranslateLogItem(TLog.eLogItemType type, bool? isSuccessful, string untranslatedText, string? translatedText, int? confidence, string? reasoning, int indent, string? message) : ObservableObject
+    public partial class TTranslateLogItem(string lineNumber, TLog.eLogItemType type, bool? isSuccessful, string untranslatedText, string? translatedText, int? confidence, string? reasoning, int indent, string? message, SolidColorBrush textColor, bool hasProfileResults) : ObservableObject
     {
+        [ObservableProperty]
+        private string _lineNumber = lineNumber;
+
         [ObservableProperty]
         private DateTime _timeStamp = DateTime.Now;
 
@@ -49,6 +56,17 @@ namespace Translator
 
         [ObservableProperty]
         private string? _message = message;
+
+        [ObservableProperty]
+        private string _filterableStr = untranslatedText + ":" + translatedText + ":" + reasoning + ":" + message;
+
+        [ObservableProperty]
+        SolidColorBrush _textColor = textColor;
+
+
+        [ObservableProperty]
+        private bool _hasProfileResults = hasProfileResults;
+
     }
 
 
@@ -62,9 +80,12 @@ namespace Translator
         private string value;
     }
 
-    public partial class TVm(string[] arguments) : ObservableObject
+    public partial class TVm : ObservableObject
     {
-
+        public TVm(string[] arguments)
+        {
+            _arguments = arguments;
+        }
 
         public class TTransFuncName(string display, string name)
         {
@@ -82,7 +103,7 @@ namespace Translator
             }
         }
 
-        private string[] _arguments = arguments;
+        private string[] _arguments = [];
         public string[] Arguments { get => _arguments; set => _arguments = value; }
 
         [ObservableProperty]
@@ -121,7 +142,74 @@ namespace Translator
         private string _target;
         partial void OnTargetChanged(string value)
         {
-            GetProfiles();
+            Profiles.Clear();
+            TUtils.CalcPaths(Target);
+            IsTargetPathInvalid = !TUtils.RootPathIsValid;
+            TargetNotConfigured = !TUtils.IsConfigured;
+            IsValidConfiguredPath = ((!IsTargetPathInvalid) && (!TargetNotConfigured));
+            if (IsValidConfiguredPath)
+            {
+                GetProfiles();
+            }
+        }
+
+        [ObservableProperty]
+        private bool _isTargetPathInvalid = false;
+
+        [ObservableProperty]
+        private bool _targetNotConfigured = false;
+
+        [ObservableProperty]
+        private bool _isValidConfiguredPath = false;
+
+        public ObservableCollection<string> TargetList = new();
+
+        [ObservableProperty]
+        private bool _isAddingTarget;
+
+        [ObservableProperty]
+        private string _inputTarget;
+
+        [RelayCommand]
+        private void AddTarget()
+        {
+            InputTarget = "";
+            IsAddingTarget = true;
+        }
+
+        [RelayCommand]
+        private void RemoveTarget()
+        {
+            IsAddingTarget = false;
+            TargetNotConfigured = false;
+            int index = TargetList.IndexOf(Target);
+            if (index != -1)
+            {
+                IsTargetPathInvalid = false;
+                TargetList.RemoveAt(index);
+                if (TargetList.Count > 0)
+                {
+                    Target = TargetList[0];
+                }
+            }
+        }
+
+        [RelayCommand]
+        private void AddTargetCancel()
+        {
+            IsAddingTarget = false;
+        }
+
+        [RelayCommand]
+        private async void AddTargetSave()
+        {
+            if (InputTarget.Trim() != "")
+            {
+                TargetList.Add(InputTarget.Trim());
+                IsAddingTarget = false;
+                await Task.Delay(400);
+                Target = InputTarget.Trim();
+            }
         }
 
 
@@ -133,6 +221,7 @@ namespace Translator
         {
             if (TUtils.CalcPaths(Target))
             {
+
                 var prfFiles = Directory.EnumerateFiles(TUtils.TargetProfilesPath, "*.prf")
                                         .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
                                         .OrderBy(fileName => fileName)
@@ -151,8 +240,6 @@ namespace Translator
 
 
         #endregion
-
-
 
         #region SCAN
         [ObservableProperty]
@@ -199,27 +286,13 @@ namespace Translator
         #endregion
 
         #region TRANSLATE
-
-
-
-
-
-
-
-        [ObservableProperty]
-        int _transLogSelectionStart = 0;
-
-        [ObservableProperty]
-        int _transLogSelectionLength = 0;
-
-
-
-
-
-
-
-        
         private CancellationTokenSource? _translateCts;
+
+        [ObservableProperty]
+        private bool _isTranslating;
+
+        [ObservableProperty]
+        private int _translateProgress = 0;
 
         [ObservableProperty]
         private bool _translateSaveToCache;
@@ -227,28 +300,14 @@ namespace Translator
         [RelayCommand]
         private async Task StartTranslate()
         {
-            TLog.Reset(TLog.eMode.translate);
-            if (TUtils.CalcPaths(Target))
-            {
-                IsBusy = true;
-                IsTranslating = true;
-                //TranslateLog = "Translating...";
-                TranslateLogScrollToBottom();
-                FilteredTranslateLog.Clear();
-                Sss = "";
-                await Task.Delay(100);
-                //await TTranslate.Start(TLog.eMode.translate, TUtils.TargetRootPath, SelectedProfile);
-                _translateCts = new();
-                TTranslatorExProc translatorExProc = new ();
-                await translatorExProc.Start(TLog.eMode.translate, TUtils.TargetRootPath, SelectedProfile, _translateCts, TranslateSaveToCache);
-                _translateCts.Dispose();
-            }
-            else
-            {
-                TLog.Log(TLog.eMode.translate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
-            }
-            TLog.Flush(TLog.eMode.translate);
-            TranslateLogScrollToBottom();
+            IsBusy = true;
+            IsTranslating = true;
+            TranslateLogItems.Clear();
+            await Task.Delay(100);
+            _translateCts = new();
+            TTranslatorExProc translatorExProc = new ();
+            await translatorExProc.Start(TLog.eMode.translate, Target, SelectedProfile, _translateCts, TranslateSaveToCache);
+            _translateCts.Dispose();
             TranslateProgress = 0;
             IsTranslating = false;
             IsBusy = false;
@@ -261,30 +320,98 @@ namespace Translator
             _translateCts.Cancel();
         }
 
-
-
-
-
-
-
-        private void TranslateLogScrollToBottom()
+        #region LOG
+        public void AddTranslateLogItem(TranslateProgressReport item)
         {
-            //TransLogSelectionStart = TranslateLog.Length;
-            //TransLogSelectionLength = 0;
+            SolidColorBrush CalcBrush(string res)
+            {
+                if (Application.Current.Resources.TryGetValue(res, out var resource) && resource is SolidColorBrush brush)
+                {
+                    return brush;
+                }
+                return new SolidColorBrush(Colors.Gray);
+            }
+
+            int lineNumber = TranslateLogItems.Count;
+
+            SolidColorBrush textColor;
+            switch (item.LogItem.itemType.ToString())
+            {
+                case "sum": textColor = CalcBrush("SystemFillColorSuccessBrush"); break;
+                default: textColor = CalcBrush("TextFillColorPrimaryBrush"); break;
+            }
+
+            TLogItemEx x;
+            if (item.TranslatorResult == null)
+            {
+                x = new TLogItemEx(
+                    lineNumber.ToString().PadLeft(4, ' '),
+                    item.LogItem.itemType,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    item.LogItem.indent,
+                    new string(' ', item.LogItem.indent) + item.LogItem.Message,
+                    textColor,
+                    false
+                    );
+            }
+            else
+            {
+                x = new TLogItemEx(
+                    lineNumber.ToString().PadLeft(4, ' '),
+                    item.LogItem.itemType,
+                    item.TranslatorResult.IsSuccessful,
+                    item.TranslatorResult.UntranslatedText,
+                    item.TranslatorResult.TranslatedText,
+                    item.TranslatorResult.Confidence,
+                    item.TranslatorResult.Reasoning,
+                    item.LogItem.indent,
+                    new string(' ', item.LogItem.indent) + item.LogItem.Message,
+                    textColor,
+                    true
+                    );
+            }
+            TranslateLogItems.Add(x);
         }
 
-        [ObservableProperty]
-        private int _translationFunctionIndex;
+        public ObservableCollection<TLogItemEx> TranslateLogItems = new();
 
-        [ObservableProperty]
-        private bool _isTranslating;
+        public ObservableCollection<TLogItemExFilter> TranslateLogFilters = new();
 
-        //[ObservableProperty]
-        //private string _translateLog;
+        public void SetTranslateLogFilter(string filter)
+        {
+            TranslateLogFilters.Clear();
+            TranslateLogFilters.Add(new TLogItemExFilter("Translations", "tra", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Summary", "sum", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Info", "inf", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Error", "err", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Warning", "wrn", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Debug", "dbg", false));
 
-        [ObservableProperty]
-        private int _translateProgress = 0;
+            string[] activeFilters = filter.Split(',');
 
+            foreach (TLogItemExFilter item in TranslateLogFilters)
+            {
+                item.IsChecked = activeFilters.Contains(item.Value);
+            }
+        }
+
+        public string GetTranslateLogFilter()
+        {
+            List<string> filter = [];
+            foreach (TLogItemExFilter item in TranslateLogFilters)
+            {
+                if (item.IsChecked)
+                {
+                    filter.Add(item.Value);
+                }
+            }
+            return string.Join(",", filter);
+        }
+        #endregion
         #endregion
 
         #region TRANSLATION FUNCTIONS
@@ -680,98 +807,6 @@ namespace Translator
 
 
 
-
-
-
-
-
-
-
-
-        [ObservableProperty]
-        string _sss = "";
-
-
-
-
-
-        //public List<TTranslateLogItem> TranslateLog = new();
-        //public AdvancedCollectionView<TTranslateLogItem> = new(TTranslateLogItem, SqlTruncateException);
-
-        // The collection used by the UI (ListView) to display results
-        public ObservableCollection<TTranslateLogItem> TranslateLog { get; } = new ObservableCollection<TTranslateLogItem>();
-        public ObservableCollection<TTranslateLogItem> FilteredTranslateLog { get; } = new ObservableCollection<TTranslateLogItem>();
-
-
-        public void AddTranslateLogItem(TranslateProgressReport item)
-        {
-            //Sss = Sss + item.LogItem.Message + Environment.NewLine;
-            //return;
-            //Sss.Append(');
-
-            TTranslateLogItem x;
-            if (item.TranslatorResult == null)
-            {
-                x = new TTranslateLogItem(
-                    item.LogItem.itemType,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    item.LogItem.indent,
-                    item.LogItem.Message
-                    );
-            }
-            else
-            {
-                x = new TTranslateLogItem(
-                    item.LogItem.itemType,
-                    item.TranslatorResult.IsSuccessful,
-                    item.TranslatorResult.UntranslatedText,
-                    item.TranslatorResult.TranslatedText,
-                    item.TranslatorResult.Confidence,
-                    item.TranslatorResult.Reasoning,
-                    item.LogItem.indent,
-                    item.LogItem.Message
-                    );
-            }
-            FilteredTranslateLog.Add(x);
-        }
-
-
-        //public partial class TTranslateLogItem(TLog.eLogItemType type, bool isSuccessful, string untranslatedText, string? translatedText, int? confidence, string? reasoning, int indent, string? message) : ObservableObject
-
-    // Search text in the TextBox
-    [ObservableProperty]
-        private string _translateSearchText = string.Empty;
-        partial void OnTranslateSearchTextChanged(string value)
-        {
-            RefreshFilteredTranslationLog(value);
-        }
-
-        private void RefreshFilteredTranslationLog(string text)
-        {
-            if (TranslateLog == null) return;
-            FilteredTranslateLog.Clear();
-
-            var matches = string.IsNullOrEmpty(text)
-                ? TCache._entries
-                : TCache._entries.Where(kvp =>
-                        kvp.Key.Contains(text, System.StringComparison.OrdinalIgnoreCase));
-
-            foreach (var kvp in matches)
-            {
-                FilteredEntries.Add(new Pair { Key = kvp.Key, Value = kvp.Value });
-            }
-
-        }
-
-        [RelayCommand]
-        private void ClearTranslationSearch()
-        {
-            TranslateSearchText = string.Empty;
-        }
     }
 }
 

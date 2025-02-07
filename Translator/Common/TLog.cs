@@ -6,11 +6,11 @@ namespace Translator
     public static class TLog
     {
         public enum eMode { scan, translate, tfTranslate, system }
-        public enum eLogItemType { inf, err, dbg, sep };
+        public enum eLogItemType { inf, err, dbg, sep, sum, tra, wrn };
         public enum eLogSeparatorType { lineWide, lineShort };
 
-        public static  string SepWide = new string ('━', 60);
-        public static string SepNarrow = new string ('━', 30);
+        public static  string SepWide = new string ('━', 30);
+        public static string SepNarrow = new string ('━', 15);
 
         private static int _logScanCounter = 0;
         private static int _logTranslateCounter = 0;

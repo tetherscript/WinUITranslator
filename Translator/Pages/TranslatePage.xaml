@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
+    xmlns:local1="using:Translator.Log"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
 
@@ -15,18 +16,20 @@
             x:Key="InvBoolConv" />
         <converters:BoolToOpacityConv
             x:Key="BoolToOpacityConv" />
-
+        <converters:BoolToVisibilityConv
+            x:Key="BoolToVisibilityConv" />
         <DataTemplate
             x:Key="LogItemTemplate"
             x:DataType="local:TTranslateLogItem">
 
-            <Grid
-                >
+            <Grid ColumnSpacing="10" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition
-                        Width="50" />
+                        Width="Auto" />
                     <ColumnDefinition
-                        Width="100" />
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="Auto" />
                     <ColumnDefinition
                         Width="*" />
                 </Grid.ColumnDefinitions>
@@ -37,56 +40,39 @@
 
                 <TextBlock
                     Grid.Column="0"
-                    Text="{x:Bind Indent}"
-                    FontSize="16"
+                    Text="{x:Bind LineNumber}"
                     Margin="4,2,4,2"
-                    TextWrapping="Wrap"
-                    FontFamily="Courier New" />
-                
+                    FontFamily="Courier New"
+                    FontWeight="ExtraLight"
+                    TextAlignment="Right"
+                    Opacity="0.5"/>
+               
                 <TextBlock
                     Grid.Column="1"
                     Text="{x:Bind Type}"
-                    FontSize="16"
-                    Margin="4,2,4,2"
+                    Margin="4,3,4,3"
                     TextWrapping="Wrap"
-                    FontFamily="Courier New" />
+                    FontFamily="Courier New"
+                    FontWeight="ExtraLight"
+                    Opacity="0.75"/>
 
-                <TextBlock
+                <StackPanel
                     Grid.Column="2"
-                    Text="{x:Bind Message}"
-                    FontSize="16"
-                    Margin="4,2,4,2"
-                    TextWrapping="Wrap"
-                    FontFamily="Courier New" />
-                
+                    Spacing="10">
+                    <TextBlock
+                        Text="{x:Bind Message}"
+                        Margin="4,2,4,2"
+                        FontFamily="Courier New"
+                        TextWrapping="Wrap"/>
+                    <TextBlock
+                        Text="sdfdsf"
+                        Visibility="{x:Bind HasProfileResults, Converter={StaticResource BoolToVisibilityConv}}"
+                        Margin="4,2,4,2"
+                        FontFamily="Courier New"
+                        TextWrapping="Wrap" />
+                </StackPanel>
             </Grid>
-                    
-                <!--<StackPanel
-                Orientation="Horizontal"
-                Spacing="8">
-                --><!--<TextBlock
-                    Text="{x:Bind Indent}"
-                    FontFamily="Courier New"
-                     />--><!--
-                <TextBlock
-                    Text="{x:Bind Message}"
-                    FontSize="16"
-                    Margin="4,2,4,2"
-                    TextWrapping="Wrap"
-                    FontFamily="Courier New"
-                     />
-                --><!--<TextBlock
-                    FontFamily="Courier New"
-                    FontSize="16"
-                    Text="> " />
-                <TextBlock
-                    Opacity="0.7"
-                    FontFamily="Courier New"
-                    FontSize="16"
-                    TextWrapping="Wrap"
-                    Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />--><!--
-            </StackPanel>-->
-        </DataTemplate>
+         </DataTemplate>
     </Page.Resources>
 
     <Grid>
@@ -100,19 +86,21 @@
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
-
-
-
+ 
         <StackPanel
             Grid.Row="0"
-            Margin="10 10 10 10"
+            Margin="10 10 10 0"
             Spacing="10">
+            <TextBlock
+                TextWrapping="WrapWholeWords"
+                Text="Every translateable item in \Strings\en-US\Resources.resw is translated by the selected profile and saved to the other languages in \Strings.">
+            </TextBlock>
             <StackPanel
                 VerticalAlignment="Top"
                 Orientation="Horizontal">
 
                 <StackPanel
-                    Spacing="10">
+                    Spacing="5">
                     <StackPanel
                         Spacing="20"
                         VerticalAlignment="Center"
@@ -158,71 +146,14 @@
                         Minimum="0">
                     </ProgressBar>
                 </StackPanel>
-
             </StackPanel>
-            <TextBlock
-                TextWrapping="WrapWholeWords"
-                Text="For each language listed in the target project's \Strings folder, excluding en-US, every translatable item is sent to the selected Translation Function for processing. The resulting translations are then stored in their corresponding Resources.resw files.  When complete, run the target project and you should see the translations.  See the sample app code for language testing tips.">
-            </TextBlock>
-
-
-
-                <StackPanel 
-                    Orientation="Horizontal"
-                    Margin="10,10,0,0">
-
-                    <RadioButtons
-                        x:Name="rbTheme"
-                        IsTabStop="False"
-                        MaxColumns="3"
-                        SelectedIndex="{x:Bind Vm.ThemeIndex, Mode=TwoWay}">
-                        <RadioButton
-                            x:Uid="Default_rb"
-                            Content="Default" />
-                        <RadioButton
-                            x:Uid="Light_rb"
-                            Content="Light" />
-                        <RadioButton
-                            x:Uid="Dark_rb"
-                            Content="Dark" />
-                    </RadioButtons>
-
-                    <ToggleSwitch
-                        OffContent="Simple Log"
-                        OnContent="Verbose Log"
-                        IsOn="{x:Bind Vm.Debug, Mode=TwoWay}" />
-
-                </StackPanel>
-
         </StackPanel>
 
-        <TextBox
-            Visibility="Collapsed"
+        <local1:ucLog
             Grid.Row="1"
-            Margin="10 0 10 10"
-            FontFamily="Courier New"
-            AcceptsReturn="True"
-            TextWrapping="NoWrap"
-            FontWeight="Light"
-            IsReadOnly="false"
-            TextAlignment="Left"
-            Text="{x:Bind Vm.Sss, Mode=OneWay}"
-            SelectionStart="{x:Bind Vm.TransLogSelectionStart, Mode=OneWay}"
-            SelectionLength="{x:Bind Vm.TransLogSelectionLength, Mode=OneWay}"
-            ScrollViewer.VerticalScrollBarVisibility="Auto"
-            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-            IsTextPredictionEnabled="False">
-        </TextBox>
-
-
-        <!--ItemTemplate="{StaticResource LogItemTemplate}"-->
-
-        <ListView
-            Grid.Row="1"
-            Visibility="Visible"
-            Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
-            ItemsSource="{x:Bind Vm.FilteredTranslateLog}"
-            ItemTemplate="{StaticResource LogItemTemplate}" />
+            Margin="0, 4, 0, 0"
+            LogItems="{x:Bind Vm.TranslateLogItems, Mode=OneWay}"
+            LogFilters="{x:Bind Vm.TranslateLogFilters, Mode=OneWay}" />
 
     </Grid>
 </Page>

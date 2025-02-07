@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json;
 using System;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
 
 namespace Translator
 {
@@ -14,7 +15,6 @@ namespace Translator
         public static string TargetTranslatorXamlElementsPath = string.Empty;
         public static string TargetTranslatorTLocalizedGetsPath = string.Empty;
         public static string TargetTranslatorDetectedXamlElementsPath = string.Empty;
-        public static string TargetTranslatorHintsPath = string.Empty;
         public static string TargetTranslatorSpecialsPath = string.Empty;
         public static string TargetStringsPath = string.Empty;
         public static string TargetStrings_enUS_Path = string.Empty;
@@ -22,25 +22,47 @@ namespace Translator
         public static string TargetTranslateLogPath = string.Empty;
         public static string TargetProfilesPath = string.Empty;
 
+        public static bool RootPathIsValid = false;
+        public static bool IsConfigured = false;
+
+        public static bool IsReady()
+        {
+            return ((RootPathIsValid) && (IsConfigured));
+        }
+
         public static bool CalcPaths(string targetRootPath)
         {
+            IsConfigured = true;
+            RootPathIsValid = false;
             if (targetRootPath != null)
             {
                 if (Directory.Exists(targetRootPath.Trim()))
                 {
+                    RootPathIsValid = true;
                     TargetRootPath = targetRootPath;
                     TargetTranslatorPath = Path.Combine(TargetRootPath, "Translator");
                     TargetTranslatorXamlElementsPath = Path.Combine(TargetRootPath, @"Translator\XamlElements.json");
                     TargetTranslatorTLocalizedGetsPath = Path.Combine(TargetRootPath, @"Translator\TLocalizedGets.json");
                     TargetTranslatorDetectedXamlElementsPath = Path.Combine(TargetRootPath, @"Translator\DetectedXamlElements.json");
-                    TargetTranslatorHintsPath = Path.Combine(TargetRootPath, @"Translator\Hints.json");
                     TargetTranslatorSpecialsPath = Path.Combine(TargetRootPath, @"Translator\Specials.json");
                     TargetStringsPath = Path.Combine(TargetRootPath, "Strings");
                     TargetStrings_enUS_Path = Path.Combine(TargetStringsPath, @"en-US\Resources.resw");
+                    TargetProfilesPath = Path.Combine(TargetRootPath, @"Translator\Profiles");
+
                     TargetScanLogPath = Path.Combine(TargetRootPath, @"Translator\ScanLog.txt");
                     TargetTranslateLogPath = Path.Combine(TargetRootPath, @"Translator\TranslateLog.txt");
-                    TargetProfilesPath = Path.Combine(TargetRootPath, @"Translator\Profiles");
-                    return true;
+
+                    IsConfigured =
+                        ((Directory.Exists(TargetTranslatorPath))
+                        && (Path.Exists(TargetTranslatorXamlElementsPath))
+                        && (Path.Exists(TargetTranslatorTLocalizedGetsPath))
+                        && (Path.Exists(TargetTranslatorDetectedXamlElementsPath))
+                        && (Path.Exists(TargetTranslatorSpecialsPath))
+                        && (Path.Exists(TargetStringsPath))
+                        && (Path.Exists(TargetStrings_enUS_Path))
+                        && (Path.Exists(TargetProfilesPath))
+                    );
+                    return IsConfigured;
                 }
                 else
                 {
@@ -48,7 +70,6 @@ namespace Translator
                     TargetTranslatorXamlElementsPath = "";
                     TargetTranslatorTLocalizedGetsPath = "";
                     TargetTranslatorDetectedXamlElementsPath = "";
-                    TargetTranslatorHintsPath = "";
                     TargetTranslatorSpecialsPath = "";
                     TargetStringsPath = "";
                     TargetStrings_enUS_Path = "";
@@ -58,7 +79,11 @@ namespace Translator
                     return false;
                 }
             }
-            else return false;
+            else
+            {
+                return false;
+            }
+             
         }
 
         public class SettingsKeyValEntry
@@ -152,5 +177,31 @@ namespace Translator
             return false;
         }
     }
+
+
+
+
+
+
+    public class BoolToVisibilityConv : IValueConverter
+    {
+        // Convert from source to target
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is bool boolean)
+                return (((bool)value) ? Visibility.Visible : Visibility.Collapsed);
+            return (double)100.0f;
+        }
+
+        // Convert back from target to source (optional, invert again)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if (value is Visibility vis)
+                return ((Visibility)value == Visibility.Visible ? true : false);
+            return false;
+        }
+    }
+
+
 
 }
