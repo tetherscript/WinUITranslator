@@ -235,6 +235,87 @@ namespace Translator
         private string _scanLog;
         #endregion
 
+        #region LOG
+        public void AddLogItem(TLogItem item)
+        {
+            int lineNumber = TranslateLogItems.Count;
+            TLogItemEx newItem = new TLogItemEx(
+                GetLogTextColor(item.ItemType),
+                lineNumber.ToString(),
+                item.ItemType,
+                item.Indent,
+                item.Message,
+                (((item.Data == null) || (item.Data.Count == 0)) ? false : true),
+                item.Data,
+                (((item.Data == null) || (item.Data.Count == 0)) ? "" : string.Join(Environment.NewLine + new string('━', 30) + Environment.NewLine, item.Data)),
+            item.ItemType.ToString() + ":" + item.Message
+            );
+            switch (item.LogType)
+            {
+                case TLog.eLogType.Translate: TranslateLogItems.Add(newItem); break;
+                default: break;
+            };
+        }
+
+        private SolidColorBrush GetLogTextColor(TLog.eLogItemType type)
+        {
+            SolidColorBrush GetResourceBrush(string res)
+            {
+                if (Application.Current.Resources.TryGetValue(res, out var resource) && resource is SolidColorBrush brush)
+                {
+                    return brush;
+                }
+                return new SolidColorBrush(Colors.Gray);
+            }
+
+            switch (type)
+            {
+                case TLog.eLogItemType.inf: return GetResourceBrush("InfoTextBrush");
+                case TLog.eLogItemType.sum: return GetResourceBrush("SummaryTextBrush");
+                case TLog.eLogItemType.dbg: return GetResourceBrush("DebugTextBrush");
+                case TLog.eLogItemType.wrn: return GetResourceBrush("WarningTextBrush");
+                case TLog.eLogItemType.err: return GetResourceBrush("ErrorTextBrush");
+                case TLog.eLogItemType.tra: return GetResourceBrush("ActionTextBrush");
+                default: return GetResourceBrush("TextFillColorPrimaryBrush");
+            }
+        }
+
+        public ObservableCollection<TLogItemEx> TranslateLogItems = new();
+
+        public ObservableCollection<TLogItemExFilter> TranslateLogFilters = new();
+
+        public void SetTranslateLogFilter(string filter)
+        {
+            TranslateLogFilters.Clear();
+            TranslateLogFilters.Add(new TLogItemExFilter("Translations", "tra", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Summary", "sum", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Info", "inf", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Error", "err", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Warning", "wrn", false));
+            TranslateLogFilters.Add(new TLogItemExFilter("Debug", "dbg", false));
+
+            string[] activeFilters = filter.Split(',');
+
+            foreach (TLogItemExFilter item in TranslateLogFilters)
+            {
+                item.IsChecked = activeFilters.Contains(item.Value);
+            }
+        }
+
+        public string GetTranslateLogFilter()
+        {
+            List<string> filter = [];
+            foreach (TLogItemExFilter item in TranslateLogFilters)
+            {
+                if (item.IsChecked)
+                {
+                    filter.Add(item.Value);
+                }
+            }
+            return string.Join(",", filter);
+        }
+        #endregion
+
         #region TRANSLATE
         private CancellationTokenSource? _translateCts;
 
@@ -269,88 +350,6 @@ namespace Translator
             _translateCts.TryReset();
             _translateCts.Cancel();
         }
-
-        #region LOG
-        public void AddLogItem(TLogItem item)
-        {
-            int lineNumber = TranslateLogItems.Count;
-            TLogItemEx newItem = new TLogItemEx(
-                GetLogTextColor(item.ItemType),
-                lineNumber.ToString(),
-                item.ItemType,
-                item.Indent,
-                item.Message,
-                (((item.Details == null) || (item.Details.Count == 0)) ? false : true),
-                item.Details,
-                item.ItemType.ToString() + ":" + item.Message
-            );
-            switch (item.LogType)
-            {
-                case TLog.eLogType.Translate: TranslateLogItems.Add(newItem); break;
-                default: break;
-            };
-        }
-
-        private SolidColorBrush GetLogTextColor(TLog.eLogItemType type)
-        {
-            SolidColorBrush GetResourceBrush(string res)
-            {
-                if (Application.Current.Resources.TryGetValue(res, out var resource) && resource is SolidColorBrush brush)
-                {
-                    return brush;
-                }
-                return new SolidColorBrush(Colors.Gray);
-            }
-
-            switch (type)
-            {
-                case TLog.eLogItemType.inf: return GetResourceBrush("SystemFillColorSuccessBrush");
-                case TLog.eLogItemType.sum: return GetResourceBrush("SystemFillColorSuccessBrush");
-                case TLog.eLogItemType.dbg: return GetResourceBrush("SystemFillColorNeutralBrush");
-                case TLog.eLogItemType.wrn: return GetResourceBrush("SystemFillColorCautionBrush");
-                case TLog.eLogItemType.err: return GetResourceBrush("SystemFillColorCriticalBrush");
-                case TLog.eLogItemType.tra: return GetResourceBrush("AccentTextFillColorSecondaryBrush");
-                default: return GetResourceBrush("TextFillColorPrimaryBrush");
-            }
-        }
-
-        public ObservableCollection<TLogItemEx> TranslateLogItems = new();
-
-        public ObservableCollection<TLogItemExFilter> TranslateLogFilters = new();
-
-        public void SetTranslateLogFilter(string filter)
-        {
-            TranslateLogFilters.Clear();
-            TranslateLogFilters.Add(new TLogItemExFilter("Translations", "tra", false));
-            TranslateLogFilters.Add(new TLogItemExFilter("Summary", "sum", false));
-            TranslateLogFilters.Add(new TLogItemExFilter("Info", "inf", false));
-            TranslateLogFilters.Add(new TLogItemExFilter("Error", "err", false));
-            TranslateLogFilters.Add(new TLogItemExFilter("Warning", "wrn", false));
-            TranslateLogFilters.Add(new TLogItemExFilter("Debug", "dbg", false));
-
-            string[] activeFilters = filter.Split(',');
-
-            foreach (TLogItemExFilter item in TranslateLogFilters)
-            {
-                item.IsChecked = activeFilters.Contains(item.Value);
-            }
-        }
-
-
-
-        public string GetTranslateLogFilter()
-        {
-            List<string> filter = [];
-            foreach (TLogItemExFilter item in TranslateLogFilters)
-            {
-                if (item.IsChecked)
-                {
-                    filter.Add(item.Value);
-                }
-            }
-            return string.Join(",", filter);
-        }
-        #endregion
         #endregion
 
         #region TRANSLATION FUNCTIONS

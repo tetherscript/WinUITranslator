@@ -19,8 +19,7 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    null,
-                    null);
+                    0);
         }
     }
 }

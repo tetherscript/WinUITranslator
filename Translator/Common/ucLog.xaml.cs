@@ -13,8 +13,12 @@ using Windows.UI.ViewManagement;
 
 namespace Translator.Log
 {
-    public partial class TLogItemEx(SolidColorBrush textColor, string lineNumber, TLog.eLogItemType type, int indent, string message,
-        bool hasDetail, List<string> details, string filterableStr) : ObservableObject
+    public partial class TLogItemDataEx
+    {
+
+    }
+
+    public partial class TLogItemEx(SolidColorBrush textColor, string lineNumber, TLog.eLogItemType type, int indent, string message, bool hasData, List<string> data, string dataStr, string filterableStr) : ObservableObject
     {
         [ObservableProperty]
         private string _lineNumber = lineNumber;
@@ -35,16 +39,23 @@ namespace Translator.Log
         private string _message = message;
 
         [ObservableProperty]
-        private bool _hasDetail = hasDetail;
+        private bool _hasData = hasData;
 
         [ObservableProperty]
-        private List<string> _details = details;
+        private List<string> _data = data;
+
+        [ObservableProperty]
+        private string _dataStr = dataStr;
 
         [ObservableProperty]
         private string _filterableStr = filterableStr;
 
         [ObservableProperty]
         SolidColorBrush _textColor = textColor;
+
+        [ObservableProperty]
+        private bool _showData = false;
+
     }
 
     public partial class TLogItemExFilter(string display, string value, bool isChecked) : ObservableObject

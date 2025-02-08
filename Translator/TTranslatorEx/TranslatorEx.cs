@@ -1,20 +1,15 @@
-﻿using Microsoft.UI.Xaml.Input;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TeeLocalized;
+using Windows.Devices.Sensors;
 using Windows.Storage;
-using Translator.Log;
 
 namespace Translator;
 
@@ -31,24 +26,22 @@ public class TTranslateBatchResult()
 }
 
 
-public class TTranslatorResult(bool isSuccessful, string UntranslatedText, string? TranslatedText, 
-    int? Confidence, string? Reasoning)
+public class TTranslatorResult(bool isSuccessful, string untranslatedText, string translatedText, int confidence)
 {
     public bool IsSuccessful { get; set; } = isSuccessful;
-    public string UntranslatedText { get; set; } = UntranslatedText;
-    public string? TranslatedText { get; set; } = TranslatedText;
-    public int? Confidence { get; set; } = Confidence;
-    public string? Reasoning { get; set; } = Reasoning;
+    public string UntranslatedText { get; set; } = untranslatedText;
+    public string TranslatedText { get; set; } = translatedText;
+    public int Confidence { get; set; } = confidence;
 }
 
 
-public class TLogItem(TLog.eLogType logType, TLog.eLogItemType itemType, int indent, string message, List<string> details)
+public class TLogItem(TLog.eLogType logType, TLog.eLogItemType itemType, int indent, string message, List<string> data)
 {
     public TLog.eLogType LogType { get; set; } = logType;
     public TLog.eLogItemType ItemType { get; set; } = itemType;
     public int Indent { get; set; } = indent;
     public string Message { get; set; } = message;
-    public List<string> Details { get; set; } = details;
+    public List<string> Data { get; set; } = data;
 }
 
 public class ProgressReport
@@ -208,7 +201,6 @@ public partial class TTranslatorEx
 
         int _progValue = 0;
         int _progMax = 100;
-        DateTime _lastASync = DateTime.Now;
 
         int _translateableCount = 0;
 
@@ -314,13 +306,6 @@ public partial class TTranslatorEx
                             new XElement("comment", item.Element("comment").Value));
 
                         destDoc.Root.Add(desDocDataElement);
-                    }
-
-                    TimeSpan ts = DateTime.Now - _lastASync;
-                    if (ts.TotalMilliseconds > (1000 / 30)) //30hz
-                    {
-                        _lastASync = DateTime.Now;
-                        await Task.Delay(1);
                     }
 
                     _progValue++;

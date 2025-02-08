@@ -13,8 +13,7 @@ public partial class TTranslatorEx
             true,
             textToTranslate,
             "$" + textToTranslate,
-            100,
-            null);
+            100);
     }
 }
 

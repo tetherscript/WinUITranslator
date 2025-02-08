@@ -178,11 +178,6 @@ namespace Translator
         }
     }
 
-
-
-
-
-
     public class BoolToVisibilityConv : IValueConverter
     {
         // Convert from source to target
@@ -202,6 +197,23 @@ namespace Translator
         }
     }
 
+    public class InvBoolToVisibilityConv : IValueConverter
+    {
+        // Convert from source to target
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is bool boolean)
+                return (((bool)value) ? Visibility.Collapsed : Visibility.Visible);
+            return (double)100.0f;
+        }
 
+        // Convert back from target to source (optional, invert again)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if (value is Visibility vis)
+                return ((Visibility)value == Visibility.Visible ? false : true);
+            return false;
+        }
+    }
 
 }

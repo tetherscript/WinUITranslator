@@ -21,11 +21,11 @@ public partial class TTranslatorEx
 
     public async Task<TTranslatorResult> Translate_OpenAIAPI(TLog.eLogType mode, string fromCulture, string toCulture, string textToTranslate, string hintToken, Dictionary<string, string> settings, IProgress<ProgressReport> report, CancellationToken cancellationToken)
     {
-
+        List<string> _data = new();
         void Log(TLog.eLogItemType logType, int indent, string msg)
         {
             report?.Report(new ProgressReport(null,
-                new TLogItem(TLog.eLogType.Translate, logType, indent, msg, null)));
+                new TLogItem(TLog.eLogType.Translate, logType, indent, msg, _data)));
         }
 
         int _totalSendTokens = 0;
@@ -41,8 +41,7 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    null,
-                    null);
+                    0);
         }
         List<string> api_key_parts = api_key_raw.Split(':').ToList();
         string apiKey;
@@ -53,9 +52,6 @@ public partial class TTranslatorEx
         else
         {
             apiKey = api_key_raw;
-            //invalid key entry in settings
-            // Log(TLog.eLogItemType.err, 2, "Settings 'api_key' must start with 'environment-variable:'.");
-            //return (null, logItems);
         }
 
         //GET HOST
@@ -67,8 +63,7 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    null,
-                    null);
+                    0);
         }
 
         //GET PROMPT FOR HINT TOKEN
@@ -79,8 +74,7 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     null,
-                     null);
+                     0);
         }
 
         //GET MAX_TOKENS
@@ -91,8 +85,7 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    null,
-                    null);
+                    0);
         }
 
         //GET MODEL
@@ -103,8 +96,7 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     null,
-                     null);
+                     0);
         }
 
         //GET MODEL
@@ -115,10 +107,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     null,
-                     null);
+                     0);
         }
-
 
         using HttpClient httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
@@ -126,11 +116,6 @@ public partial class TTranslatorEx
         //PREPARE PROMPT
         string systemContent = String.Format(systemPrompt, fromCulture, toCulture);
         string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
-
-        Log(TLog.eLogItemType.dbg, 2, "hintToken=" + hintToken);
-        Log(TLog.eLogItemType.dbg, 2, "systemContent=" + systemContent);
-        Log(TLog.eLogItemType.dbg, 2, "userContent=" + userContent);
-        Log(TLog.eLogItemType.dbg, 2, "max_tokens=" + max_tokens);
 
         character_schema = @"{""{\""$schema\"": \""http://json-schema.org/draft-07/schema#\"", \""type\"": \""object\"", \""properties\"": { \""translated\"": { \""type\"": \""string\"", \""description\"": \""The translated text.\"" }, \""confidence\"": { \""type\"": \""integer\"", \""description\"": \""The confidence level of the translation, expressed as an integer.\"" } }, \""required\"": [\""translated\"", \""confidence\""], \""additionalProperties\"": false }""";
 
@@ -158,17 +143,22 @@ public partial class TTranslatorEx
             "application/json"
         );
 
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true
+        };
+        string jsonRequestBody = JsonSerializer.Serialize(requestBody, options);
+        _data.Add("REQUEST_BODY = " + Environment.NewLine + jsonRequestBody);
+
         string jsonResponse = string.Empty;
         try
         {
-
-
             try
             {
                 using HttpResponseMessage response = await httpClient.PostAsync(host, requestContent, cancellationToken);
                 jsonResponse = response.Content.ReadAsStringAsync().Result;
                 HttpStatusCode statusCode = response.StatusCode;
-                Log(TLog.eLogItemType.dbg, 2, "HttpResponseMessage.StatusCode = " + statusCode.ToString());
+                _data.Add("RESPONSE = " + Environment.NewLine + jsonResponse);
                 if (statusCode != System.Net.HttpStatusCode.OK)
                 {
                     Log(TLog.eLogItemType.err, 2, "Error in response: statusCode = " + statusCode.ToString());
@@ -176,8 +166,7 @@ public partial class TTranslatorEx
                         false,
                         textToTranslate,
                         null,
-                        null,
-                        null);
+                        0);
                 }
             }
             catch (OperationCanceledException)
@@ -187,8 +176,7 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    null,
-                    null);
+                    0);
             }
         }
         catch (Exception ex)
@@ -198,10 +186,8 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    null,
-                    null);
+                    0);
         }
-
 
         // The response JSON includes an array of "choices"; we want the "message.content"
         // of the first choice. For structure details, see:
@@ -223,13 +209,14 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     null,
-                     null);
+                     0);
             }
 
             JsonElement firstChoice = choices[0];
             JsonElement message = firstChoice.GetProperty("message");
             string contentJson = message.GetProperty("content").GetString() ?? string.Empty;
+
+            _data.Add("ROOT.CHOICES.MESSAGE.CONTENT = " + contentJson);
 
             // Deserialize to a list of LocalizedEntry
             TContent_openai_api content = JsonSerializer.Deserialize<TContent_openai_api>(
@@ -240,6 +227,7 @@ public partial class TTranslatorEx
             int translationConfidence = content.confidence;
             string translatedText = content.translated.Trim();
             doctxt = root.GetRawText();
+
 
             //usage
             JsonElement usage = root.GetProperty("usage");
@@ -252,6 +240,7 @@ public partial class TTranslatorEx
 
             //status
             string finish_reason = firstChoice.GetProperty("finish_reason").GetString();
+            Log(TLog.eLogItemType.dbg, 2, "Translation data");
             switch (finish_reason)
             {
                 case "stop":
@@ -259,8 +248,7 @@ public partial class TTranslatorEx
                     true,
                     textToTranslate,
                     translatedText,
-                    null,
-                    null);
+                    0);
                     //translatedText.Length - 2), logItems);
                 case "length":
                     Log(TLog.eLogItemType.err, 2, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent);
@@ -268,23 +256,20 @@ public partial class TTranslatorEx
                          false,
                          textToTranslate,
                          null,
-                         null,
-                         null);
+                         0);
                 case "content_filter":
                     Log(TLog.eLogItemType.err, 2, "The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent);
                     return new TTranslatorResult(
                          false,
                          textToTranslate,
                          null,
-                         null,
-                         null);
+                         0);
                 default:
                     return new TTranslatorResult(
                          false,
                          textToTranslate,
                          null,
-                         null,
-                         null);
+                         0);
             }
         }
         catch
@@ -295,8 +280,7 @@ public partial class TTranslatorEx
                  false,
                  textToTranslate,
                  null,
-                 null,
-                 null);
+                 0);
         }
     
     }

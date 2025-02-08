@@ -10,22 +10,21 @@
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
+            
+            
             <!-- Other app resources here -->
 
             <x:Double
                 x:Key="ListViewItemMinHeight">16</x:Double>
-
             <Color
                 x:Key="SolidBackgroundFillColorBaseAltBrush">#000000</Color>
-
-
             <Color
               x:Key="SystemAccentColorLight1">#8888FF</Color>
             <Color
                 x:Key="SystemAccentColorLight2">#FFFFFF</Color>
             <!--<Color
               x:Key="SystemAccentColorLight3">#808080</Color>-->
-            
+           
             <Color
                 x:Key="SystemAccentColorDark1">#808080</Color>
             <Color
@@ -33,9 +32,76 @@
             <Color
                 x:Key="SystemAccentColorDark3">#808080</Color>
 
+
+            <SolidColorBrush
+                x:Key="InfoTextBrush"
+                Color="{ThemeResource InfoTextColor}" />
+            <SolidColorBrush
+                x:Key="DebugTextBrush"
+                Color="{ThemeResource DebugTextColor}" />
+            <SolidColorBrush
+                x:Key="ActionTextBrush"
+                Color="{ThemeResource ActionTextColor}" />
+            <SolidColorBrush
+                x:Key="ErrorTextBrush"
+                Color="{ThemeResource ErrorTextColor}" />
+            <SolidColorBrush
+                x:Key="WarningTextBrush"
+                Color="{ThemeResource WarningTextColor}" />
+            <SolidColorBrush
+                x:Key="SummaryTextBrush"
+                Color="{ThemeResource SummaryTextColor}" />
+
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- Colors for Light Theme -->
+                <ResourceDictionary
+                    x:Key="Light">
+                    <!-- Info: Blue -->
+                    <Color
+                        x:Key="InfoTextColor">#FF4CAF50</Color> 
+                    <!-- Debug: Grey -->
+                    <Color
+                        x:Key="DebugTextColor">#FF9E9E9E</Color>
+                    <!-- Action: Green -->
+                    <Color
+                        x:Key="ActionTextColor">#FF2196F3</Color>
+                    <!-- Error: Red -->
+                    <Color
+                        x:Key="ErrorTextColor">#FFF44336</Color>
+                    <!-- Warning: Amber -->
+                    <Color
+                        x:Key="WarningTextColor">#FFFFC107</Color>
+                    <!-- Summary: Deep Purple -->
+                    <Color
+                        x:Key="SummaryTextColor">#FF673AB7</Color>
+                </ResourceDictionary>
+
+                <!-- Colors for Dark Theme -->
+                <ResourceDictionary
+                    x:Key="Dark">
+                    <!-- Info: Light Blue -->
+                    <Color
+                        x:Key="InfoTextColor">#FFA5D6A7</Color> 
+                    <!-- Debug: Light Grey -->
+                    <Color
+                        x:Key="DebugTextColor">#FFE0E0E0</Color>
+                    <!-- Action: Light Green -->
+                    <Color
+                        x:Key="ActionTextColor">#FF90CAF9</Color>
+                    <!-- Error: Light Red -->
+                    <Color
+                        x:Key="ErrorTextColor">#FFEF9A9A</Color>
+                    <!-- Warning: Light Amber -->
+                    <Color
+                        x:Key="WarningTextColor">#FFFFE082</Color>
+                    <!-- Summary: Light Purple -->
+                    <Color
+                        x:Key="SummaryTextColor">#FFB39DDB</Color>
+                </ResourceDictionary>
+
+            </ResourceDictionary.ThemeDictionaries>
+
         </ResourceDictionary>
-
-
-
+        
     </Application.Resources>
 </Application>
