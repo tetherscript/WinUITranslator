@@ -24,8 +24,7 @@
 > [!NOTE]
 > You use the Translator app to translate your target app.  Here it is using OpenAI to translate the included ```Sample-Packaged``` app from en-US to ar-SA, de-DE, and fr-FR.
 
-![translate1](https://github.com/user-attachments/assets/f2327339-b7ff-4000-a90a-5586c1461967)
-
+<img alt="image" src="https://github.com/user-attachments/assets/5e401a8b-3595-4df2-9aa4-a7699fe12fca" />
 
 ## Why Does this Exist?
 I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package tools, but realized that I really don't understand how the resources/translation/localization thing works.  I figured if I made my own tool that can meet the requirements listed below, I would understand.  I posted this as a public repository to share it, and see what ideas/insights other devs may have.  Now that AI is everywhere, I set out to use AI to do the translations, and it works really well.
