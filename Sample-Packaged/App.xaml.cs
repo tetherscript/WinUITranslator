@@ -37,7 +37,7 @@ namespace Sample_Packaged
             //Comment out the remainder of this function if you want to change system language and log out/in to test.
             //try ar-SA for RTL testing
             //******* 
-            string lang = "en-US"; //en-US  de-DE  fr-FR  ar-SA
+            string lang = "de-DE"; //en-US  de-DE  fr-FR  ar-SA
             Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = lang;
 
             // **Synchronize .NET CultureInfo with PrimaryLanguageOverride**

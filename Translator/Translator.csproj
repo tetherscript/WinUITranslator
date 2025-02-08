@@ -283,6 +283,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Target\Translator\Logs\" />
     <Folder Include="TTranslatorEx\LMStudio\" />
     <Folder Include="TTranslatorEx\OpenAI\" />
   </ItemGroup>

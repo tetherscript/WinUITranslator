@@ -1,17 +1,17 @@
 0001:    Scan started.
-0002:    Scanning target project: E:\Code\VS\TranslatorNet8\Sample-UnPackaged
-0003:      Found: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\App.xaml
-0004:      Found: E:\Code\VS\TranslatorNet8\Sample-UnPackaged\MainWindow.xaml
-0005: E      Rejected E:\Code\VS\TranslatorNet8\Sample-UnPackaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
+0002:    Scanning target project: E:\Code\VS\TranslatorNet8\Sample-Unpackaged
+0003:      Found: E:\Code\VS\TranslatorNet8\Sample-Unpackaged\App.xaml
+0004:      Found: E:\Code\VS\TranslatorNet8\Sample-Unpackaged\MainWindow.xaml
+0005: E      Rejected E:\Code\VS\TranslatorNet8\Sample-Unpackaged\MainWindow.xaml:x:Uid='dot.tb' as it is an invalid XAML/C# resource identifier.
 0006:    Checking .csproj for linked .xaml's...
-0007:      Merging E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Translator\TLocalizedGets.json...
+0007:      Merging E:\Code\VS\TranslatorNet8\Sample-Unpackaged\Translator\TLocalizedGets.json...
 0008:      Found 4 mergeable entries.
 0009:        Merged LoadingFile: @Loading {0}}, please wait...
 0010:        Merged OpenAperture_Generic: @Open the aperture for a shallower depth of field.
 0011:        Merged OpenAperture_MoreContext: !Open the aperture for a shallower depth of field.
 0012:        Merged OpenAperture_MoreContext_Constrained: !!Open the aperture for a shallower depth of field.
 0013:      Merge complete.
-0014:    Updating E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Strings\en-US\Resources.resw
+0014:    Updating E:\Code\VS\TranslatorNet8\Sample-Unpackaged\Strings\en-US\Resources.resw
 0015:      Clearing old entries from en-US/Resources.resw...
 0016:        Adding entries to en-US/Resources.resw...
 0017:          Added Aperture_tb.Text
@@ -37,7 +37,7 @@
 0037:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 0038:    Summary: 0 errors
 0039:    Summary: 18 translateable items found
-0040:    Summary: Updated E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Strings\en-US\Resources.resw
-0041:    Summary: Updated E:\Code\VS\TranslatorNet8\Sample-UnPackaged\Translator\DetectedXamlElements.json
+0040:    Summary: Updated E:\Code\VS\TranslatorNet8\Sample-Unpackaged\Strings\en-US\Resources.resw
+0041:    Summary: Updated E:\Code\VS\TranslatorNet8\Sample-Unpackaged\Translator\DetectedXamlElements.json
 0042:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 0043:    Scan complete.
