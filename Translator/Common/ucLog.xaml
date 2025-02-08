@@ -23,36 +23,6 @@
             x:Key="ListViewItemMinHeight">16</x:Double>
 
         <DataTemplate
-            x:Key="LogItemDataTemplate"
-            x:DataType="local:TLogItemDataEx">
-
-            <Grid
-                ColumnSpacing="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <!--<TextBlock
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    FontWeight="Bold"
-                    Foreground="{x:Bind TextColor, Mode=OneTime}"
-                    Text="{x:Bind}"
-                    Margin="4,2,4,2"
-                    FontFamily="Courier New"
-                    TextWrapping="Wrap" />-->
-
-
-            </Grid>
-
-        </DataTemplate>
-
-        <DataTemplate
             x:Key="LogItemTemplate"
             x:DataType="local:TLogItemEx">
         
@@ -97,25 +67,29 @@
                     Margin="{x:Bind Margin, Mode=OneTime}"
                     Grid.Column="2"
                     Spacing="10">
-                    <TextBlock
+
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Spacing="10">
+
+                        <ToggleButton
+                            Opacity="0.5"
+                            Width="16"
+                            Height="16"
+                            IsChecked="{x:Bind ShowData, Mode=TwoWay}"
+                            Visibility="{x:Bind HasData, Mode=OneWay}" >
+                        </ToggleButton>
+
+                        <TextBlock
                         FontWeight="Bold"
-                        Visibility="{x:Bind HasData, Mode=OneWay, Converter={StaticResource InvBoolToVisibilityConv}}"
                         Foreground="{x:Bind TextColor, Mode=OneTime}"
                         Text="{x:Bind Message}"
                         FontFamily="Courier New"
                         TextWrapping="Wrap" />
 
-                    <ToggleButton
-                        FontFamily="Courier New"
-                        FontWeight="Bold"
-                        MaxHeight="26"
-                        Foreground="{x:Bind TextColor, Mode=OneTime}"
-                        Style="{StaticResource ExpanderHeaderDownStyle}"
-                        IsChecked="{x:Bind ShowData, Mode=TwoWay}"
-                        Visibility="{x:Bind HasData, Mode=OneWay}"
-                        Content="{x:Bind Message}">
-                    </ToggleButton>
-                    
+                    </StackPanel>
+
+
                     <TextBlock
                         FontWeight="Bold"
                         IsTextSelectionEnabled="True"

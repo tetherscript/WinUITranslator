@@ -40,18 +40,16 @@ namespace Translator
 
 
             public const string TranslateSaveToCache = "TranslateSaveToCache";
-
-
             public const string TranslateLogFilter = "TranslateLogFilter";
+            public const string ProfileTestLogFilter = "ProfileTestLogFilter";
 
 
 
-            public const string TFToCulture = "TFToCulture";
-            public const string TFTestRepeats = "TFTestRepeats";
-            public const string TFTextToTranslate = "TFTextToTranslate";
-            public const string TFLastTabIndex = "TFLastTabIndex";
+            public const string ProfileTestLastTabIndex = "ProfileTestLastTabIndex";
+            public const string ProfileTestToCulture = "ProfileTestToCulture";
+            public const string ProfileTestTestRepeats = "ProfileTestTestRepeats";
+            public const string ProfileTestTextToTranslate = "ProfileTestTextToTranslate";
 
-            public const string TFTestText = "TFTestText"; //?
 
         }
 
@@ -63,9 +61,6 @@ namespace Translator
             {
                 appData.Values.Clear(); //wipe settings in case it gets messed up            
             }
-
-            //App.Vm.ThemeIndex = (appData.Values.ContainsKey(AppSettingsKeys.ThemeIndex)) ?
-            //    (int)appData.Values[AppSettingsKeys.ThemeIndex] : 0;
 
             bool isDarkTheme = (appData.Values.ContainsKey(AppSettingsKeys.IsDarkTheme)) ?
                 (bool)appData.Values[AppSettingsKeys.IsDarkTheme] : true;
@@ -79,38 +74,34 @@ namespace Translator
             App.Vm.Target = (appData.Values.ContainsKey(AppSettingsKeys.Target)) ?
                 (string)appData.Values[AppSettingsKeys.Target] : @"C:\Repo\WinUITranslator\Sample-Packaged";
 
-
-            //App.Vm.GetProfiles();
-
             App.Vm.SelectedProfile = (appData.Values.ContainsKey(AppSettingsKeys.SelectedProfile)) ?
                 (string)appData.Values[AppSettingsKeys.SelectedProfile] : "Loopback";
-
 
             App.Vm.SearchText = (appData.Values.ContainsKey(AppSettingsKeys.CacheEditorSearchText)) ?
                 (string)appData.Values[AppSettingsKeys.CacheEditorSearchText] : "";
 
-            App.Vm.TFToCulture = (appData.Values.ContainsKey(AppSettingsKeys.TFToCulture)) ?
-                (string)appData.Values[AppSettingsKeys.TFToCulture] : "de-DE";
+            App.Vm.ProfileTestToCulture = (appData.Values.ContainsKey(AppSettingsKeys.ProfileTestToCulture)) ?
+                (string)appData.Values[AppSettingsKeys.ProfileTestToCulture] : "de-DE";
 
-            App.Vm.TFTestRepeats = (appData.Values.ContainsKey(AppSettingsKeys.TFTestRepeats)) ?
-                (int)appData.Values[AppSettingsKeys.TFTestRepeats] : 1;
+            App.Vm.ProfileTestTestRepeats = (appData.Values.ContainsKey(AppSettingsKeys.ProfileTestTestRepeats)) ?
+                (int)appData.Values[AppSettingsKeys.ProfileTestTestRepeats] : 1;
 
-            App.Vm.TFTextToTranslate = (appData.Values.ContainsKey(AppSettingsKeys.TFTextToTranslate)) ?
-                (string)appData.Values[AppSettingsKeys.TFTextToTranslate] : "@Close\r//@@Click to save save your profile.\r//!Aperture\r//!!Click to adjust white balance.\r//@Loading {0}, please wait...";
+            App.Vm.ProfileTestTextToTranslate = (appData.Values.ContainsKey(AppSettingsKeys.ProfileTestTextToTranslate)) ?
+                (string)appData.Values[AppSettingsKeys.ProfileTestTextToTranslate] : "@Close\r//@@Click to save save your profile.\r//!Aperture\r//!!Click to adjust white balance.\r//@Loading {0}, please wait...";
 
-            App.Vm.TFLastTabIndex = (appData.Values.ContainsKey(AppSettingsKeys.TFLastTabIndex)) ?
-                (int)appData.Values[AppSettingsKeys.TFLastTabIndex] : 0;
-
-
+            App.Vm.ProfileTestLastTabIndex = (appData.Values.ContainsKey(AppSettingsKeys.ProfileTestLastTabIndex)) ?
+                (int)appData.Values[AppSettingsKeys.ProfileTestLastTabIndex] : 0;
 
             App.Vm.TranslateSaveToCache = (appData.Values.ContainsKey(AppSettingsKeys.TranslateSaveToCache)) ?
                 (bool)appData.Values[AppSettingsKeys.TranslateSaveToCache] : false;
-
 
             string TranslateLogFilter = (appData.Values.ContainsKey(AppSettingsKeys.TranslateLogFilter)) ?
                 (string)appData.Values[AppSettingsKeys.TranslateLogFilter] : "inf,sum,wrn,err,tra";
             App.Vm.SetTranslateLogFilter(TranslateLogFilter);
 
+            string ProfileTestLogFilter = (appData.Values.ContainsKey(AppSettingsKeys.ProfileTestLogFilter)) ?
+                (string)appData.Values[AppSettingsKeys.ProfileTestLogFilter] : "inf,sum,wrn,err,tra";
+            App.Vm.SetProfileTestLogFilter(ProfileTestLogFilter);
 
 
 
@@ -152,18 +143,20 @@ namespace Translator
             SaveTargetList();
 
             appData.Values[AppSettingsKeys.SelectedProfile] = App.Vm.SelectedProfile;
-            appData.Values[AppSettingsKeys.TFTestText] = App.Vm.TFTextToTranslate;
+            appData.Values[AppSettingsKeys.ProfileTestTextToTranslate] = App.Vm.ProfileTestTextToTranslate;
             appData.Values[AppSettingsKeys.CacheEditorSearchText] = App.Vm.SearchText;
 
-            appData.Values[AppSettingsKeys.TFToCulture] = App.Vm.TFToCulture;
-            appData.Values[AppSettingsKeys.TFTestRepeats] = App.Vm.TFTestRepeats;
-            appData.Values[AppSettingsKeys.TFTextToTranslate] = App.Vm.TFTextToTranslate;
+            appData.Values[AppSettingsKeys.ProfileTestToCulture] = App.Vm.ProfileTestToCulture;
+            appData.Values[AppSettingsKeys.ProfileTestTestRepeats] = App.Vm.ProfileTestTestRepeats;
+            appData.Values[AppSettingsKeys.ProfileTestTextToTranslate] = App.Vm.ProfileTestTextToTranslate;
 
             appData.Values[AppSettingsKeys.TranslateSaveToCache] = App.Vm.TranslateSaveToCache;
 
             string TranslateLogFilter = App.Vm.GetTranslateLogFilter();
             appData.Values[AppSettingsKeys.TranslateLogFilter] = TranslateLogFilter;
 
+            string ProfileTestLogFilter = App.Vm.GetProfileTestLogFilter();
+            appData.Values[AppSettingsKeys.ProfileTestLogFilter] = ProfileTestLogFilter;
 
 
             appData.Values[AppSettingsKeys.IsMaximized] = IsMaximized;
@@ -174,7 +167,7 @@ namespace Translator
             appData.Values[AppSettingsKeys.WindowScale] = WindowScale;
             appData.Values[AppSettingsKeys.LastNavItemTag] = LastNavItemTag;
 
-            appData.Values[AppSettingsKeys.TFLastTabIndex] = App.Vm.TFLastTabIndex;
+            appData.Values[AppSettingsKeys.ProfileTestLastTabIndex] = App.Vm.ProfileTestLastTabIndex;
 
 
         }

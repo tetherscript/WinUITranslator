@@ -238,7 +238,13 @@ namespace Translator
         #region LOG
         public void AddLogItem(TLogItem item)
         {
-            int lineNumber = TranslateLogItems.Count;
+            int lineNumber = 0;
+            switch (item.LogType)
+            {
+                case TLog.eLogType.Translate: lineNumber = TranslateLogItems.Count; break;
+                case TLog.eLogType.ProfileTest: lineNumber = ProfileTestLogItems.Count; break;
+                default: break;
+            };
             TLogItemEx newItem = new TLogItemEx(
                 GetLogTextColor(item.ItemType),
                 lineNumber.ToString(),
@@ -253,6 +259,7 @@ namespace Translator
             switch (item.LogType)
             {
                 case TLog.eLogType.Translate: TranslateLogItems.Add(newItem); break;
+                case TLog.eLogType.ProfileTest: ProfileTestLogItems.Add(newItem); break;
                 default: break;
             };
         }
@@ -314,6 +321,42 @@ namespace Translator
             }
             return string.Join(",", filter);
         }
+
+        public ObservableCollection<TLogItemEx> ProfileTestLogItems = new();
+
+        public ObservableCollection<TLogItemExFilter> ProfileTestLogFilters = new();
+
+        public void SetProfileTestLogFilter(string filter)
+        {
+            ProfileTestLogFilters.Clear();
+            ProfileTestLogFilters.Add(new TLogItemExFilter("Translations", "tra", false));
+            ProfileTestLogFilters.Add(new TLogItemExFilter("Summary", "sum", false));
+            ProfileTestLogFilters.Add(new TLogItemExFilter("Info", "inf", false));
+            ProfileTestLogFilters.Add(new TLogItemExFilter("Error", "err", false));
+            ProfileTestLogFilters.Add(new TLogItemExFilter("Warning", "wrn", false));
+            ProfileTestLogFilters.Add(new TLogItemExFilter("Debug", "dbg", false));
+
+            string[] activeFilters = filter.Split(',');
+
+            foreach (TLogItemExFilter item in ProfileTestLogFilters)
+            {
+                item.IsChecked = activeFilters.Contains(item.Value);
+            }
+        }
+
+        public string GetProfileTestLogFilter()
+        {
+            List<string> filter = [];
+            foreach (TLogItemExFilter item in ProfileTestLogFilters)
+            {
+                if (item.IsChecked)
+                {
+                    filter.Add(item.Value);
+                }
+            }
+            return string.Join(",", filter);
+        }
+
         #endregion
 
         #region TRANSLATE
@@ -337,7 +380,7 @@ namespace Translator
             await Task.Delay(100);
             _translateCts = new();
             TTranslatorExProc translatorExProc = new ();
-            await translatorExProc.Start(TLog.eLogType.Translate, Target, SelectedProfile, _translateCts, TranslateSaveToCache);
+            await translatorExProc.TranslateStart(TLog.eLogType.Translate, Target, SelectedProfile, _translateCts, TranslateSaveToCache);
             _translateCts.Dispose();
             TranslateProgress = 0;
             IsTranslating = false;
@@ -355,200 +398,107 @@ namespace Translator
         #region TRANSLATION FUNCTIONS
 
         [ObservableProperty]
-        private int _tFLastTabIndex = 0;
+        private int _profileTestLastTabIndex = 0;
 
         [ObservableProperty]
-        int _tFLogSelectionStart = 0;
-
-        [ObservableProperty]
-        int _tFLogSelectionLength = 0;
-
-        [ObservableProperty]
-        private string _tFSettings;
-        partial void OnTFSettingsChanged(string value)
+        private string _profileTestSettings;
+        partial void OnProfileTestSettingsChanged(string value)
         {
-            TFSettingsModified = true;
+            ProfileTestSettingsModified = true;
         }
 
         [ObservableProperty]
-        private bool _tFSettingsModified;
-
+        private bool _profileTestSettingsModified;
 
         [RelayCommand]
-        private void TFTestLoadSettings()
+        private void ProfileTestLoadSettings()
         {
-            //TUtils.CalcPaths(Target);
-            //string path = TTransFunc.GetSettingsPath(SelectedProfile);
-            //if (path == null)
-            //{
-            //    TFSettings = "No settings file specified.";
-            //}
-            //else 
-            //{ 
-            //    try
-            //    {
-            //        string loadedJson = File.ReadAllText(path);
-            //        TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Loaded settings: " + path);
-            //        TFSettings = loadedJson;
-            //        TFSettingsModified = false;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Load setting failed: " + path + ": " + ex.Message);
-            //    }
-            //}
-        }
-
-        [RelayCommand]
-        private async void TFTestSaveSettings()
-        {
-            //TUtils.CalcPaths(Target);
-            //TLog.Reset(TLog.eMode.tfTranslate);
-            //string path = TTransFunc.GetSettingsPath(SelectedProfile);
-            //if (path == null) return;
-            //try
-            //    {
-            //    File.WriteAllText(path, TFSettings);
-            //    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.inf, 0, "Saved settings: " + path);
-            //    TFSettingsModified = false;
-            //}
-            //catch (Exception ex)
-            //{
-            //    TLog.Log(TLog.eMode.tfTranslate, TLog.eLogItemType.err, 0, "Save setting failed: " + path + ": " + ex.Message);
-            //}
-            //TLog.Flush(TLog.eMode.tfTranslate);
-        }
-
-        private void PopulateCultures()
-        {
-
-        var cultures = CultureInfo
-             .GetCultures(CultureTypes.AllCultures)
-             .Select(c => c.Name)
-             .Where(name => !string.IsNullOrWhiteSpace(name)) // Filter out empty strings.
-             .Distinct() // Ensure uniqueness.
-             .OrderBy(name => name).ToList(); // Sort alphabetically.
-
-            // Populate the observable collection.
-            foreach (var culture in cultures)
+            TUtils.CalcPaths(Target);
+            string path = Path.Combine(TUtils.TargetProfilesPath, SelectedProfile + ".prf");
+            if (path == null)
             {
-                CultureList.Add(culture);
-            }
-
-        }
-
-
-        [RelayCommand]
-        private async Task StartTFTest()
-        {
-            TFIsCancelling = false;
-            TLog.Reset(TLog.eLogType.tfTranslate);
-            //TranslateLog = "Translating...";
-            await Task.Delay(100);
-            if (TUtils.CalcPaths(Target))
-            {
-                IsBusy = true;
-                TFIsTranslating = true;
-                TFLog = "";
-                await Task.Delay(10);
-                await TFTranslateBatch();
+                ProfileTestSettings = "No settings file specified.";
             }
             else
             {
-                TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
+                try
+                {
+                    string loadedJson = File.ReadAllText(path);
+                    ProfileTestSettings = loadedJson;
+                    ProfileTestSettingsModified = false;
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
-            TLog.Flush(TLog.eLogType.tfTranslate);
-            TFIsTranslating = false;
+        }
+
+        [RelayCommand]
+        private void ProfileTestSaveSettings()
+        {
+            TUtils.CalcPaths(Target);
+            string path = Path.Combine(TUtils.TargetProfilesPath, SelectedProfile + ".prf");
+            if (path == null) return;
+            try
+            {
+                File.WriteAllText(path, ProfileTestSettings);
+                ProfileTestSettingsModified = false;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        [ObservableProperty]
+        private List<string> _profileTestCultureList = CultureInfo
+            .GetCultures(CultureTypes.AllCultures)
+            .Select(c => c.Name)
+            .Where(name => !string.IsNullOrWhiteSpace(name)) // Filter out empty strings.
+            .Distinct() // Ensure uniqueness.
+            .OrderBy(name => name).ToList();
+
+        [RelayCommand]
+        private async Task ProfileTestStart()
+        {
+            IsBusy = true;
+            ProfileTestIsTranslating = true;
+            ProfileTestLogItems.Clear();
+            _profileTestCts = new();
+            TTranslatorExProc translatorExProc = new();
+            await translatorExProc.ProfileTestStart(TLog.eLogType.ProfileTest, Target, SelectedProfile, _profileTestCts, ProfileTestTextToTranslate, ProfileTestTestRepeats, ProfileTestToCulture);
+            _profileTestCts.Dispose();
+            ProfileTestIsTranslating = false;
             IsBusy = false;
         }
 
-        private void TFTranslateLogScrollToBottom()
-        {
-            TFLogSelectionStart = TFLog.Length;
-            TFLogSelectionLength = 0;
-        }
-
-        [ObservableProperty]
-        private int _tFTranslationFunctionIndex;
-
-        private async Task TFTranslateBatch()
-        {
-            TFLog = "";
-            int _failedTranslationCounter = 0;
-            string[] lines = TFTextToTranslate.Split(new[] { "\r" }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string item in lines)
-            {
-                if (item.StartsWith("//")) 
-                { 
-                    continue;
-                }
-                else
-                {
-                    TFLog = TFLog + item + Environment.NewLine;
-                }
-                (string prefix, _) = TLocalized.SplitPrefix(item);
-                int prefixLength = prefix.Length;
-                for (int i = 0; i < TFTestRepeats; i++)
-                {
-                    await Task.Delay(10);
-                    if (TFIsCancelling) return;
-                    string trans = await TTranslate.StartTest(TLog.eLogType.tfTranslate, TUtils.TargetRootPath,
-                            SelectedProfile, item, TFToCulture);
-                    TFLog = TFLog + (trans == null ? "err" : trans) + Environment.NewLine;
-                    if (trans == null)
-                    {
-                        _failedTranslationCounter++;
-                        if (_failedTranslationCounter == 3)
-                        {
-                            TFLog = TFLog + Environment.NewLine + "Cancelled - too many errors.";
-                            return;
-                        };
-                    }
-                }
-                TFLog = TFLog + new string('━', 60) + Environment.NewLine;
-            }
-        }
-
-        [ObservableProperty]
-        private string _tFToCulture;
-
-        [ObservableProperty]
-        private int _tFTestRepeats;
-
-        [ObservableProperty]
-        private string _tFTextToTranslate;
-
-        [ObservableProperty]
-        private string _tFTestResult = null;
-
-        [ObservableProperty]
-        private bool _tFIsTranslating;
-
-        [ObservableProperty]
-        private string _tFLog;
-
-        [ObservableProperty]
-        private List<string> _cultureList = CultureInfo
-             .GetCultures(CultureTypes.AllCultures)
-             .Select(c => c.Name)
-             .Where(name => !string.IsNullOrWhiteSpace(name)) // Filter out empty strings.
-             .Distinct() // Ensure uniqueness.
-             .OrderBy(name => name).ToList();
-
-        [ObservableProperty]
-        private string _validHintTokens = TLocalized.ValidHintTokenStr;
-
-        [ObservableProperty]
-        private bool _tFIsCancelling = false;
-
         [RelayCommand]
-        private async Task TFCancelTranslate()
+        private void ProfileTestCancelTranslate()
         {
-            TFIsCancelling = true;
-            TFLog = TFLog + "Cancelling..." + Environment.NewLine;
-            await Task.Delay(10);
+            _profileTestCts.TryReset();
+            _profileTestCts.Cancel();
         }
 
+        private CancellationTokenSource? _profileTestCts;
+
+        [ObservableProperty]
+        private int _profileTestProfileIndex;
+
+        [ObservableProperty]
+        private string _profileTestToCulture;
+
+        [ObservableProperty]
+        private int _profileTestTestRepeats;
+
+        [ObservableProperty]
+        private string _profileTestTextToTranslate;
+
+        [ObservableProperty]
+        private bool _profileTestIsTranslating;
+
+        [ObservableProperty]
+        private string _profileTestValidHintTokens = TLocalized.ValidHintTokenStr;
 
         #endregion
 

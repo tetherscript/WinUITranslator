@@ -25,7 +25,7 @@ public partial class TTranslatorEx
         void Log(TLog.eLogItemType logType, int indent, string msg)
         {
             report?.Report(new ProgressReport(null,
-                new TLogItem(TLog.eLogType.Translate, logType, indent, msg, _data)));
+                new TLogItem(mode, logType, indent, msg, _data)));
         }
 
         int _totalSendTokens = 0;
@@ -240,7 +240,7 @@ public partial class TTranslatorEx
 
             //status
             string finish_reason = firstChoice.GetProperty("finish_reason").GetString();
-            Log(TLog.eLogItemType.dbg, 2, "Translation data");
+            //Log(TLog.eLogItemType.dbg, 2, "Translation data");
             switch (finish_reason)
             {
                 case "stop":
@@ -248,7 +248,8 @@ public partial class TTranslatorEx
                     true,
                     textToTranslate,
                     translatedText,
-                    0);
+                    0,
+                    _data);
                     //translatedText.Length - 2), logItems);
                 case "length":
                     Log(TLog.eLogItemType.err, 2, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent);

@@ -7,6 +7,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
+    xmlns:local1="using:Translator.Log"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -45,7 +47,7 @@
                 <TextBlock
                     FontFamily="Courier New"
                     TextWrapping="Wrap"
-                    Text="{x:Bind Vm.ValidHintTokens, Mode=OneTime}" />
+                    Text="{x:Bind Vm.ProfileTestValidHintTokens, Mode=OneTime}" />
                 <TextBlock
                     Text="and Comment out a line with //" />
             </StackPanel>
@@ -63,7 +65,7 @@
             IsReadOnly="false"
             IsSpellCheckEnabled="False"
             TextAlignment="Left"
-            Text="{x:Bind Vm.TFTextToTranslate, Mode=TwoWay}"
+            Text="{x:Bind Vm.ProfileTestTextToTranslate, Mode=TwoWay}"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
             IsTextPredictionEnabled="False">
@@ -78,7 +80,7 @@
             <Button
                 HorizontalAlignment="Center"
                 IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                Command="{x:Bind Vm.StartTFTestCommand}">
+                Command="{x:Bind Vm.ProfileTestStartCommand}">
                 <Button.Content>
                     <StackPanel
                         Orientation="Horizontal"
@@ -89,21 +91,21 @@
                             Width="16"
                             Height="16"
                             HorizontalAlignment="Center"
-                            IsActive="{x:Bind Vm.TFIsTranslating, Mode=OneWay}" />
+                            IsActive="{x:Bind Vm.ProfileTestIsTranslating, Mode=OneWay}" />
                     </StackPanel>
                 </Button.Content>
             </Button>
             <Button
-                IsEnabled="{x:Bind Vm.TFIsTranslating, Mode=OneWay}"
-                Command="{x:Bind Vm.TFCancelTranslateCommand}"
+                IsEnabled="{x:Bind Vm.ProfileTestIsTranslating, Mode=OneWay}"
+                Command="{x:Bind Vm.ProfileTestCancelTranslateCommand}"
                 Content="Cancel" />
             <TextBlock
                 Margin="20, 0, 0, 0"
                 VerticalAlignment="Center"
                 Text="-->" />
             <ComboBox
-                ItemsSource="{x:Bind Vm.CultureList, Mode=OneWay}"
-                SelectedValue="{x:Bind Vm.TFToCulture, Mode=TwoWay}"
+                ItemsSource="{x:Bind Vm.ProfileTestCultureList, Mode=OneWay}"
+                SelectedValue="{x:Bind Vm.ProfileTestToCulture, Mode=TwoWay}"
                 SelectedIndex="0"
                 ToolTipService.ToolTip="The language that the text will be translated into"
                 HorizontalAlignment="Left"
@@ -115,7 +117,7 @@
                 x:Name="NumberBoxSpinButtonPlacementExample"
                 Minimum="1"
                 Maximum="100"
-                Value="{x:Bind Vm.TFTestRepeats, Mode=TwoWay}"
+                Value="{x:Bind Vm.ProfileTestTestRepeats, Mode=TwoWay}"
                 SpinButtonPlacementMode="Hidden"
                 ToolTipService.ToolTip="The number of repeats per hint token type.  Increase this value to see how consistent (deterministic) the translation is."
                 SmallChange="1"
@@ -123,16 +125,12 @@
         </StackPanel>
         
         <!--LOG-->
-        <TextBox
+        <local1:ucLog
             Grid.Row="3"
-            AcceptsReturn="True"
-            Margin="10 0 10 10"
-            FontFamily="Courier New"
-            IsReadOnly="True"
-            VerticalAlignment="Stretch"
-            ScrollViewer.VerticalScrollBarVisibility="Auto"
-            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-            Text="{x:Bind Vm.TFLog, Mode=OneWay}" />
+            Margin="0, 4, 0, 0"
+            LogItems="{x:Bind Vm.ProfileTestLogItems, Mode=OneWay}"
+            LogFilters="{x:Bind Vm.ProfileTestLogFilters, Mode=OneWay}" />
+        
     </Grid>
     
 </Page>

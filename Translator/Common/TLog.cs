@@ -5,7 +5,7 @@ namespace Translator
 {
     public static class TLog
     {
-        public enum eLogType { Scan, Translate, tfTranslate, system }
+        public enum eLogType { Scan, Translate, ProfileTest, system }
         public enum eLogItemType { inf, err, dbg, sep, sum, tra, wrn };
         public enum eLogSeparatorType { lineWide, lineShort };
 
@@ -77,7 +77,7 @@ namespace Translator
             {
                 case eLogType.Scan: _logScanCounter++; break;
                 case eLogType.Translate: _logTranslateCounter++; break;
-                case eLogType.tfTranslate: _logTFCounter++; break;
+                case eLogType.ProfileTest: _logTFCounter++; break;
                 default: break;
             }
         }
@@ -88,7 +88,7 @@ namespace Translator
             {
                 case eLogType.Scan: return _logScanCounter;
                 case eLogType.Translate: return _logTranslateCounter;
-                case eLogType.tfTranslate: return _logTFCounter;
+                case eLogType.ProfileTest: return _logTFCounter;
                 default: return -1;
             }
         }
@@ -99,16 +99,6 @@ namespace Translator
             if (mode == eLogType.Scan)
             {
                 ScanText = ScanText + msg + Environment.NewLine;
-            }
-            else
-            if (mode == eLogType.Translate)
-            {
-                TranslateText = TranslateText + msg + Environment.NewLine;
-            }
-            else
-            if (mode == eLogType.tfTranslate)
-            {
-                TfTranslateText = TfTranslateText + msg + Environment.NewLine;
             }
         }
 
@@ -122,16 +112,6 @@ namespace Translator
             {
                 App.Vm.ScanLog = ScanText;
             }
-            else
-            if (mode == eLogType.Translate)
-            {
-                //App.Vm.TranslateLog = TranslateText;
-            }
-            else
-            if (mode == eLogType.tfTranslate)
-            {
-                App.Vm.TFLog = App.Vm.TFLog + Environment.NewLine + TfTranslateText;
-            }
         }
 
         public static void Reset(eLogType mode)
@@ -142,20 +122,6 @@ namespace Translator
                 App.Vm.ScanLog = "";
                 ScanText = "";
             }
-            else
-            if (mode == eLogType.Translate)
-            {
-                _logTranslateCounter = 0;
-                //App.Vm.TranslateLog = "";
-                TranslateText = "";
-            }
-            else
-            if (mode == eLogType.tfTranslate)
-            {
-                _logTFCounter = 0;
-                App.Vm.TFLog = "";
-                TfTranslateText = "";
-            }
         }
 
         public static string GetText(eLogType mode)
@@ -164,14 +130,14 @@ namespace Translator
             {
                 case eLogType.Scan: return ScanText;
                 case eLogType.Translate: return TranslateText;
-                case eLogType.tfTranslate: return TfTranslateText;
+                case eLogType.ProfileTest: return TfTranslateText;
                 default: return "";
             }
         }
 
         public static void Save(eLogType mode, string path)
         {  
-            if (mode != eLogType.tfTranslate)
+            if (mode != eLogType.ProfileTest)
             {
                 File.WriteAllText(path, GetText(mode));
             }

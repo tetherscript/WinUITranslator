@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TeeLocalized;
-using Windows.Devices.Sensors;
 using Windows.Storage;
 
 namespace Translator;
@@ -25,15 +24,15 @@ public class TTranslateBatchResult()
     public bool IsSuccessful { get; set; }
 }
 
-
-public class TTranslatorResult(bool isSuccessful, string untranslatedText, string translatedText, int confidence)
+public class TTranslatorResult(bool isSuccessful, string untranslatedText, string translatedText, int confidence,
+    List<string> data = null)
 {
     public bool IsSuccessful { get; set; } = isSuccessful;
     public string UntranslatedText { get; set; } = untranslatedText;
     public string TranslatedText { get; set; } = translatedText;
     public int Confidence { get; set; } = confidence;
+    public List<string> Data { get; set; } = data;
 }
-
 
 public class TLogItem(TLog.eLogType logType, TLog.eLogItemType itemType, int indent, string message, List<string> data)
 {
@@ -59,7 +58,7 @@ public class TTranslatorExProc
 {
     private CancellationTokenSource? cts = new();
 
-    public async Task Start(TLog.eLogType mode, string target, string profile, CancellationTokenSource cancellationToken, bool saveToCache)
+    public async Task TranslateStart(TLog.eLogType mode, string target, string profile, CancellationTokenSource cancellationToken, bool saveToCache)
     {
 
         string s = TUtils.TargetTranslatorPath;
@@ -75,7 +74,31 @@ public class TTranslatorExProc
         try
         {
             var TranslatorEx = new TTranslatorEx();
-            await TranslatorEx.RunBackgroundTaskAsync(mode, target, profile, progressReporter, cancellationToken.Token, saveToCache);
+            await TranslatorEx.RunBackgroundTaskAsyncTranslate(mode, target, profile, progressReporter, cancellationToken.Token, saveToCache);
+        }
+        catch (OperationCanceledException)
+        {
+
+        }
+    }
+
+    public async Task ProfileTestStart(TLog.eLogType mode, string target, string profile, CancellationTokenSource cancellationToken, string textToTranslate, int repeats, string toCulture)
+    {
+
+        string s = TUtils.TargetTranslatorPath;
+        var progressReporter = new Progress<ProgressReport>(report =>
+        {
+            if (report.PercentComplete != null)
+            {
+                App.Vm.TranslateProgress = (int)report.PercentComplete;
+            }
+            App.Vm.AddLogItem(report.LogItem);
+        });
+
+        try
+        {
+            var TranslatorEx = new TTranslatorEx();
+            await TranslatorEx.RunBackgroundTaskAsyncProfileTest(mode, target, profile, progressReporter, cancellationToken.Token, textToTranslate, repeats, toCulture);
         }
         catch (OperationCanceledException)
         {
@@ -84,10 +107,9 @@ public class TTranslatorExProc
     }
 }
 
-
 public partial class TTranslatorEx
 {
-    public async Task RunBackgroundTaskAsync(TLog.eLogType mode, string target, string profile, IProgress<ProgressReport> progressReport, CancellationToken cancellationToken, bool saveToCache)
+    public async Task RunBackgroundTaskAsyncTranslate(TLog.eLogType mode, string target, string profile, IProgress<ProgressReport> progressReport, CancellationToken cancellationToken, bool saveToCache)
     {
         TTranslateBatchResult result = await Task.Run(async () =>
         {
@@ -95,11 +117,32 @@ public partial class TTranslatorEx
             {
                 return new TTranslateBatchResult { IsSuccessful = false };
             }
-            bool result = await TranslateBatch(target, profile, progressReport, cancellationToken, saveToCache);
+
+            bool result = false;
+            result = await TranslateBatch(target, profile, progressReport, cancellationToken, saveToCache);
             return new TTranslateBatchResult { IsSuccessful = result };
         }, cancellationToken);
         return;
     }
+
+    public async Task RunBackgroundTaskAsyncProfileTest(TLog.eLogType mode, string target, string profile, IProgress<ProgressReport> progressReport, CancellationToken cancellationToken, string textToTranslate, int repeats, string toCulture)
+    {
+        TTranslateBatchResult result = await Task.Run(async () =>
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return new TTranslateBatchResult { IsSuccessful = false };
+            }
+
+            bool result = false;
+            result = await ProfileTestTranslateBatch(target, profile, progressReport, cancellationToken, textToTranslate, repeats, toCulture);
+            return new TTranslateBatchResult { IsSuccessful = result };
+        }, cancellationToken);
+        return;
+    }
+
+
+
 
     private async Task<bool> TranslateBatch(string target, string profile, IProgress<ProgressReport> report, CancellationToken cancellationToken, bool saveToCache)
     {
@@ -269,8 +312,8 @@ public partial class TTranslatorEx
                             string s1, s2;
                             s1 = "Cache miss: Translating...";
                             Log((TSettings.Debug ? TLog.eLogItemType.dbg : TLog.eLogItemType.dbg), 2, s1, null);
-                            s2 = "Translating: " + hintToken + textToTranslate;
-                            Log(TLog.eLogItemType.tra, 2, s2, null);
+                            s2 = hintToken + textToTranslate;
+                            Log(TLog.eLogItemType.tra, 1, s2, null);
 
                             TTranslatorResult translatorResult;
                             textToTranslate = TUtils.EscapePlaceholders(textToTranslate);
@@ -283,7 +326,7 @@ public partial class TTranslatorEx
                                 _failedTranslationCounter++;
                                 if (_failedTranslationCounter >= 5)
                                 {
-                                    Log(TLog.eLogItemType.err, 2, "Too many translation errors (max 5).  Cancelling...", null);
+                                    Log(TLog.eLogItemType.err, 2, "Too many translation errors (max 5).  Cancelling...", translatorResult.Data);
                                     return false;
                                 }
                                 continue;
@@ -291,7 +334,7 @@ public partial class TTranslatorEx
                             else
                             {
                                 translatedText = TUtils.UnescapePlaceholders(translatorResult.TranslatedText.Trim());
-                                Log(TLog.eLogItemType.tra, 4, "Translation: " + translatedText, null);
+                                Log(TLog.eLogItemType.tra, 2, translatedText, translatorResult.Data);
                             }
 
                             if ((profile != "loopback") && (saveToCache))
@@ -360,6 +403,132 @@ public partial class TTranslatorEx
         //DONE
         Log(TLog.eLogItemType.inf, 0, TLog.SepWide, null);
         Log(TLog.eLogItemType.inf, 0, "Translation complete.", null);
+        stopwatch.Stop();
+        TimeSpan elapsed = stopwatch.Elapsed;
+        string elapsedCustomFormat = elapsed.ToString(@"hh\:mm\:ss");
+        Log(TLog.eLogItemType.inf, 0, "Elapsed Time: " + elapsedCustomFormat, null);
+
+        return true;
+    }
+
+    private async Task<bool> ProfileTestTranslateBatch(string target, string profile, IProgress<ProgressReport> report, CancellationToken cancellationToken, string textToTranslate, int repeats, string toCulture)
+    {
+        int _progress = 0;
+
+        void Log(TLog.eLogItemType logType, int indent, string msg, List<string> details)
+        {
+            report?.Report(new ProgressReport(_progress,
+                new TLogItem(TLog.eLogType.ProfileTest, logType, indent, msg, details)));
+        }
+
+        if (cancellationToken.IsCancellationRequested)
+        {
+            Log(TLog.eLogItemType.err, 0, "Cancelled.", null);
+            return false;
+        }
+
+
+        if (!TUtils.CalcPaths(target))
+        {
+            Log(TLog.eLogItemType.err, 0, "Target root path does not exist: " + Environment.NewLine + target, null);
+            return false;
+        }
+        else
+        {
+            Log(TLog.eLogItemType.inf, 0, "Target: " + target, null);
+        }
+
+        Dictionary<string, string> Settings = new Dictionary<string, string>();
+        string path = Path.Combine(TUtils.TargetProfilesPath, profile + ".prf");
+        if (File.Exists(path))
+        {
+            try
+            {
+                string loadedSettingsJson = File.ReadAllText(path);
+                // Deserialize to a list of LocalizedEntry
+                var SettingsnewEntries = JsonSerializer.Deserialize<List<TUtils.SettingsKeyValEntry>>(
+                    loadedSettingsJson,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                );
+                Settings.Clear();
+                foreach (var entry in SettingsnewEntries)
+                {
+                    Settings[entry.Key] = entry.Value;
+                }
+                Log(TLog.eLogItemType.inf, 0, "Profile: " + profile, null);
+            }
+            catch (Exception ex)
+            {
+                Log(TLog.eLogItemType.err, 0, String.Format(
+                    "Error loading profile settings: {0} : {1}", ex.Message, path), null);
+                return false;
+            }
+        }
+
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+        string fromCulture = "en-US";
+        Log(TLog.eLogItemType.inf, 0, "fromCulture: " + fromCulture, null);
+
+        #region TRANSLATE
+        int _failedTranslationCounter = 0;
+
+        int _progValue = 0;
+        int _progMax = 100;
+
+        List<string> tranItems = new();
+        string[] lines = textToTranslate.Split(new[] { "\r" }, StringSplitOptions.RemoveEmptyEntries);
+        _progMax = lines.Count() * repeats;
+        foreach (string item in lines)
+        {
+            if (item.StartsWith("//"))
+            {
+                continue;
+            }
+            else
+            {
+                Log(TLog.eLogItemType.tra, 0, item, null);
+                (string hintToken, string content) = TLocalized.SplitPrefix(item);
+                if (TLocalized.IsValidHintToken(hintToken))
+                {
+                    for (int i = 0; i < repeats; i++)
+                    {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            Log(TLog.eLogItemType.err, 0, "Cancelled.", null);
+                            return false;
+                        }
+
+                        TTranslatorResult translatorResult;
+                        string escapedTextToTranslate = TUtils.EscapePlaceholders(content);
+                        translatorResult = await Translate(TLog.eLogType.ProfileTest, profile, fromCulture, toCulture, escapedTextToTranslate, hintToken, Settings, report, cancellationToken);
+                        if (!translatorResult.IsSuccessful)
+                        {
+                            _failedTranslationCounter++;
+                            if (_failedTranslationCounter >= 5)
+                            {
+                                Log(TLog.eLogItemType.err, 1, "Too many translation errors (max 5).  Cancelling...", translatorResult.Data);
+                                return false;
+                            }
+                            continue;
+                        }
+                        else
+                        {
+                            string translatedText = TUtils.UnescapePlaceholders(translatorResult.TranslatedText.Trim());
+                            Log(TLog.eLogItemType.tra, 1, translatedText, translatorResult.Data);
+                        }
+
+                        _progValue++;
+                        _progress = (int)((float)_progValue / (float)_progMax * 100.0f);
+
+                    }
+
+                }
+            }
+            Log(TLog.eLogItemType.sep, 0, TLog.SepWide, null);
+        }
+        #endregion
+
         stopwatch.Stop();
         TimeSpan elapsed = stopwatch.Elapsed;
         string elapsedCustomFormat = elapsed.ToString(@"hh\:mm\:ss");

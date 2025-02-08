@@ -84,15 +84,15 @@ namespace Translator
                     frMain.Navigate(typeof(TranslatePage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
 
-                case "TranslationFunctions":
-                    SetActiveNavItem(nviTranslationFunctions);
-                    PopulateNavigationViewHeader(Symbol.Bookmarks, "Translation Functions");
+                case "ProfileEditor":
+                    SetActiveNavItem(nviProfileEditor);
+                    PopulateNavigationViewHeader(Symbol.Bookmarks, "Profile Editor");
                     frMain.Navigate(typeof(TFPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
 
-                case "CacheEditor":
-                    SetActiveNavItem(nviCacheEditor);
-                    PopulateNavigationViewHeader(Symbol.Edit, "Cache Editor");
+                case "CacheExplorer":
+                    SetActiveNavItem(nviCacheExplorer);
+                    PopulateNavigationViewHeader(Symbol.Edit, "Cache Explorer");
                     frMain.Navigate(typeof(CacheEditorPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
 

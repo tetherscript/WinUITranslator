@@ -35,11 +35,11 @@
             Spacing="20">
             <Button
                 IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                Command="{x:Bind Vm.TFTestLoadSettingsCommand}"
+                Command="{x:Bind Vm.ProfileTestLoadSettingsCommand}"
                 Content="Load" />
             <Button
-                IsEnabled="{x:Bind Vm.TFSettingsModified, Mode=OneWay}"
-                Command="{x:Bind Vm.TFTestSaveSettingsCommand}"
+                IsEnabled="{x:Bind Vm.ProfileTestSettingsModified, Mode=OneWay}"
+                Command="{x:Bind Vm.ProfileTestSaveSettingsCommand}"
                 Content="Save" />
         </StackPanel>
 
@@ -54,7 +54,7 @@
             TextAlignment="Left"
             VerticalAlignment="Stretch"
             IsSpellCheckEnabled="False"
-            Text="{x:Bind Vm.TFSettings, Mode=TwoWay}"
+            Text="{x:Bind Vm.ProfileTestSettings, Mode=TwoWay}"
             PlaceholderText=""
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"

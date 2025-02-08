@@ -67,17 +67,17 @@
                 Content="3. Translate Scan Results"
                 Tag="Translate" />
             <NavigationViewItem
-                x:Name="nviTranslationFunctions"
+                x:Name="nviProfileEditor"
                 Icon="Bookmarks"
                 IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
-                Content="Translation Functions"
-                Tag="TranslationFunctions" />
+                Content="Profile Editor"
+                Tag="ProfileEditor" />
             <NavigationViewItem
-                x:Name="nviCacheEditor"
+                x:Name="nviCacheExplorer"
                 Icon="Edit"
                 IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
-                Content="Cache Editor"
-                Tag="CacheEditor" />
+                Content="Cache Explorer"
+                Tag="CacheExplorer" />
 
         </NavigationView.MenuItems>
         <NavigationView.PaneFooter>

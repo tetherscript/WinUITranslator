@@ -46,7 +46,7 @@ namespace Translator
             {
                 TLog.Log(mode, TLog.eLogItemType.err, 0, $"An error occurred: {ex.Message}");
             }
-            TLog.Save(TLog.eLogType.tfTranslate, TUtils.TargetTranslateLogPath);
+            TLog.Save(TLog.eLogType.ProfileTest, TUtils.TargetTranslateLogPath);
             return null;
         }
 
@@ -59,25 +59,25 @@ namespace Translator
             string hintToken = valuePrefix;
             if (!TLocalized.IsValidHintToken(hintToken))
             {
-                TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.err, 2, @"Invalid hint token. Valid tokens are " + 
+                TLog.Log(TLog.eLogType.ProfileTest, TLog.eLogItemType.err, 2, @"Invalid hint token. Valid tokens are " + 
                 "{ " + TLocalized.ValidHintTokenStr + " }");
                 return null;
             }
 
-            TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.InitGlobal(mode={0}, translationFunction={1}, fromCulture={2})",
+            TLog.Log(TLog.eLogType.ProfileTest, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.InitGlobal(mode={0}, translationFunction={1}, fromCulture={2})",
                 mode, translationFunction, fromCulture));
             if (!TTransFunc.InitGlobal(mode, translationFunction, fromCulture))
             {
-                TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.err, 2, String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}",
+                TLog.Log(TLog.eLogType.ProfileTest, TLog.eLogItemType.err, 2, String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}",
                     translationFunction, fromCulture));
                 return null;
             }
 
-            TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.InitPerCulture(mode={0}, translationFunction={1}, fromCulture={2}, toCulture={3})",
+            TLog.Log(TLog.eLogType.ProfileTest, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.InitPerCulture(mode={0}, translationFunction={1}, fromCulture={2}, toCulture={3})",
                 mode, translationFunction, fromCulture, toCulture));
             if (!TTransFunc.InitPerCulture(mode, translationFunction, fromCulture, toCulture))
             {
-                TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.err, 2,
+                TLog.Log(TLog.eLogType.ProfileTest, TLog.eLogItemType.err, 2,
                     String.Format("TTransFunc.InitGlobal failed: translationFunction={0}, fromCulture={1}, toCulture={2}",
                     translationFunction, fromCulture, toCulture));
                 return null;
@@ -91,9 +91,9 @@ namespace Translator
                     hintToken,
                     valueVal
                     );
-            TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.inf, 0, s1);
+            TLog.Log(TLog.eLogType.ProfileTest, TLog.eLogItemType.inf, 0, s1);
 
-            TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.Translate(mode={0}, translationFunction={1}, fromCulture={2}, toCulture={3}, textToTranslate={4}, hintToken={5})",
+            TLog.Log(TLog.eLogType.ProfileTest, TLog.eLogItemType.inf, 0, String.Format("TTransFunc.Translate(mode={0}, translationFunction={1}, fromCulture={2}, toCulture={3}, textToTranslate={4}, hintToken={5})",
                 mode, translationFunction, fromCulture, toCulture, valueVal, hintToken));
             translatedText = TTransFunc.Translate(mode, translationFunction, fromCulture, toCulture, valueVal, hintToken);
             if (translatedText == null)
@@ -105,7 +105,7 @@ namespace Translator
             {
                 TTransFunc.DeInitGlobal(mode, translationFunction);
                 s1 = "Result: " + translatedText;
-                TLog.Log(TLog.eLogType.tfTranslate, TLog.eLogItemType.inf, 2, s1);
+                TLog.Log(TLog.eLogType.ProfileTest, TLog.eLogItemType.inf, 2, s1);
 
                 return translatedText;
             }
