@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using System.Threading.Tasks;
@@ -25,6 +26,11 @@ namespace Translator
 
             Vm.CacheSearchSelectionLength = Vm.SearchText.Length;
             Vm.CacheSearchSelectionStart = 0;
+
+            WeakReferenceMessenger.Default.Register<TTargetSelected>(this, (r, m) =>
+            {
+                Vm.LoadCache();
+            });
 
         }
 

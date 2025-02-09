@@ -47,7 +47,7 @@
                 <StackPanel
                     Spacing="5">
                     <StackPanel
-                        Spacing="20"
+                        Spacing="10"
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
                         <Button
@@ -75,7 +75,7 @@
                         <ComboBox
                             IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
                             ItemsSource="{x:Bind Vm.Profiles}"
-                            SelectedValue="{x:Bind Vm.SelectedProfile, Mode=TwoWay}"/>
+                            SelectedValue="{x:Bind Vm.SelectedProfile, Mode=TwoWay}" />
                         <CheckBox
                             Padding="8, 0, 0, 0"
                             Margin="0"

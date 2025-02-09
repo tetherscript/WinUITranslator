@@ -155,6 +155,11 @@ namespace Translator
                 Vm.Reset();
             });
 
+            WeakReferenceMessenger.Default.Register<TTargetSelected>(this, (r, m) =>
+            {
+                Vm.Reset();
+            });
+
             Vm.CalcState();
         }
 

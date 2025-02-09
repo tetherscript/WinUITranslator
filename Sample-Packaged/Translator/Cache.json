@@ -1,15 +1,35 @@
 ﻿[
   {
+    "key": "ar-SA:!:Aperture",
+    "value": "\u0641\u062A\u062D\u0629"
+  },
+  {
+    "key": "ar-SA:@:Enter your name here",
+    "value": "\u0623\u062F\u062E\u0644 \u0627\u0633\u0645\u0643 \u0647\u0646\u0627"
+  },
+  {
+    "key": "ar-SA:@@:Enter your name here",
+    "value": "\u0623\u062F\u062E\u0644 \u0627\u0633\u0645\u0643 \u0647\u0646\u0627"
+  },
+  {
+    "key": "ar-SA:@:Close",
+    "value": "\u0625\u063A\u0644\u0627\u0642"
+  },
+  {
     "key": "ar-SA:@@:Lock",
     "value": "\u0642\u0641\u0644"
   },
   {
+    "key": "ar-SA:@:Zoom",
+    "value": "\u062A\u0643\u0628\u064A\u0631"
+  },
+  {
     "key": "ar-SA:@:100%",
-    "value": "100\u066A"
+    "value": "100%"
   },
   {
     "key": "ar-SA:@:200%",
-    "value": "200\u066A"
+    "value": "\u0662\u0660\u0660\u066A"
   },
   {
     "key": "ar-SA:!:Image Browser",
@@ -17,11 +37,11 @@
   },
   {
     "key": "ar-SA:@:Connection",
-    "value": "\u0627\u0644\u0627\u062A\u0635\u0627\u0644"
+    "value": "\u0627\u062A\u0635\u0627\u0644"
   },
   {
     "key": "ar-SA:@:Disconnected",
-    "value": "\u0645\u0646\u0642\u0637\u0639 \u0627\u0644\u0627\u062A\u0635\u0627\u0644"
+    "value": "\u063A\u064A\u0631 \u0645\u062A\u0635\u0644"
   },
   {
     "key": "ar-SA:@:Connected",
@@ -29,19 +49,19 @@
   },
   {
     "key": "ar-SA:@:Loading {0}}, please wait...",
-    "value": "\u062C\u0627\u0631\u064A \u062A\u062D\u0645\u064A\u0644 {0}\u060C \u064A\u0631\u062C\u0649 \u0627\u0644\u0627\u0646\u062A\u0638\u0627\u0631..."
+    "value": "\u062C\u0627\u0631\u064D \u062A\u062D\u0645\u064A\u0644 {0}\u060C \u064A\u0631\u062C\u0649 \u0627\u0644\u0627\u0646\u062A\u0638\u0627\u0631..."
   },
   {
     "key": "ar-SA:@:Open the aperture for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
+    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u064A\u062F\u0627\u0646 \u0623\u0642\u0644."
   },
   {
     "key": "ar-SA:!:Open the aperture for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
+    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u064A\u062F\u0627\u0646 \u0623\u0642\u0644."
   },
   {
     "key": "ar-SA:!!:Open the aperture for a shallower depth of field.",
-    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
+    "value": "\u0627\u0641\u062A\u062D \u0627\u0644\u0641\u062A\u062D\u0629 \u0644\u0639\u0645\u0642 \u0645\u062C\u0627\u0644 \u0623\u0642\u0644."
   },
   {
     "key": "de-DE:!:Aperture",
@@ -56,6 +76,14 @@
     "value": "Geben Sie hier Ihren Namen ein"
   },
   {
+    "key": "de-DE:@:Close",
+    "value": "Schlie\u00DFen"
+  },
+  {
+    "key": "de-DE:@@:Lock",
+    "value": "Sperren"
+  },
+  {
     "key": "de-DE:@:Zoom",
     "value": "Zoom"
   },
@@ -66,6 +94,10 @@
   {
     "key": "de-DE:@:200%",
     "value": "200%"
+  },
+  {
+    "key": "de-DE:!:Image Browser",
+    "value": "Bildbrowser"
   },
   {
     "key": "de-DE:@:Connection",
@@ -81,15 +113,19 @@
   },
   {
     "key": "de-DE:@:Loading {0}}, please wait...",
-    "value": "Laden von {0}, bitte warten..."
+    "value": "Lade {0}, bitte warten..."
+  },
+  {
+    "key": "de-DE:@:Open the aperture for a shallower depth of field.",
+    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Sch\u00E4rfentiefe."
   },
   {
     "key": "de-DE:!:Open the aperture for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
+    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Sch\u00E4rfentiefe."
   },
   {
     "key": "de-DE:!!:Open the aperture for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
+    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Sch\u00E4rfentiefe."
   },
   {
     "key": "fr-FR:!:Aperture",
@@ -104,8 +140,12 @@
     "value": "Entrez votre nom ici"
   },
   {
+    "key": "fr-FR:@:Close",
+    "value": "Fermer"
+  },
+  {
     "key": "fr-FR:@@:Lock",
-    "value": "Verrou"
+    "value": "Verrouiller"
   },
   {
     "key": "fr-FR:@:Zoom",
@@ -113,7 +153,7 @@
   },
   {
     "key": "fr-FR:@:100%",
-    "value": "100%"
+    "value": "100 %"
   },
   {
     "key": "fr-FR:@:200%",
@@ -121,7 +161,7 @@
   },
   {
     "key": "fr-FR:!:Image Browser",
-    "value": "Navigateur d\u0027Images"
+    "value": "Navigateur d\u0027images"
   },
   {
     "key": "fr-FR:@:Connection",
@@ -130,6 +170,10 @@
   {
     "key": "fr-FR:@:Disconnected",
     "value": "D\u00E9connect\u00E9"
+  },
+  {
+    "key": "fr-FR:@:Connected",
+    "value": "Connect\u00E9"
   },
   {
     "key": "fr-FR:@:Loading {0}}, please wait...",
@@ -146,41 +190,5 @@
   {
     "key": "fr-FR:!!:Open the aperture for a shallower depth of field.",
     "value": "Ouvrez l\u0027ouverture pour une profondeur de champ plus faible."
-  },
-  {
-    "key": "de-DE:@@:Lock",
-    "value": "Schloss"
-  },
-  {
-    "key": "de-DE:!:Image Browser",
-    "value": "Bildbrowser"
-  },
-  {
-    "key": "de-DE:@:Open the aperture for a shallower depth of field.",
-    "value": "\u00D6ffnen Sie die Blende f\u00FCr eine geringere Tiefensch\u00E4rfe."
-  },
-  {
-    "key": "ar-SA:@@:Enter your name here",
-    "value": "Enter your name here"
-  },
-  {
-    "key": "ar-SA:@:Zoom",
-    "value": "Zoom"
-  },
-  {
-    "key": "ar-SA:@:Enter your name here",
-    "value": "\u0022translated\u0022: \u0022Please enter your name\u0022,\n  \u0022confidence\u0022: 80"
-  },
-  {
-    "key": "ar-SA:!:Aperture",
-    "value": "\u0641\u062A\u062D\u0629 \u0627\u0644\u0639\u062F\u0633\u0629"
-  },
-  {
-    "key": "ar-SA:@:Close",
-    "value": "\u0625\u063A\u0644\u0627\u0642"
-  },
-  {
-    "key": "fr-FR:@:Close",
-    "value": "Fermer"
   }
 ]

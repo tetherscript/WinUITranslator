@@ -99,6 +99,10 @@ namespace Translator
             if (IsValidConfiguredPath)
             {
                 GetProfiles();
+                if (Profiles.Count > 0)
+                {
+                    SelectedProfile = Profiles[0];
+                }
             }
         }
 
@@ -641,7 +645,10 @@ namespace Translator
         private void ClearSearch()
         {
             SearchText = string.Empty;
-            SelectedPair = FilteredEntries.First();
+            if (FilteredEntries.Count > 0)
+            {
+                SelectedPair = FilteredEntries.First();
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanSaveChanges))]

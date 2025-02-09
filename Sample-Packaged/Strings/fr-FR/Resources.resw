@@ -134,7 +134,7 @@
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">
-    <value>Verrou</value>
+    <value>Verrouiller</value>
     <comment>@@</comment>
   </data>
   <data name="Zoom_rbs.Header" xml:space="preserve">
@@ -142,7 +142,7 @@
     <comment>@</comment>
   </data>
   <data name="Zoom100_rb.Content" xml:space="preserve">
-    <value>100%</value>
+    <value>100 %</value>
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
@@ -150,7 +150,7 @@
     <comment>@</comment>
   </data>
   <data name="Browser_tgbtn.Content" xml:space="preserve">
-    <value>Navigateur d'Images</value>
+    <value>Navigateur d'images</value>
     <comment>!</comment>
   </data>
   <data name="Connect_ts.Header" xml:space="preserve">

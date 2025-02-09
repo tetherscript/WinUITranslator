@@ -134,7 +134,7 @@
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">
-    <value>Schloss</value>
+    <value>Sperren</value>
     <comment>@@</comment>
   </data>
   <data name="Zoom_rbs.Header" xml:space="preserve">
@@ -166,19 +166,19 @@
     <comment>@</comment>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <value>Laden von {0}, bitte warten...</value>
+    <value>Lade {0}, bitte warten...</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">
-    <value>Öffnen Sie die Blende für eine geringere Tiefenschärfe.</value>
+    <value>Öffnen Sie die Blende für eine geringere Schärfentiefe.</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">
-    <value>Öffnen Sie die Blende für eine geringere Tiefenschärfe.</value>
+    <value>Öffnen Sie die Blende für eine geringere Schärfentiefe.</value>
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">
-    <value>Öffnen Sie die Blende für eine geringere Tiefenschärfe.</value>
+    <value>Öffnen Sie die Blende für eine geringere Schärfentiefe.</value>
     <comment>!!</comment>
   </data>
   <data name="SettingsIcon" xml:space="preserve">

@@ -232,7 +232,13 @@ namespace Translator
     }
 
 
+    public class TTargetSelected : ValueChangedMessage<string>
+    {
+        public TTargetSelected(string value) : base(value)
+        {
 
+        }
+    }
 
     public class TProfileSelected : ValueChangedMessage<string>
     {

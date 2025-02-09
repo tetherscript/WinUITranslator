@@ -38,7 +38,6 @@ namespace Translator
             public const string Debug = "Debug";
             public const string CacheEditorSearchText = "CacheEditorSearchText";
 
-
             public const string TranslateSaveToCache = "TranslateSaveToCache";
             public const string TranslateLogFilter = "TranslateLogFilter";
             public const string ProfileTestLogFilter = "ProfileTestLogFilter";

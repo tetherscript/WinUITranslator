@@ -261,7 +261,7 @@ public partial class TTranslatorEx
                 _nonEnUSLanguages++;
 
                 XDocument destDoc = XDocument.Load(destDocFilePath);
-                Log(TLog.eLogItemType.inf, 0, String.Format("Processing {0}...", toCulture), null);
+                Log(TLog.eLogItemType.tra, 0, String.Format("Processing {0}...", toCulture), null);
 
                 //reset destDoc
                 destDoc.Descendants("data")

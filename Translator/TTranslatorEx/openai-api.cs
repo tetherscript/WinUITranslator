@@ -84,6 +84,30 @@ public partial class TTranslatorEx
                      0);
         }
 
+        //GET MODEL
+        if (!settings.TryGetValue("min-confidence", out string minConfidenceStr))
+        {
+            Log(TLog.eLogItemType.err, 2, "Settings 'min-confidence' not found.");
+            return new TTranslatorResult(
+                     false,
+                     textToTranslate,
+                     null,
+                     0);
+        }
+        if (int.TryParse(minConfidenceStr, out int minConfidence))
+        {
+            
+        }
+        else
+        {
+            Log(TLog.eLogItemType.err, 2, "Invalid 'min-confidence' value.");
+            return new TTranslatorResult(
+                     false,
+                     textToTranslate,
+                     null,
+                     0);
+        }
+
         using HttpClient httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
@@ -203,6 +227,12 @@ public partial class TTranslatorEx
             _totalReceiveTokens = _totalReceiveTokens + completion_tokens;
             _totalTokens = _totalTokens + total_tokens;
 
+            if (translationConfidence < minConfidence)
+            {
+                Log(TLog.eLogItemType.wrn, 0, "<!> Confidence " + translationConfidence.ToString() + " < " + minConfidence.ToString());
+                translatedText = "<!>" + translatedText;
+            }
+
             //status
             string finish_reason = firstChoice.GetProperty("finish_reason").GetString();
             switch (finish_reason)
@@ -214,7 +244,6 @@ public partial class TTranslatorEx
                     translatedText,
                     0,
                     _data);
-                    //translatedText.Length - 2), logItems);
                 case "length":
                     Log(TLog.eLogItemType.err, 2, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent);
                     return new TTranslatorResult(

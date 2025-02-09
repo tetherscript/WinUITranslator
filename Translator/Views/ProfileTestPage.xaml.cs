@@ -19,6 +19,11 @@ namespace Translator
             {
                 App.Vm.ProfileTestLogItems.Clear();
             });
+
+            WeakReferenceMessenger.Default.Register<TTargetSelected>(this, (r, m) =>
+            {
+                App.Vm.ProfileTestLogItems.Clear();
+            });
         }
     }
 }

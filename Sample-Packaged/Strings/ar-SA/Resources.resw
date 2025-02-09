@@ -118,16 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aperture_tb.Text" xml:space="preserve">
-    <value>فتحة العدسة</value>
+    <value>فتحة</value>
     <comment>!</comment>
   </data>
   <data name="EnterYourNameHere_tb.Text" xml:space="preserve">
-    <value>"translated": "Please enter your name",
-  "confidence": 80</value>
+    <value>أدخل اسمك هنا</value>
     <comment>@</comment>
   </data>
   <data name="EnterYourNameHere_short_tb.Text" xml:space="preserve">
-    <value>Enter your name here</value>
+    <value>أدخل اسمك هنا</value>
     <comment>@@</comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
@@ -139,15 +138,15 @@
     <comment>@@</comment>
   </data>
   <data name="Zoom_rbs.Header" xml:space="preserve">
-    <value>Zoom</value>
+    <value>تكبير</value>
     <comment>@</comment>
   </data>
   <data name="Zoom100_rb.Content" xml:space="preserve">
-    <value>100٪</value>
+    <value>100%</value>
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
-    <value>200٪</value>
+    <value>٢٠٠٪</value>
     <comment>@</comment>
   </data>
   <data name="Browser_tgbtn.Content" xml:space="preserve">
@@ -155,11 +154,11 @@
     <comment>!</comment>
   </data>
   <data name="Connect_ts.Header" xml:space="preserve">
-    <value>الاتصال</value>
+    <value>اتصال</value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OffContent" xml:space="preserve">
-    <value>منقطع الاتصال</value>
+    <value>غير متصل</value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OnContent" xml:space="preserve">
@@ -167,19 +166,19 @@
     <comment>@</comment>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <value>جاري تحميل {0}، يرجى الانتظار...</value>
+    <value>جارٍ تحميل {0}، يرجى الانتظار...</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">
-    <value>افتح الفتحة لعمق مجال أقل.</value>
+    <value>افتح الفتحة للحصول على عمق ميدان أقل.</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">
-    <value>افتح الفتحة للحصول على عمق مجال أقل.</value>
+    <value>افتح الفتحة للحصول على عمق ميدان أقل.</value>
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">
-    <value>افتح الفتحة للحصول على عمق مجال أقل.</value>
+    <value>افتح الفتحة لعمق مجال أقل.</value>
     <comment>!!</comment>
   </data>
   <data name="SettingsIcon" xml:space="preserve">
