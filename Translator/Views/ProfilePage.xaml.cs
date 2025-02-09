@@ -160,6 +160,7 @@ namespace Translator
             [RelayCommand]
             private async void Rename()
             {
+                RenameName = App.Vm.SelectedProfile;
                 IsRenaming = true;
                 CalcState();
             }

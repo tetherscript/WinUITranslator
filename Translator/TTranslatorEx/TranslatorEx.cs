@@ -12,6 +12,12 @@ using Windows.Storage;
 
 namespace Translator;
 
+public class TContent_openai_api
+{
+    public string translated { get; set; }
+    public int confidence { get; set; }
+}
+
 public class SpecialItem
 {
     public string Key { get; set; }

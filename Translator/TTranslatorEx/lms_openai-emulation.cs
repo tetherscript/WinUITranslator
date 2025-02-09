@@ -13,9 +13,8 @@ namespace Translator;
 
 public partial class TTranslatorEx
 {
-    //https://platform.openai.com/docs/guides/text-generation?example=completions
 
-    public async Task<TTranslatorResult> Translate_OpenAIAPI(TLog.eLogType mode, string fromCulture, string toCulture, string textToTranslate, string hintToken, Dictionary<string, string> settings, IProgress<ProgressReport> report, CancellationToken cancellationToken)
+    public async Task<TTranslatorResult> Translate_LMS_OpenAI_Emulation(TLog.eLogType mode, string fromCulture, string toCulture, string textToTranslate, string hintToken, Dictionary<string, string> settings, IProgress<ProgressReport> report, CancellationToken cancellationToken)
     {
         List<string> _data = new();
         void Log(TLog.eLogItemType logType, int indent, string msg)
@@ -73,10 +72,32 @@ public partial class TTranslatorEx
                      0);
         }
 
+        //GET MAX_TOKENS
+        if (!settings.TryGetValue("max_tokens", out string max_tokens))
+        {
+            Log(TLog.eLogItemType.err, 2, "Settings 'max_tokens' not found.");
+            return new TTranslatorResult(
+                    false,
+                    textToTranslate,
+                    null,
+                    0);
+        }
+
         //GET MODEL
         if (!settings.TryGetValue("model", out string model))
         {
             Log(TLog.eLogItemType.err, 2, "Settings 'model' not found.");
+            return new TTranslatorResult(
+                     false,
+                     textToTranslate,
+                     null,
+                     0);
+        }
+
+        //GET MODEL
+        if (!settings.TryGetValue("character_schema", out string character_schema))
+        {
+            Log(TLog.eLogItemType.err, 2, "Settings 'character_schema' not found.");
             return new TTranslatorResult(
                      false,
                      textToTranslate,
@@ -91,15 +112,23 @@ public partial class TTranslatorEx
         string systemContent = String.Format(systemPrompt, fromCulture, toCulture);
         string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
 
+        character_schema = @"{""{\""$schema\"": \""http://json-schema.org/draft-07/schema#\"", \""type\"": \""object\"", \""properties\"": { \""translated\"": { \""type\"": \""string\"", \""description\"": \""The translated text.\"" }, \""confidence\"": { \""type\"": \""integer\"", \""description\"": \""The confidence level of the translation, expressed as an integer.\"" } }, \""required\"": [\""translated\"", \""confidence\""], \""additionalProperties\"": false }""";
+
+        string jsonSchema = @"{ ""type"": ""json"" }";
+
+        //https://platform.openai.com/docs/api-reference/chat/create
         var requestBody = new
         {
             model = model,
             messages = new[]
             {
-                    new { role = "developer", content = systemContent},
+                    new { role = "system", content = systemContent},
                     new { role = "user", content = userContent}
                     },
             temperature = 0.0,      //keep it at zero so it is deterministic
+            //max_completion_tokens = max_tokens,
+            //response_format = jsonSchema
+            //dd = "dd"
         };
 
         //COMPOSE AND SEND REQUEST
@@ -194,6 +223,7 @@ public partial class TTranslatorEx
             string translatedText = content.translated.Trim();
             doctxt = root.GetRawText();
 
+
             //usage
             JsonElement usage = root.GetProperty("usage");
             int promptSendTokens = usage.GetProperty("prompt_tokens").GetInt32();
@@ -205,6 +235,7 @@ public partial class TTranslatorEx
 
             //status
             string finish_reason = firstChoice.GetProperty("finish_reason").GetString();
+            //Log(TLog.eLogItemType.dbg, 2, "Translation data");
             switch (finish_reason)
             {
                 case "stop":
