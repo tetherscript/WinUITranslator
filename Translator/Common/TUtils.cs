@@ -5,6 +5,8 @@ using System.Text.Json;
 using System;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
+using System.Linq;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace Translator
 {
@@ -116,6 +118,19 @@ namespace Translator
         }
         #endregion
 
+        public static bool ValidateFileName(string value)
+        {
+            // Decide if an empty string is considered valid (here we treat it as invalid).
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+
+            // Get the list of invalid filename characters.
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+
+            // If any invalid character is present, the filename is invalid.
+            return !value.Any(c => invalidChars.Contains(c));
+        }
+
 
         // Escapes {0} to {9} by converting them to {{0}} to {{9}}
         public static string EscapePlaceholders(string input)
@@ -213,6 +228,17 @@ namespace Translator
             if (value is Visibility vis)
                 return ((Visibility)value == Visibility.Visible ? false : true);
             return false;
+        }
+    }
+
+
+
+
+    public class TProfileSelected : ValueChangedMessage<string>
+    {
+        public TProfileSelected(string value) : base(value)
+        {
+
         }
     }
 

@@ -16,12 +16,12 @@ using Microsoft.UI.Xaml.Navigation;
 namespace Translator
 {
 
-    public sealed partial class TFTestPage : Page
+    public sealed partial class ProfileTestPage : Page
     {
         private readonly TVm _vm = App.Vm;
         public TVm Vm { get => _vm; }
 
-        public TFTestPage()
+        public ProfileTestPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;

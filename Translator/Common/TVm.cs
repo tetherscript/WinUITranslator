@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,16 +11,12 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.Storage;
-using TeeLocalized;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading;
-using System.Data.SqlTypes;
-using Windows.Devices.Sensors;
-using CommunityToolkit.WinUI.Collections;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI;
+using System.Threading.Tasks;
+using TeeLocalized;
 using Translator.Log;
+using Windows.Storage;
 
 
 
@@ -165,7 +164,7 @@ namespace Translator
 
         #region PROFILES
         [ObservableProperty]
-        List<string> _profiles = new();
+        ObservableCollection<string> _profiles = new();
 
         public void GetProfiles()
         {
@@ -186,6 +185,10 @@ namespace Translator
 
         [ObservableProperty]
         private string _selectedProfile;
+        partial void OnSelectedProfileChanged(string value)
+        {
+            WeakReferenceMessenger.Default.Send(new TProfileSelected(value));
+        }
 
 
 
@@ -395,61 +398,10 @@ namespace Translator
         }
         #endregion
 
-        #region TRANSLATION FUNCTIONS
+        #region PROFILE EDITOR
 
         [ObservableProperty]
         private int _profileTestLastTabIndex = 0;
-
-        [ObservableProperty]
-        private string _profileTestSettings;
-        partial void OnProfileTestSettingsChanged(string value)
-        {
-            ProfileTestSettingsModified = true;
-        }
-
-        [ObservableProperty]
-        private bool _profileTestSettingsModified;
-
-        [RelayCommand]
-        private void ProfileTestLoadSettings()
-        {
-            TUtils.CalcPaths(Target);
-            string path = Path.Combine(TUtils.TargetProfilesPath, SelectedProfile + ".prf");
-            if (path == null)
-            {
-                ProfileTestSettings = "No settings file specified.";
-            }
-            else
-            {
-                try
-                {
-                    string loadedJson = File.ReadAllText(path);
-                    ProfileTestSettings = loadedJson;
-                    ProfileTestSettingsModified = false;
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-        }
-
-        [RelayCommand]
-        private void ProfileTestSaveSettings()
-        {
-            TUtils.CalcPaths(Target);
-            string path = Path.Combine(TUtils.TargetProfilesPath, SelectedProfile + ".prf");
-            if (path == null) return;
-            try
-            {
-                File.WriteAllText(path, ProfileTestSettings);
-                ProfileTestSettingsModified = false;
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
 
         [ObservableProperty]
         private List<string> _profileTestCultureList = CultureInfo
@@ -499,6 +451,148 @@ namespace Translator
 
         [ObservableProperty]
         private string _profileTestValidHintTokens = TLocalized.ValidHintTokenStr;
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region SETTINGS
+        [ObservableProperty]
+        private string _profileTestSettings;
+        partial void OnProfileTestSettingsChanged(string value)
+        {
+            ProfileTestSettingsModified = true;
+        }
+
+        [ObservableProperty]
+        private bool _profileTestSettingsModified;
+        partial void OnProfileTestSettingsModifiedChanged(bool value)
+        {
+            ProfileTestCloneSettingCommand.NotifyCanExecuteChanged();
+            ProfileTestRenameSettingCommand.NotifyCanExecuteChanged();
+        }
+
+        [RelayCommand]
+        private void ProfileTestLoadSettings()
+        {
+            TUtils.CalcPaths(Target);
+            string path = Path.Combine(TUtils.TargetProfilesPath, SelectedProfile + ".prf");
+            if (path == null)
+            {
+                ProfileTestSettings = "No settings file specified.";
+            }
+            else
+            {
+                try
+                {
+                    string loadedJson = File.ReadAllText(path);
+                    ProfileTestSettings = loadedJson;
+                    ProfileTestSettingsModified = false;
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        [RelayCommand]
+        private void ProfileTestSaveSettings()
+        {
+            TUtils.CalcPaths(Target);
+            string path = Path.Combine(TUtils.TargetProfilesPath, SelectedProfile + ".prf");
+            if (path == null) return;
+            try
+            {
+                File.WriteAllText(path, ProfileTestSettings);
+                ProfileTestSettingsModified = false;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
+        private bool ProfiletestCanCloneSetting()
+        {
+            return (!IsBusy && !ProfileTestSettingsModified);
+        } 
+
+        [ObservableProperty]
+        private bool _profileTestIsCloningSetting;
+
+        [RelayCommand(CanExecute = nameof(ProfiletestCanCloneSetting))]
+        private void ProfileTestCloneSetting()
+        {
+
+        }
+
+
+
+
+
+        private bool ProfiletestCanRenameSetting()
+        {
+            return (!IsBusy && !ProfileTestSettingsModified);
+        }
+
+        [ObservableProperty]
+        private bool _profileTestIsRenamingSetting;
+        partial void OnProfileTestIsRenamingSettingChanged(bool value)
+        {
+            ProfileTestCloneSettingCommand.NotifyCanExecuteChanged();
+            ProfileTestRenameSettingCommand.NotifyCanExecuteChanged();
+        }
+
+        [RelayCommand(CanExecute = nameof(ProfiletestCanRenameSetting))]
+        private void ProfileTestRenameSetting()
+        {
+            ProfileTestIsRenamingSetting = true;
+            IsBusy = true;
+        }
+
+        [ObservableProperty]
+        private string _profileTestRenamedSettingStr;
+        partial void OnProfileTestRenamedSettingStrChanged(string value)
+        {
+            ProfileTestSettingRenameStrInvalid = TUtils.ValidateFileName(value);
+        }
+
+        [ObservableProperty]
+        private bool _profileTestSettingRenameStrInvalid;
+
+        [RelayCommand]
+        private void ProfileTestRenameSettingSave()
+        {
+            ProfileTestIsRenamingSetting = false;
+            IsBusy = false;
+        }
+
+        [RelayCommand]
+        private void ProfileTestRenameSettingCancel()
+        {
+            ProfileTestIsRenamingSetting = false;
+            IsBusy = false;
+        }
+
+
+
+
+
+  
+
+        #endregion
+
+
 
         #endregion
 

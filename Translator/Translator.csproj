@@ -31,13 +31,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Common\ucLog.xaml" />
-    <None Remove="Pages\CacheEditorPage.xaml" />
-    <None Remove="Pages\MainPage.xaml" />
-    <None Remove="Pages\ScanPage.xaml" />
-    <None Remove="Pages\SettingsPage.xaml" />
-    <None Remove="Pages\TargetPage.xaml" />
-    <None Remove="Pages\TFSettingsPage.xaml" />
-    <None Remove="Pages\TranslatePage.xaml" />
+    <None Remove="Views\CacheEditorPage.xaml" />
+    <None Remove="Views\MainPage.xaml" />
+    <None Remove="Views\ScanPage.xaml" />
+    <None Remove="Views\SettingsPage.xaml" />
+    <None Remove="Views\TargetPage.xaml" />
+    <None Remove="Views\TranslatePage.xaml" />
     <None Remove="Test2.xaml" />
   </ItemGroup>
 
@@ -240,7 +239,7 @@
     <Page Update="Common\ucLog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Pages\TFSettingsPage.xaml">
+    <Page Update="Pages\ProfileSettingPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Pages\TFTestPage.xaml">

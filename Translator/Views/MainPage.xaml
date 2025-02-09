@@ -45,8 +45,9 @@
         IsTabStop="False"
         OpenPaneLength="250"
         IsSettingsVisible="False"
+        PaneDisplayMode="Left"
         SelectionChanged="NvMain_SelectionChanged"
-        AlwaysShowHeader="True">
+        AlwaysShowHeader="False">
         
         <NavigationView.MenuItems>
             <NavigationViewItem
@@ -82,6 +83,7 @@
         </NavigationView.MenuItems>
         <NavigationView.PaneFooter>
             <StackPanel
+                VerticalAlignment="Center"
                 Orientation="Vertical"
                 Margin="10, 0, 10, 0"
                 Visibility="Visible">

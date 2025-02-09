@@ -124,7 +124,7 @@ public partial class TTranslatorEx
         //https://platform.openai.com/docs/api-reference/chat/create
         var requestBody = new
         {
-            model = "gpt-4",
+            model = model,
             messages = new[]
             {
                     new { role = "system", content = systemContent},
@@ -148,7 +148,7 @@ public partial class TTranslatorEx
             WriteIndented = true
         };
         string jsonRequestBody = JsonSerializer.Serialize(requestBody, options);
-        _data.Add("REQUEST_BODY = " + Environment.NewLine + jsonRequestBody);
+        _data.Add("REQUEST_BODY" + Environment.NewLine + jsonRequestBody);
 
         string jsonResponse = string.Empty;
         try
@@ -158,7 +158,7 @@ public partial class TTranslatorEx
                 using HttpResponseMessage response = await httpClient.PostAsync(host, requestContent, cancellationToken);
                 jsonResponse = response.Content.ReadAsStringAsync().Result;
                 HttpStatusCode statusCode = response.StatusCode;
-                _data.Add("RESPONSE = " + Environment.NewLine + jsonResponse);
+                _data.Add("RESPONSE" + Environment.NewLine + jsonResponse);
                 if (statusCode != System.Net.HttpStatusCode.OK)
                 {
                     Log(TLog.eLogItemType.err, 2, "Error in response: statusCode = " + statusCode.ToString());
@@ -216,7 +216,7 @@ public partial class TTranslatorEx
             JsonElement message = firstChoice.GetProperty("message");
             string contentJson = message.GetProperty("content").GetString() ?? string.Empty;
 
-            _data.Add("ROOT.CHOICES.MESSAGE.CONTENT = " + contentJson);
+            _data.Insert(0, "RESPONSE.CHOICES[0].MESSAGE.CONTENT" + Environment.NewLine + contentJson);
 
             // Deserialize to a list of LocalizedEntry
             TContent_openai_api content = JsonSerializer.Deserialize<TContent_openai_api>(

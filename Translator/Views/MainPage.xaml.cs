@@ -87,7 +87,7 @@ namespace Translator
                 case "ProfileEditor":
                     SetActiveNavItem(nviProfileEditor);
                     PopulateNavigationViewHeader(Symbol.Bookmarks, "Profile Editor");
-                    frMain.Navigate(typeof(TFPage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
+                    frMain.Navigate(typeof(ProfilePage), new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
                     break;
 
                 case "CacheExplorer":

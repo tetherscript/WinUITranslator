@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="Translator.TFTestPage"
+    x:Class="Translator.ProfileTestPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Translator"
@@ -127,7 +127,7 @@
         <!--LOG-->
         <local1:ucLog
             Grid.Row="3"
-            Margin="0, 4, 0, 0"
+            Margin="0, 4, 0, 10"
             LogItems="{x:Bind Vm.ProfileTestLogItems, Mode=OneWay}"
             LogFilters="{x:Bind Vm.ProfileTestLogFilters, Mode=OneWay}" />
         

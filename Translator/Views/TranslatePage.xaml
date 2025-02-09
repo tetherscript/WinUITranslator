@@ -96,7 +96,7 @@
 
         <local1:ucLog
             Grid.Row="1"
-            Margin="0, 4, 0, 0"
+            Margin="0, 4, 0, 10"
             LogItems="{x:Bind Vm.TranslateLogItems, Mode=OneWay}"
             LogFilters="{x:Bind Vm.TranslateLogFilters, Mode=OneWay}" />
 

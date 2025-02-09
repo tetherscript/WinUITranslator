@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="Translator.TFSettingsPage"
+    x:Class="Translator.ProfileSettingPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Translator"
@@ -14,6 +14,9 @@
             x:Key="InvBoolConv" />
         <converters:BoolToOpacityConv
             x:Key="BoolToOpacityConv" />
+        <converters:BoolToVisibilityConv
+            x:Key="BoolToVisibilityConv" />
+
     </Page.Resources>
 
     <Grid
@@ -30,19 +33,30 @@
         </Grid.RowDefinitions>
 
         <StackPanel
-            Grid.Row="0"
-            Orientation="Horizontal"
-            Spacing="20">
-            <Button
-                IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                Command="{x:Bind Vm.ProfileTestLoadSettingsCommand}"
-                Content="Load" />
-            <Button
-                IsEnabled="{x:Bind Vm.ProfileTestSettingsModified, Mode=OneWay}"
-                Command="{x:Bind Vm.ProfileTestSaveSettingsCommand}"
-                Content="Save" />
-        </StackPanel>
+            Spacing="10"
+            Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="40">
+                    <Button
+                        IsEnabled="{x:Bind Vm.CanLoad, Mode=OneWay}"
+                        Command="{x:Bind Vm.LoadCommand}"
+                        Content="Load" />
+                    <Button
+                        IsEnabled="{x:Bind Vm.CanSave, Mode=OneWay}"
+                        Command="{x:Bind Vm.SaveCommand}"
+                        Content="Save" />
+                    <Button
+                        IsEnabled="{x:Bind Vm.CanRevert, Mode=OneWay}"
+                        Command="{x:Bind Vm.RevertCommand}"
+                        Content="Revert" />
+                </StackPanel>
 
+            </StackPanel>
+            
+        </StackPanel>
+        
         <TextBox
             Grid.Row="1"
             Margin="0 10 0 0"
@@ -54,7 +68,8 @@
             TextAlignment="Left"
             VerticalAlignment="Stretch"
             IsSpellCheckEnabled="False"
-            Text="{x:Bind Vm.ProfileTestSettings, Mode=TwoWay}"
+            IsEnabled="{x:Bind Vm.IsLoaded, Mode=OneWay}"
+            Text="{x:Bind Vm.SettingsStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             PlaceholderText=""
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
