@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.AI.MachineLearning;
 
 namespace Translator;
 
@@ -72,17 +73,6 @@ public partial class TTranslatorEx
                      0);
         }
 
-        //GET MAX_TOKENS
-        if (!settings.TryGetValue("max_tokens", out string max_tokens))
-        {
-            Log(TLog.eLogItemType.err, 2, "Settings 'max_tokens' not found.");
-            return new TTranslatorResult(
-                    false,
-                    textToTranslate,
-                    null,
-                    0);
-        }
-
         //GET MODEL
         if (!settings.TryGetValue("model", out string model))
         {
@@ -94,10 +84,24 @@ public partial class TTranslatorEx
                      0);
         }
 
-        //GET MODEL
-        if (!settings.TryGetValue("character_schema", out string character_schema))
+
+        //GET CONFIDENCE
+        if (!settings.TryGetValue("min-confidence", out string minConfidenceStr))
         {
-            Log(TLog.eLogItemType.err, 2, "Settings 'character_schema' not found.");
+            Log(TLog.eLogItemType.err, 2, "Settings 'min-confidence' not found.");
+            return new TTranslatorResult(
+                     false,
+                     textToTranslate,
+                     null,
+                     0);
+        }
+        if (int.TryParse(minConfidenceStr, out int minConfidence))
+        {
+
+        }
+        else
+        {
+            Log(TLog.eLogItemType.err, 2, "Invalid 'min-confidence' value.");
             return new TTranslatorResult(
                      false,
                      textToTranslate,
@@ -112,10 +116,6 @@ public partial class TTranslatorEx
         string systemContent = String.Format(systemPrompt, fromCulture, toCulture);
         string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
 
-        character_schema = @"{""{\""$schema\"": \""http://json-schema.org/draft-07/schema#\"", \""type\"": \""object\"", \""properties\"": { \""translated\"": { \""type\"": \""string\"", \""description\"": \""The translated text.\"" }, \""confidence\"": { \""type\"": \""integer\"", \""description\"": \""The confidence level of the translation, expressed as an integer.\"" } }, \""required\"": [\""translated\"", \""confidence\""], \""additionalProperties\"": false }""";
-
-        string jsonSchema = @"{ ""type"": ""json"" }";
-
         //https://platform.openai.com/docs/api-reference/chat/create
         var requestBody = new
         {
@@ -126,10 +126,7 @@ public partial class TTranslatorEx
                     new { role = "user", content = userContent}
                     },
             temperature = 0.0,      //keep it at zero so it is deterministic
-            //max_completion_tokens = max_tokens,
-            //response_format = jsonSchema
-            //dd = "dd"
-        };
+         };
 
         //COMPOSE AND SEND REQUEST
         var requestContent = new StringContent(
@@ -211,13 +208,31 @@ public partial class TTranslatorEx
             JsonElement message = firstChoice.GetProperty("message");
             string contentJson = message.GetProperty("content").GetString() ?? string.Empty;
 
-            _data.Insert(0, "RESPONSE.CHOICES[0].MESSAGE.CONTENT" + Environment.NewLine + contentJson);
+            int startTagIndex = contentJson.IndexOf("<think>");
+            int endTagIndex = contentJson.IndexOf("</think>");
+            if (startTagIndex != -1 && endTagIndex != -1)
+            {
+                int startIndex = startTagIndex + "<think>".Length;
+                string extractedText = contentJson.Substring(startIndex, endTagIndex - startIndex).Trim();
+                _data.Add("REASONING" + Environment.NewLine + extractedText);
+                int remainderStartIndex = endTagIndex + "</think>".Length;
+                if (remainderStartIndex < contentJson.Length)
+                {
+                    string remainderText = contentJson.Substring(remainderStartIndex).Trim();
+                    contentJson = remainderText;
+                }
+            }
+            //sometimes there's some additonal thinking stuff added AFTER the json.....and this
+            //can change from identical query to identical query so it's not entirely deterministic.
+            how to use structured output?
 
-            // Deserialize to a list of LocalizedEntry
+            contentJson = contentJson.Replace("```json", "").Replace("```", "").Trim();
             TContent_openai_api content = JsonSerializer.Deserialize<TContent_openai_api>(
                 contentJson,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );
+
+            _data.Insert(0, "RESPONSE.CHOICES[0].MESSAGE.CONTENT" + Environment.NewLine + contentJson);
 
             int translationConfidence = content.confidence;
             string translatedText = content.translated.Trim();
@@ -232,6 +247,12 @@ public partial class TTranslatorEx
             _totalSendTokens = _totalSendTokens + promptSendTokens;
             _totalReceiveTokens = _totalReceiveTokens + completion_tokens;
             _totalTokens = _totalTokens + total_tokens;
+
+            if (translationConfidence < minConfidence)
+            {
+                Log(TLog.eLogItemType.wrn, 0, "<!> Confidence " + translationConfidence.ToString() + " < " + minConfidence.ToString());
+                translatedText = "<!>" + translatedText;
+            }
 
             //status
             string finish_reason = firstChoice.GetProperty("finish_reason").GetString();

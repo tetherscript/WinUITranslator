@@ -84,7 +84,7 @@ public partial class TTranslatorEx
                      0);
         }
 
-        //GET MODEL
+        //GET CONFIDENCE
         if (!settings.TryGetValue("min-confidence", out string minConfidenceStr))
         {
             Log(TLog.eLogItemType.err, 2, "Settings 'min-confidence' not found.");
