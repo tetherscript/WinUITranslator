@@ -14,6 +14,7 @@ public partial class TTranslatorEx
         {
             case "loopback": return await Translate_Loopback(mode, fromCulture, toCulture, textToTranslate, hintToken, settings, report, cancellationToken);
             case "openai-api": return await Translate_OpenAIAPI(mode, fromCulture, toCulture, textToTranslate, hintToken, settings, report, cancellationToken);
+            case "openai-api-so": return await Translate_OpenAIAPI_SO(mode, fromCulture, toCulture, textToTranslate, hintToken, settings, report, cancellationToken);
             case "lms_openai-emulation": return await Translate_LMS_OpenAI_Emulation(mode, fromCulture, toCulture, textToTranslate, hintToken, settings, report, cancellationToken);
             default:
                 return new TTranslatorResult(

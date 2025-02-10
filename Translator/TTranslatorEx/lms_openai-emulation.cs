@@ -112,9 +112,13 @@ public partial class TTranslatorEx
         using HttpClient httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
+        string responseFormat = @"{'type': 'json_object'}";
+
         //PREPARE PROMPT
         string systemContent = String.Format(systemPrompt, fromCulture, toCulture);
         string userContent = "'" + textToTranslate + "'"; //because sending None to the API returns a 'please specify the string response...'
+
+        //hmmm deepseek, test in LMStudio manually to see if structure outputs, or JSON mode works.
 
         //https://platform.openai.com/docs/api-reference/chat/create
         var requestBody = new
@@ -126,6 +130,7 @@ public partial class TTranslatorEx
                     new { role = "user", content = userContent}
                     },
             temperature = 0.0,      //keep it at zero so it is deterministic
+            response_format = responseFormat,
          };
 
         //COMPOSE AND SEND REQUEST
@@ -222,9 +227,10 @@ public partial class TTranslatorEx
                     contentJson = remainderText;
                 }
             }
-            //sometimes there's some additonal thinking stuff added AFTER the json.....and this
-            //can change from identical query to identical query so it's not entirely deterministic.
-            how to use structured output?
+        //sometimes there's some additonal thinking stuff added AFTER the json.....and this
+        //can change from identical query to identical query so it's not entirely deterministic.
+        //how to use structured output?
+        https://api-docs.deepseek.com/guides/json_mode
 
             contentJson = contentJson.Replace("```json", "").Replace("```", "").Trim();
             TContent_openai_api content = JsonSerializer.Deserialize<TContent_openai_api>(

@@ -100,7 +100,7 @@
                         TextWrapping="Wrap" />
 
                     <TextBlock
-                        Margin="25,10,0,10"
+                        Margin="25,0,20,0"
                         Grid.ColumnSpan="2"
                         Grid.Column="0"
                         Grid.Row="1"

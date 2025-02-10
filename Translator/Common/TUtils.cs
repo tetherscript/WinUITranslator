@@ -248,4 +248,37 @@ namespace Translator
         }
     }
 
+
+    public static class StringExtensions
+    {
+        /// <summary>
+        /// Encapsulates the given string with the specified character.
+        /// </summary>
+        /// <param name="text">The original string to encapsulate.</param>
+        /// <param name="encapsulator">The character used to encapsulate the text.</param>
+        /// <returns>A new string with the encapsulator appended to both the beginning and the end.</returns>
+        public static string Encapsulate(this string text, char encapsulator)
+        {
+            // Convert the char to a string and call the string overload
+            return Encapsulate(text, encapsulator.ToString());
+        }
+
+        /// <summary>
+        /// Encapsulates the given string with the specified string.
+        /// </summary>
+        /// <param name="text">The original string to encapsulate.</param>
+        /// <param name="encapsulator">The string used to encapsulate the text.</param>
+        /// <returns>A new string with the encapsulator appended to both the beginning and the end.</returns>
+        public static string Encapsulate(this string text, string encapsulator)
+        {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+            if (encapsulator == null)
+                throw new ArgumentNullException(nameof(encapsulator));
+
+            return encapsulator + text + encapsulator;
+        }
+    }
+
+
 }

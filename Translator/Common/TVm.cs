@@ -98,10 +98,6 @@ namespace Translator
             if (IsValidConfiguredPath)
             {
                 GetProfiles();
-                if (Profiles.Count > 0)
-                {
-                    SelectedProfile = Profiles[0];
-                }
             }
         }
 
@@ -183,16 +179,19 @@ namespace Translator
                 {
                     Profiles.Add(file);
                 }
+                SelectedProfile = PrevSelectedProfile;
             }
         }
 
         [ObservableProperty]
         private string _selectedProfile;
-        partial void OnSelectedProfileChanged(string value)
+        partial void OnSelectedProfileChanged(string? oldValue, string newValue)
         {
-            WeakReferenceMessenger.Default.Send(new TProfileSelected(value));
+            PrevSelectedProfile = oldValue;
+            WeakReferenceMessenger.Default.Send(new TProfileSelected(newValue));
         }
 
+        public string PrevSelectedProfile;
 
 
         #endregion
@@ -244,6 +243,7 @@ namespace Translator
         #region LOG
         public void AddLogItem(TLogItem item)
         {
+            string sep = new string('─', 30);
             int lineNumber = 0;
             switch (item.LogType)
             {
@@ -259,8 +259,8 @@ namespace Translator
                 item.Message,
                 (((item.Data == null) || (item.Data.Count == 0)) ? false : true),
                 item.Data,
-                (((item.Data == null) || (item.Data.Count == 0)) ? "" : string.Join(Environment.NewLine + new string('━', 30) + Environment.NewLine, item.Data)),
-            item.ItemType.ToString() + ":" + item.Message
+                (((item.Data == null) || (item.Data.Count == 0)) ? "" : sep + Environment.NewLine + string.Join(Environment.NewLine + sep + Environment.NewLine, item.Data)) + sep,
+                item.ItemType.ToString() + ":" + item.Message
             );
             switch (item.LogType)
             {

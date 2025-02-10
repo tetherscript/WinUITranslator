@@ -43,6 +43,8 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="CommunityToolkit.WinUI.Collections" Version="8.1.240916" />
+    <PackageReference Include="Microsoft.KernelMemory.AI.OpenAI" Version="0.96.250120.1" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.36.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250108002" />
     <Manifest Include="$(ApplicationManifest)" />

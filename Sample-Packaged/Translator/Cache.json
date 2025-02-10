@@ -16,10 +16,6 @@
     "value": "\u0625\u063A\u0644\u0627\u0642"
   },
   {
-    "key": "ar-SA:@@:Lock",
-    "value": "\u0642\u0641\u0644"
-  },
-  {
     "key": "ar-SA:@:Zoom",
     "value": "\u062A\u0643\u0628\u064A\u0631"
   },
@@ -96,10 +92,6 @@
     "value": "200%"
   },
   {
-    "key": "de-DE:!:Image Browser",
-    "value": "Bildbrowser"
-  },
-  {
     "key": "de-DE:@:Connection",
     "value": "Verbindung"
   },
@@ -142,10 +134,6 @@
   {
     "key": "fr-FR:@:Close",
     "value": "Fermer"
-  },
-  {
-    "key": "fr-FR:@@:Lock",
-    "value": "Verrouiller"
   },
   {
     "key": "fr-FR:@:Zoom",

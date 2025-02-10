@@ -73,8 +73,10 @@ namespace Translator
             App.Vm.Target = (appData.Values.ContainsKey(AppSettingsKeys.Target)) ?
                 (string)appData.Values[AppSettingsKeys.Target] : @"C:\Repo\WinUITranslator\Sample-Packaged";
 
+
             App.Vm.SelectedProfile = (appData.Values.ContainsKey(AppSettingsKeys.SelectedProfile)) ?
                 (string)appData.Values[AppSettingsKeys.SelectedProfile] : "Loopback";
+            App.Vm.PrevSelectedProfile = App.Vm.SelectedProfile;
 
             App.Vm.SearchText = (appData.Values.ContainsKey(AppSettingsKeys.CacheEditorSearchText)) ?
                 (string)appData.Values[AppSettingsKeys.CacheEditorSearchText] : "";

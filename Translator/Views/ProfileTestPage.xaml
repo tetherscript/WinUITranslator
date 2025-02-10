@@ -51,8 +51,9 @@
                 <TextBlock
                     Text="and Comment out a line with //" />
             </StackPanel>
-        </StackPanel>
 
+        </StackPanel>
+        
         <!--TEST STRINGS-->
         <TextBox
             CharacterSpacing="50"
