@@ -57,6 +57,10 @@ namespace Translator
             CanTranslate = (
                 !IsTranslating
             );
+
+            CanCancel = (
+                IsTranslating
+);
         }
 
         public void LoadSettings()
@@ -98,7 +102,7 @@ namespace Translator
         }
 
         [ObservableProperty]
-        private string _canCancel;
+        private bool _canCancel;
 
         [ObservableProperty]
         private List<string> _cultureList = CultureInfo
@@ -128,7 +132,7 @@ namespace Translator
         }
 
         [RelayCommand]
-        private void Translate()
+        private void Cancel()
         {
             _profileTestCts.TryReset();
             _profileTestCts.Cancel();

@@ -6,6 +6,7 @@
     xmlns:local="using:Translator"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -35,7 +36,7 @@
         </DataTemplate>
     </Page.Resources>
     
-    <Grid Margin="10,0,10,10">
+    <Grid Margin="10,10,10,10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="*" />
@@ -71,8 +72,6 @@
                 FontFamily="Courier New"
                 FontSize="16"
                 Text="{x:Bind Vm.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectionStart="{x:Bind Vm.CacheSearchSelectionStart, Mode=OneWay}"
-                SelectionLength="{x:Bind Vm.CacheSearchSelectionLength, Mode=OneWay}"
                 PlaceholderText="Type to filter by key..." />
 
             <Button

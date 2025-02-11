@@ -30,13 +30,21 @@
                 Height="*" />
         </Grid.RowDefinitions>
 
+        <ToggleButton
+            Grid.Column="0"
+            Grid.Row="0"
+            Width="16"
+            Height="16"
+            Margin="4,4,4,4"
+            IsChecked="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}">
+        </ToggleButton>
         
         <TextBlock
             Grid.Column="0"
             Grid.Row="0"
+            Margin="30,0,0,0"
             Opacity="0.55"
             Text="{x:Bind Vm.Title, Mode=OneWay}"
-            Margin="10 5 10 5"
             VerticalAlignment="Center" />
 
         <Frame

@@ -26,6 +26,7 @@ namespace Translator
         public static string TargetStrings_enUS_Path = string.Empty;
         public static string TargetScanLogPath = string.Empty;
         public static string TargetTranslateLogPath = string.Empty;
+        public static string TargetProfileTestLogPath = string.Empty;
         public static string TargetProfilesPath = string.Empty;
 
         public static bool RootPathIsValid = false;
@@ -55,8 +56,9 @@ namespace Translator
                     TargetStrings_enUS_Path = Path.Combine(TargetStringsPath, @"en-US\Resources.resw");
                     TargetProfilesPath = Path.Combine(TargetRootPath, @"Translator\Profiles");
 
-                    TargetScanLogPath = Path.Combine(TargetRootPath, @"Translator\ScanLog.txt");
-                    TargetTranslateLogPath = Path.Combine(TargetRootPath, @"Translator\TranslateLog.txt");
+                    TargetScanLogPath = Path.Combine(TargetRootPath, @"Translator\Logs\ScanLog.txt");
+                    TargetTranslateLogPath = Path.Combine(TargetRootPath, @"Translator\Logs\TranslateLog.txt");
+                    TargetProfileTestLogPath = Path.Combine(TargetRootPath, @"Translator\Logs\ProfileTestLog.txt");
 
                     IsConfigured =
                         ((Directory.Exists(TargetTranslatorPath))
@@ -81,6 +83,7 @@ namespace Translator
                     TargetStrings_enUS_Path = "";
                     TargetScanLogPath = "";
                     TargetTranslateLogPath = "";
+                    TargetProfileTestLogPath = "";
                     TargetProfilesPath = "";
                     return false;
                 }
@@ -269,6 +272,9 @@ namespace Translator
 
             return encapsulator + text + encapsulator;
         }
+
+
+
     }
 
 

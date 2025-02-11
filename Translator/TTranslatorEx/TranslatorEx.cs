@@ -66,15 +66,16 @@ public class TTranslatorExProc
         {
             if (report.PercentComplete != null)
             {
-                App.Vm.TranslateProgress = (int)report.PercentComplete;
-            }
-            App.Vm.AddLogItem(report.LogItem);
+                WeakReferenceMessenger.Default.Send(new TTranslateProgress((int)report.PercentComplete));
+            };
+            WeakReferenceMessenger.Default.Send(new TAddLogItem(report.LogItem));
         });
 
         try
         {
             var TranslatorEx = new TTranslatorEx();
             await TranslatorEx.RunBackgroundTaskAsyncTranslate(mode, target, profile, progressReporter, cancellationToken.Token, saveToCache);
+            WeakReferenceMessenger.Default.Send(new TSaveLog(TLog.eLogType.Translate));
         }
         catch (OperationCanceledException)
         {
@@ -90,24 +91,16 @@ public class TTranslatorExProc
         {
             if (report.PercentComplete != null)
             {
-                if (report.LogItem.LogType == TLog.eLogType.Translate)
-                {
-                    WeakReferenceMessenger.Default.Send(new TTranslateProgress((int)report.PercentComplete));
-                }
-                else
-                if (report.LogItem.LogType == TLog.eLogType.ProfileTest)
-                {
-                    WeakReferenceMessenger.Default.Send(new TTestProgress((int)report.PercentComplete));
-                }
+                WeakReferenceMessenger.Default.Send(new TTestProgress((int)report.PercentComplete));
             };
-                
-            WeakReferenceMessenger.Default.Send(new TAddProfileTestLogItem(report.LogItem));
+            WeakReferenceMessenger.Default.Send(new TAddLogItem(report.LogItem));
         });
 
         try
         {
             var TranslatorEx = new TTranslatorEx();
             await TranslatorEx.RunBackgroundTaskAsyncProfileTest(mode, target, profile, progressReporter, cancellationToken.Token, textToTranslate, repeats, toCulture);
+            WeakReferenceMessenger.Default.Send(new TSaveLog(TLog.eLogType.ProfileTest));
         }
         catch (OperationCanceledException)
         {
@@ -163,6 +156,9 @@ public partial class TTranslatorEx
             report?.Report(new ProgressReport(_progress,
                 new TLogItem(TLog.eLogType.Translate, logType, indent, msg, details)));
         }
+
+        Log(TLog.eLogItemType.inf, 0, "<<< TRANSLATE >>>", null);
+
 
         if (cancellationToken.IsCancellationRequested)
         {
@@ -430,6 +426,8 @@ public partial class TTranslatorEx
                 new TLogItem(TLog.eLogType.ProfileTest, logType, indent, msg, details)));
         }
 
+        Log(TLog.eLogItemType.inf, 0, "<<< PROFILE TEST >>>", null);
+
         if (cancellationToken.IsCancellationRequested)
         {
             Log(TLog.eLogItemType.err, 0, "Cancelled.", null);
@@ -517,6 +515,7 @@ public partial class TTranslatorEx
                         TTranslatorResult translatorResult;
                         string escapedTextToTranslate = TUtils.EscapePlaceholders(content);
                         translatorResult = await Translate(TLog.eLogType.ProfileTest, profile, fromCulture, toCulture, escapedTextToTranslate, hintToken, Settings, report, cancellationToken);
+                        //translatorResult.Data.Add(TLog.SepWide);
                         if (!translatorResult.IsSuccessful)
                         {
                             _failedTranslationCounter++;
@@ -535,7 +534,6 @@ public partial class TTranslatorEx
                     }
                 }
             }
-            Log(TLog.eLogItemType.sep, 0, TLog.SepWide, null);
         }
         #endregion
 

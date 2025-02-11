@@ -31,9 +31,17 @@ namespace Translator
         }
     }
 
-    public class TAddProfileTestLogItem : ValueChangedMessage<TLogItem>
+    public class TAddLogItem : ValueChangedMessage<TLogItem>
     {
-        public TAddProfileTestLogItem(TLogItem value) : base(value)
+        public TAddLogItem(TLogItem value) : base(value)
+        {
+
+        }
+    }
+
+    public class TSaveLog : ValueChangedMessage<TLog.eLogType>
+    {
+        public TSaveLog(TLog.eLogType value) : base(value)
         {
 
         }

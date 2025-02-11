@@ -87,7 +87,7 @@
                         Orientation="Horizontal"
                         Spacing="10">
                         <TextBlock
-                            Text="Translate" />
+                            Text="Start Test" />
                         <ProgressRing
                             Width="16"
                             Height="16"
@@ -97,8 +97,8 @@
                 </Button.Content>
             </Button>
             <Button
-                IsEnabled="{x:Bind Vm.IsTranslating, Mode=OneWay}"
-                Command="{x:Bind Vm.TranslateCommand}"
+                IsEnabled="{x:Bind Vm.CanCancel, Mode=OneWay}"
+                Command="{x:Bind Vm.CancelCommand}"
                 Content="Cancel" />
             <TextBlock
                 Margin="20, 0, 0, 0"
@@ -130,6 +130,7 @@
             HorizontalAlignment="Left"
             Width="420"
             Foreground="Lime"
+            Background="Green"
             Value="{x:Bind Vm.Progress, Mode=OneWay}"
             Opacity="{x:Bind Vm.IsTranslating, Mode=OneWay, Converter={StaticResource BoolToOpacityConv}}"
             Minimum="0">

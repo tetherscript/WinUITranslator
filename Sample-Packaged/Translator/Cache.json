@@ -178,5 +178,17 @@
   {
     "key": "fr-FR:!!:Open the aperture for a shallower depth of field.",
     "value": "Ouvrez l\u0027ouverture pour une profondeur de champ plus faible."
+  },
+  {
+    "key": "ar-SA:@@:Lock",
+    "value": "\u0642\u0641\u0644"
+  },
+  {
+    "key": "de-DE:!:Image Browser",
+    "value": "Bildbrowser"
+  },
+  {
+    "key": "fr-FR:@@:Lock",
+    "value": "Verrou"
   }
 ]

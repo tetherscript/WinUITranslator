@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -14,7 +15,9 @@
             x:Key="InvBoolConv" />
     </Page.Resources>
     
-    <Grid>
+    <Grid 
+        Margin="10,10,10,0"
+        RowSpacing="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="*" />
@@ -25,57 +28,31 @@
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
-        
 
-
-        <StackPanel
+        <TextBlock
             Grid.Row="0"
-            Margin="10 10 10 10"
-            Spacing="10">
-            <StackPanel
-                VerticalAlignment="Top"
-                Orientation="Horizontal">
+            TextWrapping="WrapWholeWords"
+            Text="The scan searches the target project for translatable elements, including .xaml elements with x:Uid and Hint Token prefixes, as well as any historical TLocalized.Get() calls. These items are then saved to the \Strings\en-US\Resources.resw file.">
+        </TextBlock>
 
-                <StackPanel
-                    Spacing="10">
-                    <StackPanel
-                        Spacing="20"
-                        Orientation="Horizontal">
-                        <Button
-                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                            Command="{x:Bind Vm.StartScanCommand}"
-                            Content="Scan" />
-                        <ProgressRing
-                            IsActive="{x:Bind Vm.IsScanning, Mode=OneWay}" />
-                    </StackPanel>
-                </StackPanel>
-                    
-            </StackPanel>
-            <TextBlock
-                TextWrapping="WrapWholeWords"
-                Text="The scan searches the target project for translatable elements, including .xaml elements with x:Uid and Hint Token prefixes, as well as any historical TLocalized.Get() calls. These items are then saved to the \Strings\en-US\Resources.resw file.">
-            </TextBlock>
-
-        </StackPanel>
-
-        <TextBox
+        <Button
             Grid.Row="1"
-            Margin="10 0 10 10"
-            FontFamily="Courier New"
-            AcceptsReturn="True"
-            TextWrapping="NoWrap"
-            FontWeight="Light"
-            IsReadOnly="false"
-            TextAlignment="Left"
-            Text="{x:Bind Vm.ScanLog, Mode=OneWay}"
-            SelectionStart="{x:Bind Vm.ScanLogSelectionStart, Mode=OneWay}"
-            SelectionLength="{x:Bind Vm.ScanLogSelectionLength, Mode=OneWay}"
-            ScrollViewer.VerticalScrollBarVisibility="Auto"
-            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-            IsTextPredictionEnabled="False">
-        </TextBox>
-
-
+            IsEnabled="{x:Bind Vm.CanScan, Mode=OneWay}"
+            Command="{x:Bind Vm.StartCommand}">
+            <Button.Content>
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="10">
+                    <TextBlock
+                        Text="Scan Target Project" />
+                    <ProgressRing
+                        Width="16"
+                        Height="16"
+                        HorizontalAlignment="Center"
+                        IsActive="{x:Bind Vm.IsScanning, Mode=OneWay}" />
+                </StackPanel>
+            </Button.Content>
+        </Button>
 
     </Grid>
 </Page>

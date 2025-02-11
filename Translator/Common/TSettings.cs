@@ -38,12 +38,7 @@ namespace Translator
             public const string Debug = "Debug";
             public const string CacheEditorSearchText = "CacheEditorSearchText";
 
-            public const string TranslateSaveToCache = "TranslateSaveToCache";
-            public const string TranslateLogFilter = "TranslateLogFilter";
 
-
-
-            public const string ProfileTestLastTabIndex = "ProfileTestLastTabIndex";
 
 
 
@@ -80,16 +75,7 @@ namespace Translator
             App.Vm.SearchText = (appData.Values.ContainsKey(AppSettingsKeys.CacheEditorSearchText)) ?
                 (string)appData.Values[AppSettingsKeys.CacheEditorSearchText] : "";
 
-            App.Vm.ProfileTestLastTabIndex = (appData.Values.ContainsKey(AppSettingsKeys.ProfileTestLastTabIndex)) ?
-                (int)appData.Values[AppSettingsKeys.ProfileTestLastTabIndex] : 0;
-
-            App.Vm.TranslateSaveToCache = (appData.Values.ContainsKey(AppSettingsKeys.TranslateSaveToCache)) ?
-                (bool)appData.Values[AppSettingsKeys.TranslateSaveToCache] : false;
-
-            string TranslateLogFilter = (appData.Values.ContainsKey(AppSettingsKeys.TranslateLogFilter)) ?
-                (string)appData.Values[AppSettingsKeys.TranslateLogFilter] : "inf,sum,wrn,err,tra";
-            App.Vm.SetTranslateLogFilter(TranslateLogFilter);
-
+            
 
             LastNavItemTag = (appData.Values.ContainsKey(AppSettingsKeys.LastNavItemTag)) ?
                 (string)appData.Values[AppSettingsKeys.LastNavItemTag] : "Target";
@@ -128,11 +114,6 @@ namespace Translator
             appData.Values[AppSettingsKeys.SelectedProfile] = App.Vm.SelectedProfile;
 
 
-            appData.Values[AppSettingsKeys.TranslateSaveToCache] = App.Vm.TranslateSaveToCache;
-
-            string TranslateLogFilter = App.Vm.GetTranslateLogFilter();
-            appData.Values[AppSettingsKeys.TranslateLogFilter] = TranslateLogFilter;
-
             //string ProfileTestLogFilter = App.Vm.GetProfileTestLogFilter();
             
             appData.Values[AppSettingsKeys.CacheEditorSearchText] = App.Vm.SearchText;
@@ -144,8 +125,6 @@ namespace Translator
             appData.Values[AppSettingsKeys.WindowHeight] = WindowHeight;
             appData.Values[AppSettingsKeys.WindowScale] = WindowScale;
             appData.Values[AppSettingsKeys.LastNavItemTag] = LastNavItemTag;
-
-            appData.Values[AppSettingsKeys.ProfileTestLastTabIndex] = App.Vm.ProfileTestLastTabIndex;
 
 
         }

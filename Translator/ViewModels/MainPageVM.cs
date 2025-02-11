@@ -22,22 +22,23 @@ namespace Translator
         public const string SelectedProfile = "SelectedProfile";
         public const string LastTabIndexSetting = "LastTabIndexSetting";
         public const string IsShowingProfileSettingsSetting = "IsShowingProfileSettingsSetting";
-
         public const string LogFilterSetting = "LogFilterSetting";
-
 
         public MainPageVm()
         {
-            WeakReferenceMessenger.Default.Register<TAddProfileTestLogItem>(this, (r, m) =>
+            WeakReferenceMessenger.Default.Register<TAddLogItem>(this, (r, m) =>
             {
                 AddLogItem(m.Value);
-
             });
 
             WeakReferenceMessenger.Default.Register<TClearLog>(this, (r, m) =>
             {
                 LogItems.Clear();
+            });
 
+            WeakReferenceMessenger.Default.Register<TSaveLog>(this, (r, m) =>
+            {
+                SaveLog(m.Value);
             });
 
 
@@ -62,8 +63,6 @@ namespace Translator
 
             string logFilterStr = (appData.Values.ContainsKey(LogFilterSetting)) ? (string)appData.Values[LogFilterSetting] : "inf,sum,wrn,err,tra";
             SetLogFilter(logFilterStr);
-
-
 
             LastTabIndex = (appData.Values.ContainsKey(LastTabIndexSetting)) ? (int)appData.Values[LastTabIndexSetting] : 0;
 
@@ -224,7 +223,7 @@ namespace Translator
             );
 
             CanShowLog = (
-                (LastTabIndex != 3)
+                ((LastTabIndex != 3) && (LastTabIndex != 4))
             );
 
         }
@@ -573,13 +572,29 @@ namespace Translator
 
         #region CONTENT
         [ObservableProperty]
-        private int _lastTabIndex = 0;
+        private int _lastTabIndex = -1;
         partial void OnLastTabIndexChanged(int value)
         {
-            SecondRowHeight = (LastTabIndex == 3) ? new GridLength(1, GridUnitType.Star)
-                : new GridLength(1, GridUnitType.Auto);
-            ThirdRowHeight = (LastTabIndex == 3) ? new GridLength(1, GridUnitType.Auto)
-                : new GridLength(1, GridUnitType.Star);
+            AdjustTabs();
+        }
+
+        private void AdjustTabs()
+        {
+            if (LastTabIndex == 3 || LastTabIndex == 4)
+            {
+                SecondRowHeight = new GridLength(1, GridUnitType.Star);
+                ThirdRowHeight = new GridLength(1, GridUnitType.Auto);
+            }
+            else
+            {
+                SecondRowHeight = new GridLength(1, GridUnitType.Auto);
+                ThirdRowHeight = new GridLength(1, GridUnitType.Star);
+
+            }
+            //SecondRowHeight = (LastTabIndex == 3) ? new GridLength(1, GridUnitType.Star)
+            //    : new GridLength(1, GridUnitType.Auto);
+            //ThirdRowHeight = (LastTabIndex == 3) ? new GridLength(1, GridUnitType.Auto)
+            //    : new GridLength(1, GridUnitType.Star);
             CalcState();
         }
 
@@ -641,11 +656,42 @@ namespace Translator
                 item.Message,
                 (((item.Data == null) || (item.Data.Count == 0)) ? false : true),
                 item.Data,
-                (((item.Data == null) || (item.Data.Count == 0)) ? "" : sep + Environment.NewLine + string.Join(Environment.NewLine + sep + Environment.NewLine, item.Data)) + sep,
+                (((item.Data == null) || (item.Data.Count == 0)) ? "" : sep + Environment.NewLine + string.Join(Environment.NewLine + sep + Environment.NewLine, item.Data)) + Environment.NewLine + sep,
                 item.ItemType.ToString() + ":" + item.Message
             );
             LogItems.Add(newItem);
         }
+
+        public void SaveLog(TLog.eLogType mode)
+        {
+            string sep = ucLogHelper.SepMedium;
+            List<string> log = new();
+            foreach(TLogItemEx item in LogItems)
+            {
+                string lineNumber = item.LineNumber.PadLeft(4);
+                string type = String.Format("[{0}]", item.Type.ToString()).ToUpper();
+                string msg = new string(' ', item.Indent) + item.Message.Trim();
+                if ((item.Data != null) && (item.Data.Count >= 0))
+                {
+                    foreach (string dataItem in item.Data)
+                    {
+                        msg = msg + Environment.NewLine + new string(' ', 14) + dataItem.Replace(Environment.NewLine, Environment.NewLine + new string(' ', 14));
+                    }
+                }
+                string res = String.Format("{0}: {1} {2}", lineNumber,  type, msg);
+                log.Add(res);
+            }
+            string logStr = string.Join(Environment.NewLine, log);
+            //save
+            switch (mode)
+            {
+                case TLog.eLogType.Scan: File.WriteAllText(TUtils.TargetScanLogPath, logStr); break;
+                case TLog.eLogType.Translate: File.WriteAllText(TUtils.TargetTranslateLogPath, logStr); break;
+                case TLog.eLogType.ProfileTest: File.WriteAllText(TUtils.TargetProfileTestLogPath, logStr); break;
+            }
+
+        }
+
         #endregion
 
     }

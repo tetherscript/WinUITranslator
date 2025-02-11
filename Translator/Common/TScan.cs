@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,11 @@ namespace Translator
 {
     public static class TScan
     {
+        private static void Log(TLog.eLogItemType logType, int indent, string msg, List<string> details = null)
+        {
+            WeakReferenceMessenger.Default.Send(new TAddLogItem(new TLogItem(TLog.eLogType.Scan, logType, indent, msg, details)));
+        }
+
         public static int ProgressPerc = 0;
         public static bool IsCancelled = false;
         private static int _delay = 500;
@@ -43,18 +49,19 @@ namespace Translator
             IsCancelled = false;
             try
             {
-                TLog.Log(mode, TLog.eLogItemType.inf, 0, "Scan started.");
+                TLog.Log(mode,TLog.eLogItemType.inf, 0, "Scan started.");
 
                 await ScanAsync(
                     mode, 
                     targetRootPath);
 
                 TLog.LogSeparator(mode, TLog.eLogSeparatorType.lineWide);
-                TLog.Log(mode, TLog.eLogItemType.inf, 0, "Scan complete.");
+                Log(TLog.eLogItemType.inf, 0, "Scan complete.");
+                WeakReferenceMessenger.Default.Send(new TSaveLog(TLog.eLogType.Scan));
             }
             catch (Exception ex)
             {
-                TLog.Log(mode, TLog.eLogItemType.err, 0, $"An error occurred: {ex.Message}");
+                Log(TLog.eLogItemType.err, 0, $"An error occurred: {ex.Message}");
             }
         }
 
@@ -68,11 +75,14 @@ namespace Translator
             TUtils.CalcPaths(targetRootPath);
             ProgressPerc = 0;
 
+            Log(TLog.eLogItemType.inf, 0, "<<< SCAN >>>", null);
+
+
             try
             {
                 if (!File.Exists(TUtils.TargetTranslatorXamlElementsPath))
                 {
-                    TLog.Log(mode, TLog.eLogItemType.inf, 0, String.Format("Cannot find {0}", TUtils.TargetTranslatorXamlElementsPath));
+                    Log(TLog.eLogItemType.inf, 0, String.Format("Cannot find {0}", TUtils.TargetTranslatorXamlElementsPath));
                     return;
                 }
 
@@ -81,10 +91,10 @@ namespace Translator
             }
             catch (Exception ex)
             {
-                TLog.Log(mode, TLog.eLogItemType.err, 0, $"Error XamlElements.json from JSON: {ex.Message}");
+                Log(TLog.eLogItemType.err, 0, $"Error XamlElements.json from JSON: {ex.Message}");
             }
 
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, "Scanning target project: " + targetRootPath);
+            Log(TLog.eLogItemType.inf, 0, "Scanning target project: " + targetRootPath);
 
             var entriesMap = new Dictionary<string, string>();
 
@@ -94,7 +104,7 @@ namespace Translator
             {
                 if (!filePath.Contains(@"\obj\"))
                 {
-                    TLog.Log(mode, TLog.eLogItemType.inf, 2, "Found: " + filePath);
+                    Log(TLog.eLogItemType.inf, 2, "Found: " + filePath);
                     ProcessXamlFile(mode, filePath, entriesMap);
                 }
             }
@@ -113,7 +123,7 @@ namespace Translator
                 throw new FileNotFoundException("The specified .csproj file does not exist.", csprojPath);
 
             // Load the .csproj XML
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, "Checking .csproj for linked .xaml's...");
+            Log(TLog.eLogItemType.inf, 0, "Checking .csproj for linked .xaml's...");
             XDocument csprojXml;
             try
             {
@@ -165,17 +175,17 @@ namespace Translator
                     PhysicalPath = physicalPath
                 });
 
-                TLog.Log(mode, TLog.eLogItemType.inf, 0, "Found linked .xaml: " + physicalPath);
+                Log(TLog.eLogItemType.inf, 0, "Found linked .xaml: " + physicalPath);
                 ProcessXamlFile(mode, physicalPath, entriesMap);
             }
 
             await Task.Delay(_delay);
 
             //merge with manual entries
-            TLog.Log(mode, TLog.eLogItemType.inf, 2, "Merging " + TUtils.TargetTranslatorTLocalizedGetsPath + "...");
+            Log(TLog.eLogItemType.inf, 2, "Merging " + TUtils.TargetTranslatorTLocalizedGetsPath + "...");
             if (!File.Exists(TUtils.TargetTranslatorTLocalizedGetsPath))
             {
-                TLog.Log(mode, TLog.eLogItemType.err, 2, $"Merge file not found: {TUtils.TargetTranslatorTLocalizedGetsPath}");
+                Log(TLog.eLogItemType.err, 2, $"Merge file not found: {TUtils.TargetTranslatorTLocalizedGetsPath}");
                 return;
             }
 
@@ -191,12 +201,12 @@ namespace Translator
 
                 if (newEntries == null)
                 {
-                    TLog.Log(mode, TLog.eLogItemType.inf, 2, "Merging: " + "No entries found in " + TUtils.TargetTranslatorTLocalizedGetsPath + ".");
+                    Log(TLog.eLogItemType.inf, 2, "Merging: " + "No entries found in " + TUtils.TargetTranslatorTLocalizedGetsPath + ".");
                     return;
                 }
                 else
                 {
-                    TLog.Log(mode, TLog.eLogItemType.inf, 2, $"Found {newEntries.Count} mergeable entries.");
+                    Log(TLog.eLogItemType.inf, 2, $"Found {newEntries.Count} mergeable entries.");
                 }
 
                 // Merge them into entriesMap
@@ -206,14 +216,14 @@ namespace Translator
                     {
                         // Add the new entry
                         entriesMap[entry.Key] = entry.Value;
-                        TLog.Log(mode, TLog.eLogItemType.inf, 4, $"Merged {entry.Key}: {entry.Value}");
+                        Log(TLog.eLogItemType.inf, 4, $"Merged {entry.Key}: {entry.Value}");
                     }
                 }
-                TLog.Log(mode, TLog.eLogItemType.inf, 2, $"Merge complete.");
+                Log(TLog.eLogItemType.inf, 2, $"Merge complete.");
             }
             catch (Exception ex)
             {
-                TLog.Log(mode, TLog.eLogItemType.err, 2, $"Scanning: Error merging JSON file: {ex.Message}");
+                Log(TLog.eLogItemType.err, 2, $"Scanning: Error merging JSON file: {ex.Message}");
             }
 
             SaveAsJson(mode, TUtils.TargetTranslatorDetectedXamlElementsPath, entriesMap);
@@ -222,8 +232,8 @@ namespace Translator
 
             UpdateEnUSReswFile(mode, entriesMap, TUtils.TargetStrings_enUS_Path);
 
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, "Summary: Updated " + TUtils.TargetStrings_enUS_Path);
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, "Summary: Updated " + TUtils.TargetTranslatorDetectedXamlElementsPath);
+            Log(TLog.eLogItemType.sum, 0, "Summary: Updated " + TUtils.TargetStrings_enUS_Path);
+            Log(TLog.eLogItemType.sum, 0, "Summary: Updated " + TUtils.TargetTranslatorDetectedXamlElementsPath);
 
         }
 
@@ -250,7 +260,7 @@ namespace Translator
                     //reject items that have invalid XAM/ c# identifiers in the key as this will cause app start fails
                     if (!TLocalized.IsValidXamlIdentifier(uid))
                     {
-                        TLog.Log(mode, TLog.eLogItemType.err, 4, String.Format("Rejected {0}:x:Uid='{1}' as it is an invalid XAML/C# resource identifier.", filePath, uid));
+                        Log(TLog.eLogItemType.wrn, 4, String.Format("Rejected {0}:x:Uid='{1}' as it is an invalid XAML/C# resource identifier.", filePath, uid));
                         continue;
                         //// XAML/C# rules: The first character must be a letter or underscore.
                         ///// Subsequent characters can be letters, digits, or underscores.
@@ -300,7 +310,7 @@ namespace Translator
             }
             catch (Exception ex)
             {
-                TLog.Log(mode, TLog.eLogItemType.err, 4, $"Error processing {filePath}: {ex.Message}");
+                Log(TLog.eLogItemType.err, 4, $"Error processing {filePath}: {ex.Message}");
             }
         }
 
@@ -321,15 +331,15 @@ namespace Translator
         {
             int _counter = 0;
 
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, String.Format("Updating {0}", path));
+            Log(TLog.eLogItemType.inf, 0, String.Format("Updating {0}", path));
             if (!File.Exists(path))
             {
-                TLog.Log(mode, TLog.eLogItemType.err, 0, String.Format("File does not exist: {0}", path));
+                Log(TLog.eLogItemType.err, 0, String.Format("File does not exist: {0}", path));
                 return;
             }
             XDocument doc = XDocument.Load(path);
 
-            TLog.Log(mode, TLog.eLogItemType.inf, 2, "Clearing old entries from en-US/Resources.resw...");
+            Log(TLog.eLogItemType.inf, 2, "Clearing old entries from en-US/Resources.resw...");
 
             doc.Descendants("data")
                 .Where(x => 1 == 1)
@@ -337,7 +347,7 @@ namespace Translator
 
             var dataElements = doc.Descendants("data").ToList();
 
-            TLog.Log(mode, TLog.eLogItemType.inf, 4, "Adding entries to en-US/Resources.resw...");
+            Log(TLog.eLogItemType.inf, 4, "Adding entries to en-US/Resources.resw...");
             foreach (var item in entriesMap)
             {
                 (string valuePrefix, string valueVal) = TLocalized.SplitPrefix(item.Value.Substring(0));
@@ -349,14 +359,14 @@ namespace Translator
                 );
                 doc.Root.Add(dataElement);
                 _counter++;
-                TLog.Log(mode, TLog.eLogItemType.inf, 6, String.Format("Added {0}", item.Key));
+                Log(TLog.eLogItemType.inf, 6, String.Format("Added {0}", item.Key));
             }
 
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, "Checking for specials...");
+            Log(TLog.eLogItemType.inf, 0, "Checking for specials...");
             TUtils.LoadSpecials(TUtils.TargetTranslatorSpecialsPath);
             foreach (var item in TUtils.SpecialItems.Where(item => item.Culture == "en-US"))
             {
-                TLog.Log(mode, TLog.eLogItemType.inf, 2, "Adding special: " + item.Key.ToString() + "=" + item.Value.ToString());
+                Log(TLog.eLogItemType.inf, 2, "Adding special: " + item.Key.ToString() + "=" + item.Value.ToString());
 
                 var desDocDataElement1 = new XElement("data",
                     new XAttribute("name", item.Key.ToString()),
@@ -369,10 +379,9 @@ namespace Translator
             }
 
             doc.Save(path);
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, "en-US/Resources.resw updated.");
-            TLog.LogSeparator(mode, TLog.eLogSeparatorType.lineWide);
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, String.Format("Summary: {0} errors", TLog.ErrorCounter));
-            TLog.Log(mode, TLog.eLogItemType.inf, 0, String.Format("Summary: {0} translateable items found", _counter));
+            Log(TLog.eLogItemType.sum, 0, "en-US/Resources.resw updated.");
+            Log(TLog.eLogItemType.sum, 0, String.Format("Summary: {0} errors", TLog.ErrorCounter));
+            Log(TLog.eLogItemType.sum, 0, String.Format("Summary: {0} translateable items found", _counter));
         }
 
     }

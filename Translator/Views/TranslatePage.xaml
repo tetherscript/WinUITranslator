@@ -51,14 +51,14 @@
                         Orientation="Horizontal">
                         <Button
                             HorizontalAlignment="Center"
-                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                            Command="{x:Bind Vm.StartTranslateCommand}">
+                            IsEnabled="{x:Bind Vm.CanTranslate, Mode=OneWay}"
+                            Command="{x:Bind Vm.TranslateCommand}">
                             <Button.Content>
                                 <StackPanel
                                     Orientation="Horizontal"
                                     Spacing="10">
                                     <TextBlock
-                                        Text="Translate" />
+                                        Text="Translate Target Project" />
                                     <ProgressRing
                                         Width="16"
                                         Height="16"
@@ -68,20 +68,22 @@
                             </Button.Content>
                         </Button>
                         <Button
-                            IsEnabled="{x:Bind Vm.IsTranslating, Mode=OneWay}"
-                            Command="{x:Bind Vm.CancelTranslateCommand}"
+                            IsEnabled="{x:Bind Vm.CanCancel, Mode=OneWay}"
+                            Command="{x:Bind Vm.CancelCommand}"
                             Content="Cancel" />
                         <CheckBox
                             Padding="8, 0, 0, 0"
                             Margin="0"
                             Content="Save to cache"
-                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                            IsChecked="{x:Bind Vm.TranslateSaveToCache, Mode=TwoWay}" 
+                            IsEnabled="{x:Bind Vm.CanChangeSaveToCache, Mode=OneWay}"
+                            IsChecked="{x:Bind Vm.SaveToCache, Mode=TwoWay}" 
                             VerticalContentAlignment="Center" />
                     </StackPanel>
                     <ProgressBar
-                        Value="{x:Bind Vm.TranslateProgress, Mode=OneWay}"
+                        Value="{x:Bind Vm.Progress, Mode=OneWay}"
                         Opacity="{x:Bind Vm.IsTranslating, Mode=OneWay, Converter={StaticResource BoolToOpacityConv}}"
+                        Foreground="Lime"
+                        Background="Green"
                         Maximum="100"
                         Minimum="0">
                     </ProgressBar>

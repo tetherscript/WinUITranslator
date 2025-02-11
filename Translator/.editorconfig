@@ -2,3 +2,6 @@
 
 # CA1416: Validate platform compatibility
 dotnet_diagnostic.CA1416.severity = silent
+
+# MVVMTK0045: Using [ObservableProperty] on fields is not AOT compatible for WinRT
+dotnet_diagnostic.MVVMTK0045.severity = silent

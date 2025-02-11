@@ -295,35 +295,6 @@
                         Content="Cancel" />
                 </StackPanel>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </Grid>
 
             <StackPanel
@@ -361,8 +332,6 @@
                         Glyph="&#xE713;" />
                 </Button>                
             </StackPanel>
-
-
 
         </Grid>
 
@@ -436,7 +405,21 @@
                     <local:ProfileSettingPage />
                 </TabViewItem>
 
-             </TabView.TabItems>
+                <TabViewItem
+                    MaxWidth="150"
+                    IsClosable="False"
+                    BorderThickness="0"
+                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    Header="Cache Editor">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource
+                            Symbol="Edit" />
+                    </TabViewItem.IconSource>
+                    <local:CacheEditorPage />
+                </TabViewItem>
+
+            </TabView.TabItems>
         </TabView>
         
         <!--LOG-->
