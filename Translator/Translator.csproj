@@ -238,6 +238,9 @@
     <None Update="Assets\Wide310x150Logo.scale-200.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\ConfirmDialogPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Common\ucLog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -285,8 +288,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Target\Translator\Logs\" />
-    <Folder Include="TTranslatorEx\LMStudio\" />
-    <Folder Include="TTranslatorEx\OpenAI\" />
   </ItemGroup>
 
   <!--

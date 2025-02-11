@@ -37,7 +37,8 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    0);
+                    0,
+                    "");
         }
         List<string> api_key_parts = api_key_raw.Split(':').ToList();
         string apiKey;
@@ -59,7 +60,8 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    0);
+                    0,
+                    "");
         }
 
         //GET PROMPT FOR HINT TOKEN
@@ -70,7 +72,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0);
+                     0,
+                     "");
         }
 
         //GET MODEL
@@ -81,7 +84,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0);
+                     0,
+                     "");
         }
 
 
@@ -93,7 +97,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0);
+                     0,
+                     "");
         }
         if (int.TryParse(minConfidenceStr, out int minConfidence))
         {
@@ -106,7 +111,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0);
+                     0,
+                     "");
         }
 
         using HttpClient httpClient = new HttpClient();
@@ -163,7 +169,8 @@ public partial class TTranslatorEx
                         false,
                         textToTranslate,
                         null,
-                        0);
+                        0,
+                        "");
                 }
             }
             catch (OperationCanceledException)
@@ -173,7 +180,8 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    0);
+                    0,
+                    "");
             }
         }
         catch (Exception ex)
@@ -183,7 +191,8 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    0);
+                    0,
+                    "");
         }
 
         // The response JSON includes an array of "choices"; we want the "message.content"
@@ -206,7 +215,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0);
+                     0,
+                    "");
             }
 
             JsonElement firstChoice = choices[0];
@@ -271,28 +281,31 @@ public partial class TTranslatorEx
                     textToTranslate,
                     translatedText,
                     0,
+                    "",
                     _data);
-                    //translatedText.Length - 2), logItems);
                 case "length":
                     Log(TLog.eLogItemType.err, 2, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + userContent);
                     return new TTranslatorResult(
                          false,
                          textToTranslate,
                          null,
-                         0);
+                         0,
+                         "");
                 case "content_filter":
                     Log(TLog.eLogItemType.err, 2, "The response was blocked due to safety or policy filters (e.g., violating OpenAI's content guidelines): " + userContent);
                     return new TTranslatorResult(
                          false,
                          textToTranslate,
                          null,
-                         0);
+                         0,
+                         "");
                 default:
                     return new TTranslatorResult(
                          false,
                          textToTranslate,
                          null,
-                         0);
+                         0,
+                         "");
             }
         }
         catch
@@ -303,7 +316,8 @@ public partial class TTranslatorEx
                  false,
                  textToTranslate,
                  null,
-                 0);
+                 0,
+                 "");
         }
     
     }

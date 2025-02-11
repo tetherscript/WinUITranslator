@@ -14,7 +14,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TeeLocalized;
-using Translator.Log;
 using Windows.Storage;
 
 
@@ -33,6 +32,7 @@ namespace Translator
 
     public partial class TVm : ObservableObject
     {
+
         public TVm(string[] arguments)
         {
             _arguments = arguments;
@@ -98,6 +98,8 @@ namespace Translator
             if (IsValidConfiguredPath)
             {
                 GetProfiles();
+                TUtils.Target = value;
+                WeakReferenceMessenger.Default.Send(new TTargetChanged(value));
             }
         }
 
@@ -188,7 +190,8 @@ namespace Translator
         partial void OnSelectedProfileChanged(string? oldValue, string newValue)
         {
             PrevSelectedProfile = oldValue;
-            WeakReferenceMessenger.Default.Send(new TProfileSelected(newValue));
+            TUtils.Profile = newValue;
+            WeakReferenceMessenger.Default.Send(new TProfileChanged(newValue));
         }
 
         public string PrevSelectedProfile;
@@ -248,11 +251,11 @@ namespace Translator
             switch (item.LogType)
             {
                 case TLog.eLogType.Translate: lineNumber = TranslateLogItems.Count; break;
-                case TLog.eLogType.ProfileTest: lineNumber = ProfileTestLogItems.Count; break;
+                //case TLog.eLogType.ProfileTest: lineNumber = ProfileTestLogItems.Count; break;
                 default: break;
             };
             TLogItemEx newItem = new TLogItemEx(
-                GetLogTextColor(item.ItemType),
+                ucLogHelper.GetLogTextColor(item.ItemType),
                 lineNumber.ToString(),
                 item.ItemType,
                 item.Indent,
@@ -265,33 +268,18 @@ namespace Translator
             switch (item.LogType)
             {
                 case TLog.eLogType.Translate: TranslateLogItems.Add(newItem); break;
-                case TLog.eLogType.ProfileTest: ProfileTestLogItems.Add(newItem); break;
+                //case TLog.eLogType.ProfileTest: ProfileTestLogItems.Add(newItem); break;
                 default: break;
             };
         }
 
-        private SolidColorBrush GetLogTextColor(TLog.eLogItemType type)
-        {
-            SolidColorBrush GetResourceBrush(string res)
-            {
-                if (Application.Current.Resources.TryGetValue(res, out var resource) && resource is SolidColorBrush brush)
-                {
-                    return brush;
-                }
-                return new SolidColorBrush(Colors.Gray);
-            }
 
-            switch (type)
-            {
-                case TLog.eLogItemType.inf: return GetResourceBrush("InfoTextBrush");
-                case TLog.eLogItemType.sum: return GetResourceBrush("SummaryTextBrush");
-                case TLog.eLogItemType.dbg: return GetResourceBrush("DebugTextBrush");
-                case TLog.eLogItemType.wrn: return GetResourceBrush("WarningTextBrush");
-                case TLog.eLogItemType.err: return GetResourceBrush("ErrorTextBrush");
-                case TLog.eLogItemType.tra: return GetResourceBrush("ActionTextBrush");
-                default: return GetResourceBrush("TextFillColorPrimaryBrush");
-            }
-        }
+
+
+
+
+
+
 
         public ObservableCollection<TLogItemEx> TranslateLogItems = new();
 
@@ -327,42 +315,6 @@ namespace Translator
             }
             return string.Join(",", filter);
         }
-
-        public ObservableCollection<TLogItemEx> ProfileTestLogItems = new();
-
-        public ObservableCollection<TLogItemExFilter> ProfileTestLogFilters = new();
-
-        public void SetProfileTestLogFilter(string filter)
-        {
-            ProfileTestLogFilters.Clear();
-            ProfileTestLogFilters.Add(new TLogItemExFilter("Translations", "tra", false));
-            ProfileTestLogFilters.Add(new TLogItemExFilter("Summary", "sum", false));
-            ProfileTestLogFilters.Add(new TLogItemExFilter("Info", "inf", false));
-            ProfileTestLogFilters.Add(new TLogItemExFilter("Error", "err", false));
-            ProfileTestLogFilters.Add(new TLogItemExFilter("Warning", "wrn", false));
-            ProfileTestLogFilters.Add(new TLogItemExFilter("Debug", "dbg", false));
-
-            string[] activeFilters = filter.Split(',');
-
-            foreach (TLogItemExFilter item in ProfileTestLogFilters)
-            {
-                item.IsChecked = activeFilters.Contains(item.Value);
-            }
-        }
-
-        public string GetProfileTestLogFilter()
-        {
-            List<string> filter = [];
-            foreach (TLogItemExFilter item in ProfileTestLogFilters)
-            {
-                if (item.IsChecked)
-                {
-                    filter.Add(item.Value);
-                }
-            }
-            return string.Join(",", filter);
-        }
-
         #endregion
 
         #region TRANSLATE
@@ -403,201 +355,10 @@ namespace Translator
 
         #region PROFILE EDITOR
 
-        [ObservableProperty]
-        private int _profileTestLastTabIndex = 0;
-
-        [ObservableProperty]
-        private List<string> _profileTestCultureList = CultureInfo
-            .GetCultures(CultureTypes.AllCultures)
-            .Select(c => c.Name)
-            .Where(name => !string.IsNullOrWhiteSpace(name)) // Filter out empty strings.
-            .Distinct() // Ensure uniqueness.
-            .OrderBy(name => name).ToList();
-
-        [RelayCommand]
-        private async Task ProfileTestStart()
-        {
-            IsBusy = true;
-            ProfileTestIsTranslating = true;
-            ProfileTestLogItems.Clear();
-            _profileTestCts = new();
-            TTranslatorExProc translatorExProc = new();
-            await translatorExProc.ProfileTestStart(TLog.eLogType.ProfileTest, Target, SelectedProfile, _profileTestCts, ProfileTestTextToTranslate, ProfileTestTestRepeats, ProfileTestToCulture);
-            _profileTestCts.Dispose();
-            ProfileTestIsTranslating = false;
-            IsBusy = false;
-        }
-
-        [RelayCommand]
-        private void ProfileTestCancelTranslate()
-        {
-            _profileTestCts.TryReset();
-            _profileTestCts.Cancel();
-        }
-
-        private CancellationTokenSource? _profileTestCts;
-
-        [ObservableProperty]
-        private int _profileTestProfileIndex;
-
-        [ObservableProperty]
-        private string _profileTestToCulture;
-
-        [ObservableProperty]
-        private int _profileTestTestRepeats;
-
-        [ObservableProperty]
-        private string _profileTestTextToTranslate;
-
-        [ObservableProperty]
-        private bool _profileTestIsTranslating;
-
-        [ObservableProperty]
-        private string _profileTestValidHintTokens = TLocalized.ValidHintTokenStr;
-
-
-
-
-
-
-
-
-
-
-
-
-
-        #region SETTINGS
-        [ObservableProperty]
-        private string _profileTestSettings;
-        partial void OnProfileTestSettingsChanged(string value)
-        {
-            ProfileTestSettingsModified = true;
-        }
-
-        [ObservableProperty]
-        private bool _profileTestSettingsModified;
-        partial void OnProfileTestSettingsModifiedChanged(bool value)
-        {
-            ProfileTestCloneSettingCommand.NotifyCanExecuteChanged();
-            ProfileTestRenameSettingCommand.NotifyCanExecuteChanged();
-        }
-
-        [RelayCommand]
-        private void ProfileTestLoadSettings()
-        {
-            TUtils.CalcPaths(Target);
-            string path = Path.Combine(TUtils.TargetProfilesPath, SelectedProfile + ".prf");
-            if (path == null)
-            {
-                ProfileTestSettings = "No settings file specified.";
-            }
-            else
-            {
-                try
-                {
-                    string loadedJson = File.ReadAllText(path);
-                    ProfileTestSettings = loadedJson;
-                    ProfileTestSettingsModified = false;
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-        }
-
-        [RelayCommand]
-        private void ProfileTestSaveSettings()
-        {
-            TUtils.CalcPaths(Target);
-            string path = Path.Combine(TUtils.TargetProfilesPath, SelectedProfile + ".prf");
-            if (path == null) return;
-            try
-            {
-                File.WriteAllText(path, ProfileTestSettings);
-                ProfileTestSettingsModified = false;
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-
-        private bool ProfiletestCanCloneSetting()
-        {
-            return (!IsBusy && !ProfileTestSettingsModified);
-        } 
-
-        [ObservableProperty]
-        private bool _profileTestIsCloningSetting;
-
-        [RelayCommand(CanExecute = nameof(ProfiletestCanCloneSetting))]
-        private void ProfileTestCloneSetting()
-        {
-
-        }
-
-
-
-
-
-        private bool ProfiletestCanRenameSetting()
-        {
-            return (!IsBusy && !ProfileTestSettingsModified);
-        }
-
-        [ObservableProperty]
-        private bool _profileTestIsRenamingSetting;
-        partial void OnProfileTestIsRenamingSettingChanged(bool value)
-        {
-            ProfileTestCloneSettingCommand.NotifyCanExecuteChanged();
-            ProfileTestRenameSettingCommand.NotifyCanExecuteChanged();
-        }
-
-        [RelayCommand(CanExecute = nameof(ProfiletestCanRenameSetting))]
-        private void ProfileTestRenameSetting()
-        {
-            ProfileTestIsRenamingSetting = true;
-            IsBusy = true;
-        }
-
-        [ObservableProperty]
-        private string _profileTestRenamedSettingStr;
-        partial void OnProfileTestRenamedSettingStrChanged(string value)
-        {
-            ProfileTestSettingRenameStrInvalid = TUtils.ValidateFileName(value);
-        }
-
-        [ObservableProperty]
-        private bool _profileTestSettingRenameStrInvalid;
-
-        [RelayCommand]
-        private void ProfileTestRenameSettingSave()
-        {
-            ProfileTestIsRenamingSetting = false;
-            IsBusy = false;
-        }
-
-        [RelayCommand]
-        private void ProfileTestRenameSettingCancel()
-        {
-            ProfileTestIsRenamingSetting = false;
-            IsBusy = false;
-        }
-
-
-
-
-
-  
-
-        #endregion
-
 
 
         #endregion
+
 
         #region CACHE EDITOR
         // The collection used by the UI (ListView) to display results
@@ -783,6 +544,8 @@ namespace Translator
 
 
 
+                [ObservableProperty]
+        private int _profileTestLastTabIndex = 0;
 
 
 

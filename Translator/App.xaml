@@ -19,9 +19,9 @@
             <Color
                 x:Key="SolidBackgroundFillColorBaseAltBrush">#000000</Color>
             <Color
-              x:Key="SystemAccentColorLight1">#8888FF</Color>
+              x:Key="SystemAccentColorLight1">#808080</Color>
             <Color
-                x:Key="SystemAccentColorLight2">#FFFFFF</Color>
+                x:Key="SystemAccentColorLight2">#808080</Color>
             <!--<Color
               x:Key="SystemAccentColorLight3">#808080</Color>-->
            

@@ -27,7 +27,7 @@ namespace Translator
             Vm.CacheSearchSelectionLength = Vm.SearchText.Length;
             Vm.CacheSearchSelectionStart = 0;
 
-            WeakReferenceMessenger.Default.Register<TTargetSelected>(this, (r, m) =>
+            WeakReferenceMessenger.Default.Register<TTargetChanged>(this, (r, m) =>
             {
                 Vm.LoadCache();
             });

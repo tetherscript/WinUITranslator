@@ -18,7 +18,7 @@ public partial class TTranslatorEx
     {
         //order of these fields is important.  ex. total_tokens is last because it isn't known at the beginning.
         public required string originalText { get; set; }
-        public required string reasoning { get; set; }
+        public required string reasoning { get; set; } //this improves the accuracy
         public required string translatedText { get; set; }
         public required int confidence { get; set; }
     }
@@ -40,7 +40,8 @@ public partial class TTranslatorEx
                     false,
                     textToTranslate,
                     null,
-                    0);
+                    0,
+                    "");
         }
 
         //GET MODEL
@@ -51,7 +52,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0); 
+                     0,
+                     ""); 
         }
 
         //GET CONFIDENCE
@@ -62,7 +64,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0);
+                     0,
+                     "");
         }
         if (!int.TryParse(minConfidenceStr, out int minConfidence))
         {
@@ -71,7 +74,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0);
+                     0,
+                     "");
         }
 
         //GET PROMPT FOR HINT TOKEN
@@ -82,7 +86,8 @@ public partial class TTranslatorEx
                      false,
                      textToTranslate,
                      null,
-                     0);
+                     0,
+                     "");
         }
 
         try
@@ -128,6 +133,7 @@ public partial class TTranslatorEx
                     translationResult.originalText,
                     "<!>" + translatedText,
                     translationResult.confidence,
+                    "",
                     _data);
             }
             else
@@ -138,6 +144,7 @@ public partial class TTranslatorEx
                     translationResult.originalText,
                     translatedText,
                     translationResult.confidence,
+                    "",
                     _data);
             }
         }
@@ -150,6 +157,7 @@ public partial class TTranslatorEx
                 "",
                 "<ERROR>",
                 0,
+                "",
                 _data);
         }
 

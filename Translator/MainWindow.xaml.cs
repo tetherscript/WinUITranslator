@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media.Animation;
@@ -82,6 +83,7 @@ namespace Translator
         {
             SaveWindowSizePos(this);
             TSettings.Save();
+            WeakReferenceMessenger.Default.Send(new TShuttingDown(""));
         }
 
         private void RestoreWindowSizePos(Window window)

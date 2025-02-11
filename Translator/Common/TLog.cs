@@ -129,8 +129,6 @@ namespace Translator
             switch (mode)
             {
                 case eLogType.Scan: return ScanText;
-                case eLogType.Translate: return TranslateText;
-                case eLogType.ProfileTest: return TfTranslateText;
                 default: return "";
             }
         }

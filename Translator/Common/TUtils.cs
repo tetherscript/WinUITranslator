@@ -12,6 +12,10 @@ namespace Translator
 {
     public static class TUtils
     {
+        public static string Target;
+        public static string Profile;
+
+
         public static string TargetRootPath = string.Empty;
         public static string TargetTranslatorPath = string.Empty;
         public static string TargetTranslatorXamlElementsPath = string.Empty;
@@ -232,21 +236,8 @@ namespace Translator
     }
 
 
-    public class TTargetSelected : ValueChangedMessage<string>
-    {
-        public TTargetSelected(string value) : base(value)
-        {
 
-        }
-    }
 
-    public class TProfileSelected : ValueChangedMessage<string>
-    {
-        public TProfileSelected(string value) : base(value)
-        {
-
-        }
-    }
 
 
     public static class StringExtensions

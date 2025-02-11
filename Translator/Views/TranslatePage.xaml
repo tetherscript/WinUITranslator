@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Translator"
-    xmlns:local1="using:Translator.Log"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
 
@@ -72,10 +71,6 @@
                             IsEnabled="{x:Bind Vm.IsTranslating, Mode=OneWay}"
                             Command="{x:Bind Vm.CancelTranslateCommand}"
                             Content="Cancel" />
-                        <ComboBox
-                            IsEnabled="{x:Bind Vm.IsBusy, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
-                            ItemsSource="{x:Bind Vm.Profiles}"
-                            SelectedValue="{x:Bind Vm.SelectedProfile, Mode=TwoWay}" />
                         <CheckBox
                             Padding="8, 0, 0, 0"
                             Margin="0"
@@ -93,12 +88,6 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-
-        <local1:ucLog
-            Grid.Row="1"
-            Margin="0, 4, 0, 10"
-            LogItems="{x:Bind Vm.TranslateLogItems, Mode=OneWay}"
-            LogFilters="{x:Bind Vm.TranslateLogFilters, Mode=OneWay}" />
 
     </Grid>
 </Page>

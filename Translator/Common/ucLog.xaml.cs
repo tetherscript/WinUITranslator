@@ -1,21 +1,58 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.WinUI.Collections;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.Windows.Widgets.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Windows.UI.ViewManagement;
 
-namespace Translator.Log
+namespace Translator
 {
     public partial class TLogItemDataEx
     {
 
+    }
+
+    public static class ucLogHelper
+    {
+        public static string SepSmall = new('─', 15);
+        public static string SepMedium = new('─', 30);
+        public static string SepLarge = new('─', 60);
+
+        public static SolidColorBrush GetLogTextColor(TLog.eLogItemType type)
+        {
+            SolidColorBrush GetResourceBrush(string res)
+            {
+                if (Application.Current.Resources.TryGetValue(res, out var resource) && resource is SolidColorBrush brush)
+                {
+                    return brush;
+                }
+                return new SolidColorBrush(Colors.Gray);
+            }
+
+            switch (type)
+            {
+                case TLog.eLogItemType.inf: return GetResourceBrush("InfoTextBrush");
+                case TLog.eLogItemType.sum: return GetResourceBrush("SummaryTextBrush");
+                case TLog.eLogItemType.dbg: return GetResourceBrush("DebugTextBrush");
+                case TLog.eLogItemType.wrn: return GetResourceBrush("WarningTextBrush");
+                case TLog.eLogItemType.err: return GetResourceBrush("ErrorTextBrush");
+                case TLog.eLogItemType.tra: return GetResourceBrush("ActionTextBrush");
+                default: return GetResourceBrush("TextFillColorPrimaryBrush");
+            }
+        }
+    }
+
+    public class TLogItem(TLog.eLogType logType, TLog.eLogItemType itemType, int indent, string message, List<string> data)
+    {
+        public TLog.eLogType LogType { get; set; } = logType;
+        public TLog.eLogItemType ItemType { get; set; } = itemType;
+        public int Indent { get; set; } = indent;
+        public string Message { get; set; } = message;
+        public List<string> Data { get; set; } = data;
     }
 
     public partial class TLogItemEx(SolidColorBrush textColor, string lineNumber, TLog.eLogItemType type, int indent, string message, bool hasData, List<string> data, string dataStr, string filterableStr) : ObservableObject
@@ -67,7 +104,7 @@ namespace Translator.Log
         private bool _isChecked = isChecked;
     }
 
-    public partial class TVm : ObservableObject
+    public partial class TucLogVm : ObservableObject
     {
         private void Filter_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -128,8 +165,8 @@ namespace Translator.Log
 
     public sealed partial class ucLog : UserControl
     {
-        private readonly TVm _vm = new();
-        public TVm Vm { get => _vm; }
+        private readonly TucLogVm _vm = new();
+        public TucLogVm Vm { get => _vm; }
 
         public ucLog()
         {

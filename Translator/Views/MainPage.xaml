@@ -15,86 +15,439 @@
             x:Key="InvBoolConv" />
         <converters:BoolToOpacityConv
             x:Key="BoolToOpacityConv" />
-        
-        <Thickness
-            x:Key="NavigationViewHeaderMargin">10,20,0,20</Thickness>
-
-        <!-- DataTemplate for NavigationViewItem Header -->
-        <DataTemplate
-            x:Key="HeaderTemplate">
-            <StackPanel
-                Orientation="Horizontal"
-                VerticalAlignment="Center"
-                Margin="0">
-                <SymbolIcon
-                    Symbol="{Binding NavIcon}"
-                    Width="24"
-                    Height="24"
-                    Margin="0,0,10,0" />
-                <TextBlock
-                    Text="{Binding NavLabel}"
-                    Style="{StaticResource SubtitleTextBlockStyle}" />
-            </StackPanel>
-        </DataTemplate>
+        <converters:BoolToVisibilityConv
+            x:Key="BoolToVisibilityConv" />
     </Page.Resources>
-    
-    <NavigationView
-        x:Name="nvMain"
-        HeaderTemplate="{StaticResource HeaderTemplate}"
-        IsBackButtonVisible="Collapsed"
-        IsTabStop="False"
-        OpenPaneLength="250"
-        IsSettingsVisible="False"
-        PaneDisplayMode="Left"
-        SelectionChanged="NvMain_SelectionChanged"
-        AlwaysShowHeader="False">
-        
-        <NavigationView.MenuItems>
-            <NavigationViewItem
-                x:Name="nviTarget"
-                Icon="Home"
-                Content="1. Target a Project"
-                Tag="Target" />
-            <NavigationViewItem
-                x:Name="nviScan"
-                Icon="Find"
-                IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
-                Content="2. Scan Target Project"
-                Tag="Scan" />
-            <NavigationViewItem
-                x:Name="nviTranslate"
-                Icon="Globe"
-                IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
-                Content="3. Translate Scan Results"
-                Tag="Translate" />
-            <NavigationViewItem
-                x:Name="nviProfileEditor"
-                Icon="Bookmarks"
-                IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
-                Content="Profile Editor"
-                Tag="ProfileEditor" />
-            <NavigationViewItem
-                x:Name="nviCacheExplorer"
-                Icon="Edit"
-                IsEnabled="{x:Bind Vm.IsValidConfiguredPath, Mode=OneWay}"
-                Content="Cache Explorer"
-                Tag="CacheExplorer" />
 
-        </NavigationView.MenuItems>
-        <NavigationView.PaneFooter>
+    <Grid
+        RowSpacing="10"
+        Margin="10,10,10,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="{x:Bind Vm.SecondRowHeight, Mode=OneWay}" />
+            <RowDefinition
+                Height="{x:Bind Vm.ThirdRowHeight, Mode=OneWay}" />
+        </Grid.RowDefinitions>
+
+        <!--TARGET-->
+        <Grid
+            Grid.Row="0"
+            Margin="0,0,40,0"
+            ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="0,8,0,0"
+                VerticalAlignment="Top"
+                Text="Target">
+            </TextBlock>
+
+            <Grid
+                Visibility="Visible"
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,2,0,0"
+                HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ComboBox
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    SelectedItem="{x:Bind Vm.Target, Mode=TwoWay}"
+                    IsEnabled="{x:Bind Vm.CanSelectTarget, Mode=OneWay}"
+                    ItemsSource="{x:Bind Vm.TargetList}" />
+
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,10,0,0"
+                    VerticalAlignment="Center"
+                    Visibility="{x:Bind Vm.IsTargetPathInvalid, Mode=OneWay, Converter={StaticResource BoolToVisibilityConv}}"
+                    Text="&#x274C; Invalid target root path" />
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,10,0,0"
+                    VerticalAlignment="Center"
+                    Visibility="{x:Bind Vm.TargetNotConfigured, Mode=OneWay, Converter={StaticResource BoolToVisibilityConv}}"
+                    Text="&#x274C; Target not configured" />
+                <TextBox
+                    Grid.Row="2"
+                    Margin="0,10,0,0"
+                    Visibility="{x:Bind Vm.IsAddingTarget, Mode=OneWay}"
+                    HorizontalAlignment="Stretch"
+                    IsReadOnly="False"
+                    FontFamily="Courier New"
+                    Text="{x:Bind Vm.InputTarget, Mode=TwoWay}"
+                    IsEnabled="{x:Bind Vm.IsAddingTarget, Mode=OneWay}"
+                    PlaceholderText="Enter target project folder path..."
+                    TextAlignment="Left">
+                </TextBox>
+
+                <StackPanel
+                    Grid.Row="3"
+                    Margin="0,10,0,0"
+                    Visibility="{x:Bind Vm.IsAddingTarget, Mode=OneWay}"
+                    VerticalAlignment="Top"
+                    Spacing="60"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button
+                        IsEnabled="{x:Bind Vm.CanAddTarget}"
+                        Command="{x:Bind Vm.AddTargetSaveCommand}"
+                        Content="Save">
+                    </Button>
+                    <Button
+                        IsEnabled="{x:Bind Vm.CanAddTarget}"
+                        Command="{x:Bind Vm.AddTargetCancelCommand}"
+                        Content="Cancel">
+                    </Button>
+                </StackPanel>
+                
+            </Grid>
+
             <StackPanel
-                VerticalAlignment="Center"
-                Orientation="Vertical"
-                Margin="10, 0, 10, 0"
-                Visibility="Visible">
-                <ToggleSwitch
-                    IsOn="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}"
-                    OnContent="Dark Mode"
-                    OffContent="Light Mode" />
+                Grid.Row="0"
+                Grid.Column="2"
+                Orientation="Horizontal"
+                VerticalAlignment="Top"
+                Spacing="10">
+                <Button
+                    ToolTipService.ToolTip="Add a target"
+                    IsEnabled="{x:Bind Vm.CanAddTarget, Mode=OneWay}"
+                    Command="{x:Bind Vm.AddTargetCommand}">
+                    <FontIcon
+                        Glyph="&#xE710;" />
+                </Button>
+                <Button
+                    ToolTipService.ToolTip="Delete the selected target"
+                    Command="{x:Bind Vm.RemoveTargetCommand}"
+                    IsEnabled="{x:Bind Vm.CanRemoveTarget, Mode=OneWay}" >
+                    <FontIcon
+                        Glyph="&#xE74D;" />
+                </Button>
             </StackPanel>
-        </NavigationView.PaneFooter>
 
-        <Frame
-            x:Name="frMain" />
-    </NavigationView>
+        </Grid>
+
+        <!--PROFILE-->
+        <Grid
+            Grid.Row="1"
+            Margin="0,0,40,0"
+            ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="0,8,0,0"
+                VerticalAlignment="Top"
+                Text="Profile">
+            </TextBlock>
+
+            <Grid
+                Visibility="Visible"
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,2,0,0"
+                HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ComboBox
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    SelectedItem="{x:Bind Vm.Profile, Mode=TwoWay}"
+                    IsEnabled="{x:Bind Vm.CanSelectProfile, Mode=OneWay}"
+                    ItemsSource="{x:Bind Vm.Profiles}" />
+
+                <!--PROFILE CLONING-->
+                <TextBox
+                    Grid.Row="2"
+                    Margin="0,10,0,0"
+                    IsReadOnly="False"
+                    FontFamily="Courier New"
+                    HorizontalAlignment="Stretch"
+                    IsSpellCheckEnabled="false"
+                    IsTextPredictionEnabled="False"
+                    Visibility="{x:Bind Vm.IsProfileCloning, Mode=OneWay}"
+                    Text="{x:Bind Vm.ProfileCloneName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    PlaceholderText="Enter name for the cloned profile..."
+                    TextAlignment="Left">
+                </TextBox>
+                
+                <StackPanel
+                    Grid.Row="3"
+                    Margin="0,10,0,0"
+                    Visibility="{x:Bind Vm.IsProfileCloning, Mode=OneWay}"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="40">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Visibility="{x:Bind Vm.IsCloneNameInvalid, Mode=OneWay, Converter={StaticResource BoolToVisibilityConv}}"
+                        Text="&#x274C; Invalid or duplicate profile name" />
+                    <Button
+                        IsEnabled="{x:Bind Vm.IsCloneNameInvalid, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                        Command="{x:Bind Vm.ProfileCloneSaveCommand}"
+                        Content="Save" />
+                    <Button
+                        Command="{x:Bind Vm.ProfileCloneCancelCommand}"
+                        Content="Cancel" />
+                </StackPanel>
+
+                
+                <!--PROFILE RENAMING-->
+                <TextBox
+                    Grid.Row="2"
+                    Margin="0,10,0,0"
+                    IsReadOnly="False"
+                    FontFamily="Courier New"
+                    HorizontalAlignment="Stretch"
+                    IsSpellCheckEnabled="false"
+                    IsTextPredictionEnabled="False"
+                    Visibility="{x:Bind Vm.IsProfileRenaming, Mode=OneWay}"
+                    Text="{x:Bind Vm.ProfileRenameName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    PlaceholderText="Enter new profile name..."
+                    TextAlignment="Left">
+                </TextBox>
+
+                <StackPanel
+                    Grid.Row="3"
+                    Margin="0,10,0,0"
+                    Orientation="Horizontal"
+                    Visibility="{x:Bind Vm.IsProfileRenaming, Mode=OneWay}"
+                    HorizontalAlignment="Right"
+                    Spacing="40">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Visibility="{x:Bind Vm.IsProfileRenameNameInvalid, Mode=OneWay, Converter={StaticResource BoolToVisibilityConv}}"
+                        Text="&#x274C; Invalid or duplicate profile name" />
+                    <Button
+                        IsEnabled="{x:Bind Vm.IsProfileRenameNameInvalid, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
+                        Command="{x:Bind Vm.ProfileRenameSaveCommand}"
+                        Content="Save" />
+                    <Button
+                        Command="{x:Bind Vm.ProfileRenameCancelCommand}"
+                        Content="Cancel" />
+                </StackPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </Grid>
+
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="2"
+                Orientation="Horizontal"
+                VerticalAlignment="Top"
+                Spacing="10">
+                <Button
+                    ToolTipService.ToolTip="Clone the profile"
+                    IsEnabled="{x:Bind Vm.CanProfileClone, Mode=OneWay}"
+                    Command="{x:Bind Vm.ProfileCloneCommand}">
+                    <FontIcon
+                        Glyph="&#xE8C8;" />
+                </Button>
+                <Button
+                    ToolTipService.ToolTip="Rename the profile"
+                    IsEnabled="{x:Bind Vm.CanProfileRename, Mode=OneWay}"
+                    Command="{x:Bind Vm.ProfileRenameCommand}">
+                    <FontIcon
+                        Glyph="&#xE70F;" />
+                </Button>
+                <Button
+                    ToolTipService.ToolTip="Delete the profile"
+                    IsEnabled="{x:Bind Vm.CanProfileDelete, Mode=OneWay}"
+                    Command="{x:Bind Vm.ProfileDeleteCommand}">
+                    <FontIcon
+                        Glyph="&#xE74D;" />
+                </Button>
+                <Button
+                    ToolTipService.ToolTip="Open the profile settings"
+                    IsEnabled="{x:Bind Vm.CanToggleProfileSettings, Mode=OneWay}"
+                    Command="{x:Bind Vm.ToggleProfileSettingsCommand}">
+                    <FontIcon
+                        Glyph="&#xE713;" />
+                </Button>                
+            </StackPanel>
+
+
+
+        </Grid>
+
+        <!--CONTENT-->
+        <TabView
+            Grid.Row="2"
+            Margin="0,0,40,0"
+            SelectedIndex="{x:Bind Vm.LastTabIndex, Mode=TwoWay}"
+            Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+            IsAddTabButtonVisible="False"
+            TabWidthMode="Equal"
+            VerticalAlignment="Stretch"
+            CloseButtonOverlayMode="OnPointerOver">
+            <TabView.TabItems>
+
+                <TabViewItem
+                    MaxWidth="150"
+                    IsClosable="False"
+                    BorderThickness="0"
+                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    Header="Scan">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource
+                            Symbol="Find" />
+                    </TabViewItem.IconSource>
+                    <local:ScanPage />
+                </TabViewItem>
+
+                <TabViewItem
+                    MaxWidth="150"
+                    IsClosable="False"
+                    BorderThickness="0"
+                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    Header="Translate">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource
+                            Symbol="Globe" />
+                    </TabViewItem.IconSource>
+                    <local:TranslatePage />
+                </TabViewItem>
+
+                <TabViewItem
+                    MaxWidth="150"
+                    IsClosable="False"
+                    BorderThickness="0"
+                    Visibility="{x:Bind Vm.IsShowingProfileSettings, Mode=OneWay}"
+                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
+                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    Header="Profile Test">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource
+                            Symbol="Rotate" />
+                    </TabViewItem.IconSource>
+                    <local:ProfileTestPage />
+                </TabViewItem>
+
+                <TabViewItem
+                    Margin="10, 0, 0, 0"
+                    MaxWidth="150"
+                    IsClosable="False"
+                    BorderThickness="0"
+                    Visibility="{x:Bind Vm.IsShowingProfileSettings, Mode=OneWay}"
+                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    Header="Profile Settings">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource
+                            Symbol="Share" />
+                    </TabViewItem.IconSource>
+                    <local:ProfileSettingPage />
+                </TabViewItem>
+
+             </TabView.TabItems>
+        </TabView>
+        
+        <!--LOG-->
+        <local:ucLog
+            Grid.Row="3"
+            Visibility="{x:Bind Vm.CanShowLog, Mode=OneWay}"
+            LogItems="{x:Bind Vm.LogItems, Mode=OneWay}"
+            LogFilters="{x:Bind Vm.LogFilters, Mode=OneWay}"
+            Margin="0,0,40,0">
+        </local:ucLog>
+        
+    </Grid>
+
 </Page>

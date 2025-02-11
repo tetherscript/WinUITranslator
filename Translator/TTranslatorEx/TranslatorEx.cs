@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -30,24 +31,17 @@ public class TTranslateBatchResult()
     public bool IsSuccessful { get; set; }
 }
 
-public class TTranslatorResult(bool isSuccessful, string untranslatedText, string translatedText, int confidence,
-    List<string> data = null)
+public class TTranslatorResult(bool isSuccessful, string untranslatedText, string translatedText, int confidence, string reasoning, List<string> data = null)
 {
     public bool IsSuccessful { get; set; } = isSuccessful;
     public string UntranslatedText { get; set; } = untranslatedText;
     public string TranslatedText { get; set; } = translatedText;
     public int Confidence { get; set; } = confidence;
+    public string Reasoning { get; set; } = reasoning;
     public List<string> Data { get; set; } = data;
 }
 
-public class TLogItem(TLog.eLogType logType, TLog.eLogItemType itemType, int indent, string message, List<string> data)
-{
-    public TLog.eLogType LogType { get; set; } = logType;
-    public TLog.eLogItemType ItemType { get; set; } = itemType;
-    public int Indent { get; set; } = indent;
-    public string Message { get; set; } = message;
-    public List<string> Data { get; set; } = data;
-}
+
 
 public class ProgressReport
 {
@@ -96,9 +90,18 @@ public class TTranslatorExProc
         {
             if (report.PercentComplete != null)
             {
-                App.Vm.TranslateProgress = (int)report.PercentComplete;
-            }
-            App.Vm.AddLogItem(report.LogItem);
+                if (report.LogItem.LogType == TLog.eLogType.Translate)
+                {
+                    WeakReferenceMessenger.Default.Send(new TTranslateProgress((int)report.PercentComplete));
+                }
+                else
+                if (report.LogItem.LogType == TLog.eLogType.ProfileTest)
+                {
+                    WeakReferenceMessenger.Default.Send(new TTestProgress((int)report.PercentComplete));
+                }
+            };
+                
+            WeakReferenceMessenger.Default.Send(new TAddProfileTestLogItem(report.LogItem));
         });
 
         try
@@ -487,8 +490,11 @@ public partial class TTranslatorEx
         _progMax = lines.Count() * repeats;
         foreach (string item in lines)
         {
+
             if (item.StartsWith("//"))
             {
+                _progValue++;
+                _progress = (int)((float)_progValue / (float)_progMax * 100.0f);
                 continue;
             }
             else
@@ -499,6 +505,9 @@ public partial class TTranslatorEx
                 {
                     for (int i = 0; i < repeats; i++)
                     {
+                        _progValue++;
+                        _progress = (int)((float)_progValue / (float)_progMax * 100.0f);
+
                         if (cancellationToken.IsCancellationRequested)
                         {
                             Log(TLog.eLogItemType.err, 0, "Cancelled.", null);
@@ -523,12 +532,7 @@ public partial class TTranslatorEx
                             string translatedText = TUtils.UnescapePlaceholders(translatorResult.TranslatedText.Trim());
                             Log(TLog.eLogItemType.tra, 1, translatedText, translatorResult.Data);
                         }
-
-                        _progValue++;
-                        _progress = (int)((float)_progValue / (float)_progMax * 100.0f);
-
                     }
-
                 }
             }
             Log(TLog.eLogItemType.sep, 0, TLog.SepWide, null);
@@ -538,6 +542,7 @@ public partial class TTranslatorEx
         stopwatch.Stop();
         TimeSpan elapsed = stopwatch.Elapsed;
         string elapsedCustomFormat = elapsed.ToString(@"hh\:mm\:ss");
+        _progress = 100;
         Log(TLog.eLogItemType.inf, 0, "Elapsed Time: " + elapsedCustomFormat, null);
 
         return true;
