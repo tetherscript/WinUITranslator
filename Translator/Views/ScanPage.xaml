@@ -32,7 +32,7 @@
         <TextBlock
             Grid.Row="0"
             TextWrapping="WrapWholeWords"
-            Text="The scan searches the target project for translatable elements, including .xaml elements with x:Uid and Hint Token prefixes, as well as any historical TLocalized.Get() calls. These items are then saved to the \Strings\en-US\Resources.resw file.">
+            Text="Scanning searches the target project for translateable .xaml elements, saved TLocalized.Get() calls and specials and saves them to \Strings\en-US\Resources.resw.">
         </TextBlock>
 
         <Button

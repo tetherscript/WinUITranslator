@@ -37,7 +37,7 @@
             Spacing="10">
             <TextBlock
                 TextWrapping="WrapWholeWords"
-                Text="Every translateable item in \Strings\en-US\Resources.resw is translated by the selected profile and saved to the other languages in \Strings.">
+                Text="Translates items in \Strings\en-US\Resources.resw and stores the translations in \Strings\[LANGUAGE]\Resources.resw.">
             </TextBlock>
             <StackPanel
                 VerticalAlignment="Top"

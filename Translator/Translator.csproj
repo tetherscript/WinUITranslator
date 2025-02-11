@@ -34,8 +34,6 @@
     <None Remove="Views\CacheEditorPage.xaml" />
     <None Remove="Views\MainPage.xaml" />
     <None Remove="Views\ScanPage.xaml" />
-    <None Remove="Views\SettingsPage.xaml" />
-    <None Remove="Views\TargetPage.xaml" />
     <None Remove="Views\TranslatePage.xaml" />
     <None Remove="Test2.xaml" />
   </ItemGroup>
