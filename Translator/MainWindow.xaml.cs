@@ -1,6 +1,9 @@
+using Windows.Foundation;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Animation;
 using System;
 using System.Runtime.InteropServices;
@@ -43,7 +46,9 @@ namespace Translator
             TSettings.Load();
 
             nint MainWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
             ExtendsContentIntoTitleBar = true;
+            SetTitleBar(this.AppTitleBar);
 
             // Load the icon from file
             AppWindow.SetIcon("Assets\\app.ico");
@@ -64,6 +69,7 @@ namespace Translator
             RestoreWindowSizePos(this);
             IntPtr hWnd = WindowNative.GetWindowHandle(this);
             ShowWindow(hWnd, SW_SHOW);
+            SetRegionsForCustomTitleBar();
         }
 
         private bool _firstActivation = true;
@@ -78,7 +84,35 @@ namespace Translator
                 ShowWindow(hWnd, SW_HIDE);
             }
         }
-            
+
+        private void SetRegionsForCustomTitleBar()
+        {
+            var appWindow = App.m_window;
+            double scaleAdjustment = grdMain.XamlRoot.RasterizationScale;
+
+            GeneralTransform transform = btnTheme.TransformToVisual(null);
+            Rect bounds = transform.TransformBounds(new Rect(0, 0,
+                                                             btnTheme.ActualWidth,
+                                                             btnTheme.ActualHeight));
+            RectInt32 btnThemeRect = GetRect(bounds, scaleAdjustment);
+
+            var rectArray = new RectInt32[] { btnThemeRect };
+
+            InputNonClientPointerSource nonClientInputSrc =
+                InputNonClientPointerSource.GetForWindowId(this.AppWindow.Id);
+            nonClientInputSrc.SetRegionRects(NonClientRegionKind.Passthrough, rectArray);
+        }
+
+        private Windows.Graphics.RectInt32 GetRect(Rect bounds, double scale)
+        {
+            return new Windows.Graphics.RectInt32(
+                _X: (int)Math.Round(bounds.X * scale),
+                _Y: (int)Math.Round(bounds.Y * scale),
+                _Width: (int)Math.Round(bounds.Width * scale),
+                _Height: (int)Math.Round(bounds.Height * scale)
+            );
+        }
+
         private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
         {
             SaveWindowSizePos(this);

@@ -9,14 +9,13 @@
     xmlns:converters="using:Translator"
     NavigationCacheMode="Required"
     mc:Ignorable="d">
-
     <Page.Resources>
         <converters:InvBoolConv
             x:Key="InvBoolConv" />
     </Page.Resources>
     
-    <Grid 
-        Margin="10,10,10,0"
+    <Grid
+        Margin="10,10,10,10"
         RowSpacing="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition

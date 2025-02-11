@@ -49,13 +49,10 @@ namespace Translator
             IsCancelled = false;
             try
             {
-                TLog.Log(mode,TLog.eLogItemType.inf, 0, "Scan started.");
-
                 await ScanAsync(
                     mode, 
                     targetRootPath);
 
-                TLog.LogSeparator(mode, TLog.eLogSeparatorType.lineWide);
                 Log(TLog.eLogItemType.inf, 0, "Scan complete.");
                 WeakReferenceMessenger.Default.Send(new TSaveLog(TLog.eLogType.Scan));
             }
@@ -380,7 +377,6 @@ namespace Translator
 
             doc.Save(path);
             Log(TLog.eLogItemType.sum, 0, "en-US/Resources.resw updated.");
-            Log(TLog.eLogItemType.sum, 0, String.Format("Summary: {0} errors", TLog.ErrorCounter));
             Log(TLog.eLogItemType.sum, 0, String.Format("Summary: {0} translateable items found", _counter));
         }
 

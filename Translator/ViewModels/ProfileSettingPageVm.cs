@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.IO;
 
-
 namespace Translator
 {
     public partial class TProfileSettingPageVm : ObservableObject

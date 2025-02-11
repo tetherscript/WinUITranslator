@@ -8,52 +8,42 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Activated="Window_Activated"
     mc:Ignorable="d">
-
+    
     <Grid
         x:Name="grdMain"
         VerticalAlignment="Stretch"
-        MinHeight="100"
-        MinWidth="100"
         Loaded="GrdMain_Loaded"
         RequestedTheme="{x:Bind Vm.Theme, Mode=TwoWay}"
         Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition
-                Width="Auto" />
-            <ColumnDefinition
-                Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition
-                Height="Auto" />
-            <RowDefinition
-                Height="*" />
-        </Grid.RowDefinitions>
+        <Grid
+>
+            <Border
+                x:Name="AppTitleBar"
+                VerticalAlignment="Top">
+                <StackPanel
+                    Height="30"
+                    Orientation="Horizontal"
+                    Spacing="5">
 
-        <ToggleButton
-            Grid.Column="0"
-            Grid.Row="0"
-            Width="16"
-            Height="16"
-            Margin="4,4,4,4"
-            IsChecked="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}">
-        </ToggleButton>
-        
-        <TextBlock
-            Grid.Column="0"
-            Grid.Row="0"
-            Margin="30,0,0,0"
-            Opacity="0.55"
-            Text="{x:Bind Vm.Title, Mode=OneWay}"
-            VerticalAlignment="Center" />
+                    <ToggleButton
+                        x:Name="btnTheme"
+                        Width="16"
+                        Height="16"
+                        Margin="4,4,4,4"
+                        IsChecked="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}">
+                    </ToggleButton>
 
-        <Frame
-            x:Name="frMainPage"
-            Grid.ColumnSpan="2"
-            Grid.Column="0"
-            Grid.Row="1"
-            Margin="0,0,0,0" />
-        
+                    <TextBlock
+                        x:Name="tbTitle"
+                        Text="{x:Bind Vm.Title, Mode=OneWay}"
+                        VerticalAlignment="Center" />
+
+                </StackPanel>
+            </Border>
+            <Frame
+                Margin="0,30,0,0"
+                x:Name="frMainPage" />
+        </Grid>
     </Grid>
 
 </Window>    

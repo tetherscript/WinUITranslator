@@ -199,49 +199,6 @@ namespace Translator
 
         #endregion
 
-        #region SCAN
-        [ObservableProperty]
-        int _scanLogSelectionStart = 0;
-
-        [ObservableProperty]
-        int _scanLogSelectionLength = 0;
-
-        [RelayCommand]
-        private async Task StartScan()
-        {
-            TLog.Reset(TLog.eLogType.Scan);
-            if (TUtils.CalcPaths(Target))
-            {
-                IsBusy = true;
-                IsScanning = true;
-                ScanLog = "Scanning...";
-                ScanLogScrollToBottom();
-                await Task.Delay(100);
-                await TScan.Start(TLog.eLogType.Scan, TUtils.TargetRootPath);
-                TLog.Save(TLog.eLogType.Scan, TUtils.TargetScanLogPath);
-            }
-            else
-            {
-                TLog.Log(TLog.eLogType.Scan, TLog.eLogItemType.err, 0, "Target root path does not exist: " + Target);
-            }
-            TLog.Flush(TLog.eLogType.Scan);
-            ScanLogScrollToBottom();
-            IsScanning = false;
-            IsBusy = false;
-        }
-
-        private void ScanLogScrollToBottom()
-        {
-            ScanLogSelectionStart = ScanLog.Length;
-            ScanLogSelectionLength = 0;
-        }
-
-        [ObservableProperty]
-        private bool _isScanning;
-
-        [ObservableProperty]
-        private string _scanLog;
-        #endregion
 
         #region LOG
         public void AddLogItem(TLogItem item)

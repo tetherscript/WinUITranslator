@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf.WellKnownTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,11 +10,17 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.AI.MachineLearning;
+using Windows.Management.Deployment.Preview;
 
 namespace Translator;
 
 public partial class TTranslatorEx
 {
+    public class TContentGeneric
+    {
+        public string translated { get; set; }
+        public int confidence { get; set; }
+    }
 
     public async Task<TTranslatorResult> Translate_LMS_OpenAI_Emulation(TLog.eLogType mode, string fromCulture, string toCulture, string textToTranslate, string hintToken, Dictionary<string, string> settings, IProgress<ProgressReport> report, CancellationToken cancellationToken)
     {
@@ -243,7 +250,7 @@ public partial class TTranslatorEx
         https://api-docs.deepseek.com/guides/json_mode
 
             contentJson = contentJson.Replace("```json", "").Replace("```", "").Trim();
-            TContent_openai_api content = JsonSerializer.Deserialize<TContent_openai_api>(
+            TContentGeneric content = JsonSerializer.Deserialize<TContentGeneric>(
                 contentJson,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );

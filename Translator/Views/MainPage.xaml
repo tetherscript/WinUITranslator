@@ -21,7 +21,7 @@
 
     <Grid
         RowSpacing="10"
-        Margin="10,20,10,10">
+        Margin="10,10,10,10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="*" />
@@ -335,12 +335,14 @@
 
         </Grid>
 
+        <!--Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"-->
         <!--CONTENT-->
         <TabView
             Grid.Row="2"
             Margin="0,0,0,0"
+            CanDragTabs="False"
+            CanReorderTabs="False"
             SelectedIndex="{x:Bind Vm.LastTabIndex, Mode=TwoWay}"
-            Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
             IsAddTabButtonVisible="False"
             TabWidthMode="Equal"
             VerticalAlignment="Stretch"
@@ -350,9 +352,8 @@
                 <TabViewItem
                     MaxWidth="150"
                     IsClosable="False"
-                    BorderThickness="0"
-                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Scan">
                     <TabViewItem.IconSource>
                         <SymbolIconSource
@@ -364,9 +365,8 @@
                 <TabViewItem
                     MaxWidth="150"
                     IsClosable="False"
-                    BorderThickness="0"
-                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Translate">
                     <TabViewItem.IconSource>
                         <SymbolIconSource
@@ -378,10 +378,9 @@
                 <TabViewItem
                     MaxWidth="150"
                     IsClosable="False"
-                    BorderThickness="0"
                     Visibility="{x:Bind Vm.IsShowingProfileSettings, Mode=OneWay}"
-                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Profile Test">
                     <TabViewItem.IconSource>
                         <SymbolIconSource
@@ -394,9 +393,9 @@
                     Margin="10, 0, 0, 0"
                     MaxWidth="150"
                     IsClosable="False"
-                    BorderThickness="0"
                     Visibility="{x:Bind Vm.IsShowingProfileSettings, Mode=OneWay}"
-                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Profile Settings">
                     <TabViewItem.IconSource>
                         <SymbolIconSource
@@ -408,9 +407,8 @@
                 <TabViewItem
                     MaxWidth="150"
                     IsClosable="False"
-                    BorderThickness="0"
-                    Background="{ThemeResource SolidBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Cache Editor">
                     <TabViewItem.IconSource>
                         <SymbolIconSource
@@ -428,7 +426,7 @@
             Visibility="{x:Bind Vm.CanShowLog, Mode=OneWay}"
             LogItems="{x:Bind Vm.LogItems, Mode=OneWay}"
             LogFilters="{x:Bind Vm.LogFilters, Mode=OneWay}"
-            Margin="0,0,0,0">
+            Margin="10,0,10,0">
         </local:ucLog>
         
     </Grid>

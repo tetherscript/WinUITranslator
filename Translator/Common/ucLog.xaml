@@ -119,7 +119,7 @@
     </UserControl.Resources>
     
     <Grid
-        Margin="10, 0, 10, 0"
+        Margin="0, 0, 0, 0"
         RowSpacing="10">
         <Grid.RowDefinitions>
             <RowDefinition
@@ -160,7 +160,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
-        <!--Background="{ThemeResource SystemAltHighColor}"-->
+
         <ListView
             Padding="0, 5, 0, 5"
             Grid.Row="1"
