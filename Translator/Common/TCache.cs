@@ -138,7 +138,8 @@ namespace Translator
         {
             try
             {
-                var entryList = _entries.Select(kvp => new Entry { Key = kvp.Key, Value = kvp.Value }).ToList();
+                //var entryList = _entries.Select(kvp => new Entry { Key = kvp.Key, Value = kvp.Value }).ToList();
+                var entryList = _entries.OrderBy(pair => pair.Key).Select(kvp => new Entry { Key = kvp.Key, Value = kvp.Value }).ToList();
                 var options = new JsonSerializerOptions
                 {
                     WriteIndented = true

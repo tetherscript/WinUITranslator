@@ -120,8 +120,6 @@ namespace Translator
             Progress = 0;
             WeakReferenceMessenger.Default.Send(new TClearLog(false));
             _profileTestCts = new();
-
-            await Task.Delay(2000);
             TTranslatorExProc translatorExProc = new();
             await translatorExProc.ProfileTestStart(TLog.eLogType.ProfileTest, Target, Profile, _profileTestCts, TextToTranslate, Repeats, ToCulture);
             _profileTestCts.Dispose();

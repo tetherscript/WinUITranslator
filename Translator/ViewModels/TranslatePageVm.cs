@@ -117,6 +117,10 @@ namespace Translator
             await Task.Delay(200);
             IsTranslating = false;
             CalcState();
+            if (SaveToCache)
+            {
+                WeakReferenceMessenger.Default.Send(new TCacheUdpated(false));
+            }
         }
     }
 }

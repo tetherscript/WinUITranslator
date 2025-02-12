@@ -82,8 +82,8 @@
                     <ProgressBar
                         Value="{x:Bind Vm.Progress, Mode=OneWay}"
                         Opacity="{x:Bind Vm.IsTranslating, Mode=OneWay, Converter={StaticResource BoolToOpacityConv}}"
-                        Foreground="Lime"
-                        Background="Green"
+                        Foreground="{ThemeResource AccentFillColorSelectedTextBackgroundBrush}"
+                        Background="{ThemeResource ControlOnImageFillColorTertiaryBrush}"
                         Maximum="100"
                         Minimum="0">
                     </ProgressBar>

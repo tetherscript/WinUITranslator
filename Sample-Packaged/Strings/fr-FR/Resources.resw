@@ -126,7 +126,7 @@
     <comment>@</comment>
   </data>
   <data name="EnterYourNameHere_short_tb.Text" xml:space="preserve">
-    <value>Entrez votre nom ici</value>
+    <value>Votre nom</value>
     <comment>@@</comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
-    <value>200%</value>
+    <value>200 %</value>
     <comment>@</comment>
   </data>
   <data name="Browser_tgbtn.Content" xml:space="preserve">
@@ -170,7 +170,7 @@
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">
-    <value>Ouvrez l'ouverture pour une profondeur de champ plus faible.</value>
+    <value>Ouvrez l'ouverture pour obtenir une profondeur de champ plus faible.</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">

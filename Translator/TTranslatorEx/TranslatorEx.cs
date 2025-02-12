@@ -473,7 +473,8 @@ public partial class TTranslatorEx
 
         List<string> tranItems = new();
         string[] lines = textToTranslate.Split(new[] { "\r" }, StringSplitOptions.RemoveEmptyEntries);
-        _progMax = lines.Count() * repeats;
+        int count = lines.Count(item => !item.StartsWith("//"));
+        _progMax = count * repeats;
         foreach (string item in lines)
         {
 

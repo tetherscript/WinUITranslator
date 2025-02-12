@@ -66,6 +66,14 @@ namespace Translator
         }
     }
 
+    public class TCacheUdpated : ValueChangedMessage<bool>
+    {
+        public TCacheUdpated(bool value) : base(value)
+        {
+
+        }
+    }
+
 
 
 }

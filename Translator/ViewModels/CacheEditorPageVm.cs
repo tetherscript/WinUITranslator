@@ -33,6 +33,11 @@ namespace Translator
                 LoadCache();
             });
 
+            WeakReferenceMessenger.Default.Register<TCacheUdpated>(this, (r, m) =>
+            {
+                LoadCache();
+            });
+
             WeakReferenceMessenger.Default.Register<TShuttingDown>(this, (r, m) =>
             {
 

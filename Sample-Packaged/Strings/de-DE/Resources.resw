@@ -126,7 +126,7 @@
     <comment>@</comment>
   </data>
   <data name="EnterYourNameHere_short_tb.Text" xml:space="preserve">
-    <value>Geben Sie hier Ihren Namen ein</value>
+    <value>Namen hier eingeben</value>
     <comment>@@</comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
-    <value>200%</value>
+    <value>200 %</value>
     <comment>@</comment>
   </data>
   <data name="Browser_tgbtn.Content" xml:space="preserve">
@@ -166,7 +166,7 @@
     <comment>@</comment>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <value>Lade {0}, bitte warten...</value>
+    <value>Lade {0}}, bitte warten...</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">

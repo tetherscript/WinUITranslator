@@ -93,7 +93,7 @@
                     FontSize="16"
                     Text="{x:Bind Vm.SelectedPair.Key, Mode=TwoWay}" />
                 <TextBlock
-                    Text="Selected Value: Press TAB to enable Save Changes button." />
+                    Text="Selected Value" />
                 <TextBox
                     Text="{x:Bind Vm.SelectedPair.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Courier New"

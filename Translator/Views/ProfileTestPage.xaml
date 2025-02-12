@@ -129,8 +129,8 @@
             Margin="10, 5, 10, 0"
             HorizontalAlignment="Left"
             Width="420"
-            Foreground="Lime"
-            Background="Green"
+            Foreground="{ThemeResource AccentFillColorSelectedTextBackgroundBrush}"
+            Background="{ThemeResource ControlOnImageFillColorTertiaryBrush}"
             Value="{x:Bind Vm.Progress, Mode=OneWay}"
             Opacity="{x:Bind Vm.IsTranslating, Mode=OneWay, Converter={StaticResource BoolToOpacityConv}}"
             Minimum="0">
