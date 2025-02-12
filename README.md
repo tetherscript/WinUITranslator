@@ -19,7 +19,7 @@
 - Trimming is supported.
 - Supports non-translateable resource items such as different icon and colors per culture.
 - You don't need to edit the .resw files.  Ever.
-- All translation changes are diff-able.
+- All translation settings and results are json/text files so you can include them in version control and see the changes to your app translation over time.  
 <br/>
 
 > [!NOTE]
