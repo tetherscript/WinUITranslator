@@ -23,7 +23,7 @@
 <br/>
 
 > [!NOTE]
-> You use the Translator app to translate your target app.  Here it is using OpenAI to translate the included ```Sample-Packaged``` app from en-US to ar-SA, de-DE, and fr-FR.
+> You use the Translator app to translate your target app.  Here it is using OpenAI GPT4-o-mini to translate the included ```Sample-Packaged``` app from en-US to ar-SA, de-DE, and fr-FR.  It has found that the en-US 'Connected' requires translation to ar-SA (Arabic), de-DE (Germani) and fr-FR (French).  The translation result for de-DE is expanded to show the OpenAI API response, including reasoning.  These translations are saved to a local cache file so that you don't need to re-translate these again.
 
 ![translate1](https://github.com/user-attachments/assets/5197a496-a259-43a9-a58f-f4897a228e40)
 
