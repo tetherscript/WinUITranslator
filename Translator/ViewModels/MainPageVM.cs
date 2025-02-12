@@ -111,7 +111,7 @@ namespace Translator
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }
@@ -130,7 +130,7 @@ namespace Translator
                 string historyJson = JsonSerializer.Serialize(TargetList);
                 localSettings.Values[MainPageTargetList] = historyJson;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -314,7 +314,7 @@ namespace Translator
         }
 
         [RelayCommand]
-        private async void AddTargetSave()
+        private void AddTargetSave()
         {
             if (InputTarget.Trim() != "")
             {
@@ -423,14 +423,14 @@ namespace Translator
         private bool _isCloneNameInvalid = true;
 
         [RelayCommand]
-        private async void ProfileClone()
+        private void ProfileClone()
         {
             IsProfileCloning = true;
             CalcState();
         }
 
         [RelayCommand]
-        private async void ProfileCloneSave()
+        private void ProfileCloneSave()
         {
             //copy the .pref and give it the new file the clone name
             string srcPath = Path.Combine(TUtils.TargetProfilesPath, Profile + ".prf");
@@ -449,7 +449,7 @@ namespace Translator
 
 
         [RelayCommand]
-        private async void ProfileCloneCancel()
+        private void ProfileCloneCancel()
         {
             IsProfileCloning = false;
             CalcState();
@@ -490,7 +490,7 @@ namespace Translator
         private bool _isProfileRenameNameInvalid = true;
 
         [RelayCommand]
-        private async void ProfileRename()
+        private void ProfileRename()
         {
             ProfileRenameName = Profile;
             IsProfileRenaming = true;
@@ -498,7 +498,7 @@ namespace Translator
         }
 
         [RelayCommand]
-        private async void ProfileRenameSave()
+        private void ProfileRenameSave()
         {
             string srcPath = Path.Combine(TUtils.TargetProfilesPath, Profile + ".prf");
             string clonePath = Path.Combine(TUtils.TargetProfilesPath, ProfileRenameName + ".prf");
@@ -510,7 +510,7 @@ namespace Translator
         }
 
         [RelayCommand]
-        private async void ProfileRenameCancel()
+        private void ProfileRenameCancel()
         {
 
             IsProfileRenaming = false;
@@ -553,7 +553,7 @@ namespace Translator
         private bool _isShowingProfileSettings;
 
         [RelayCommand]
-        private async void ToggleProfileSettings()
+        private void ToggleProfileSettings()
         {
             if ((IsShowingProfileSettings) && ((LastTabIndex == 2) || (LastTabIndex == 3)))
             {

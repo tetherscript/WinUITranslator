@@ -90,7 +90,7 @@ namespace Translator
                 IsLoaded = true;
                 CalcState();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -133,7 +133,7 @@ namespace Translator
                 SettingsStrModified = false;
                 CalcState();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

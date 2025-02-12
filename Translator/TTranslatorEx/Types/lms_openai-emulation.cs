@@ -247,7 +247,7 @@ public partial class TTranslatorEx
         //sometimes there's some additonal thinking stuff added AFTER the json.....and this
         //can change from identical query to identical query so it's not entirely deterministic.
         //how to use structured output?
-        https://api-docs.deepseek.com/guides/json_mode
+        //https://api-docs.deepseek.com/guides/json_mode
 
             contentJson = contentJson.Replace("```json", "").Replace("```", "").Trim();
             TContentGeneric content = JsonSerializer.Deserialize<TContentGeneric>(
