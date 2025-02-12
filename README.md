@@ -17,6 +17,7 @@
 - You only need to include the TLocalized static class in your project.  It allows dynamic text translations, like for a 'Loading {0}, please wait...' status message.  It also allows the retrieval of non-translated resources, such as icon files, colors etc.
 - Your deployables do not require any third party packages or libraries.  All the Translator-required code is contained in the included ```TLocalized.cs``` which is very simple, short and reviewable.  In fact, if you don't use any dynamic translations, you don't even need to include that.
 - Trimming is supported.
+- Supports non-translateable resource items such as different icon and colors per culture.
 - You don't need to edit the .resw files.  Ever.
 - All translation changes are diff-able.
 <br/>
