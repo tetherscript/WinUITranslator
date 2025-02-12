@@ -23,6 +23,4 @@ namespace Translator
             return res;
         }
     }
-
-
 }

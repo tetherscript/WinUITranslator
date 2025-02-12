@@ -11,8 +11,19 @@ using Windows.Storage;
 
 namespace Translator
 {
+
+    public partial class Pair : ObservableObject
+    {
+        [ObservableProperty]
+        private string key;
+
+        [ObservableProperty]
+        private string value;
+    }
+
     public partial class CacheEditorPageVm : ObservableObject
     {
+
         public CacheEditorPageVm()
         {
 

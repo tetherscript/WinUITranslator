@@ -67,9 +67,6 @@ namespace Translator
             LastTabIndex = (appData.Values.ContainsKey(LastTabIndexSetting)) ? (int)appData.Values[LastTabIndexSetting] : 0;
 
             IsShowingProfileSettings = (appData.Values.ContainsKey(IsShowingProfileSettingsSetting)) ? (bool)appData.Values[IsShowingProfileSettingsSetting] : false;
-
-            TUtils.Target = Target;
-            TUtils.Profile = Profile;
         }
 
         public void SaveSettings()
@@ -251,7 +248,6 @@ namespace Translator
             if (IsValidConfiguredPath)
             {
                 GetProfiles();
-                TUtils.Target = value;
                 WeakReferenceMessenger.Default.Send(new TTargetChanged(value));
             }
         }
@@ -362,7 +358,6 @@ namespace Translator
         partial void OnProfileChanged(string? oldValue, string newValue)
         {
             prevSelectedProfile = oldValue;
-            TUtils.Profile = newValue;
             WeakReferenceMessenger.Default.Send(new TProfileChanged(newValue));
         }
 

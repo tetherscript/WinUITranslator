@@ -305,12 +305,8 @@ public partial class TTranslatorEx
                         else
                         {
                             _cacheMissCounter++;
-
-                            string s1, s2;
-                            s1 = "Cache miss: Translating...";
-                            Log((TSettings.Debug ? TLog.eLogItemType.dbg : TLog.eLogItemType.dbg), 2, s1, null);
-                            s2 = hintToken + textToTranslate;
-                            Log(TLog.eLogItemType.tra, 1, s2, null);
+                            Log(TLog.eLogItemType.dbg, 2, "Cache miss: Translating...", null);
+                            Log(TLog.eLogItemType.tra, 1, hintToken + textToTranslate, null);
 
                             TTranslatorResult translatorResult;
                             textToTranslate = TUtils.EscapePlaceholders(textToTranslate);

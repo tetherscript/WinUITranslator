@@ -32,8 +32,8 @@ namespace Translator
         private const uint IMAGE_ICON = 1;
         private const uint LR_LOADFROMFILE = 0x00000010;
 
-        private readonly TVm _vm = App.Vm;
-        public TVm Vm { get => _vm; }
+        private readonly MainWIndowVm _vm = App.Vm;
+        public MainWIndowVm Vm { get => _vm; }
 
         public MainWindow()
         {

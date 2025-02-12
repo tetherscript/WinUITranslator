@@ -7,8 +7,8 @@ namespace Translator
 {
     public partial class App : Application
     {
-        private static TVm _vm;
-        public static TVm Vm { get => _vm; }
+        private static MainWIndowVm _vm;
+        public static MainWIndowVm Vm { get => _vm; }
 
         public static bool IsRTL = false;
 
@@ -27,7 +27,7 @@ namespace Translator
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            _vm = new TVm(Environment.GetCommandLineArgs());
+            _vm = new MainWIndowVm();
             _vm.KeyLeftControlPressedOnLaunch = InputKeyboardSource.GetKeyStateForCurrentThread(Windows.System.VirtualKey.LeftControl).HasFlag(CoreVirtualKeyStates.Down);
 
             m_window = new MainWindow();
