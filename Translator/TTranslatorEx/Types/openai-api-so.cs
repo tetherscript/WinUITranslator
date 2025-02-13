@@ -31,7 +31,7 @@ public partial class TTranslatorEx
             report?.Report(new ProgressReport(null,
                 new TLogItem(mode, logType, indent, msg, _data)));
         }
-
+        //api-key-environment-variable
         //GET APIKEY
         if (!settings.TryGetValue("api-key-environment-variable", out string api_key_environment_variable))
         {
@@ -69,7 +69,7 @@ public partial class TTranslatorEx
         }
         if (!int.TryParse(minConfidenceStr, out int minConfidence))
         {
-            Log(TLog.eLogItemType.err, 2, "Invalid 'min-confidence' value.");
+            Log(TLog.eLogItemType.err, 2, "Invalid 'min-confidence' Value.");
             return new TTranslatorResult(
                      false,
                      textToTranslate,
@@ -133,7 +133,7 @@ public partial class TTranslatorEx
                     translationResult.originalText,
                     "<!>" + translatedText,
                     translationResult.confidence,
-                    "",
+                    translationResult.reasoning,
                     _data);
             }
             else
@@ -144,7 +144,7 @@ public partial class TTranslatorEx
                     translationResult.originalText,
                     translatedText,
                     translationResult.confidence,
-                    "",
+                    translationResult.reasoning,
                     _data);
             }
         }

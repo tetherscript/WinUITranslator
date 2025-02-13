@@ -249,12 +249,12 @@ namespace Translator
 
                 foreach (var element in elementsWithUid)
                 {
-                    // Read the x:Uid value
+                    // Read the x:Uid Value
                     string uid = element.Attribute(xNs + "Uid")?.Value;
                     if (string.IsNullOrWhiteSpace(uid))
                         continue;
 
-                    //reject items that have invalid XAM/ c# identifiers in the key as this will cause app start fails
+                    //reject items that have invalid XAM/ c# identifiers in the Key as this will cause app start fails
                     if (!TLocalized.IsValidXamlIdentifier(uid))
                     {
                         Log(TLog.eLogItemType.wrn, 4, String.Format("Rejected {0}:x:Uid='{1}' as it is an invalid XAML/C# resource identifier.", filePath, uid));
@@ -351,7 +351,7 @@ namespace Translator
                 var dataElement = new XElement("data",
                     new XAttribute("name", item.Key),
                     new XAttribute(XNamespace.Xml + "space", "preserve"),
-                    new XElement("value", valueVal),
+                    new XElement("Value", valueVal),
                     new XElement("comment", valuePrefix)
                 );
                 doc.Root.Add(dataElement);
@@ -368,7 +368,7 @@ namespace Translator
                 var desDocDataElement1 = new XElement("data",
                     new XAttribute("name", item.Key.ToString()),
                     new XAttribute(XNamespace.Xml + "space", "preserve"),
-                    new XElement("value", item.Value.ToString()),
+                    new XElement("Value", item.Value.ToString()),
                     new XElement("comment", item.Culture.ToString()));
 
                 doc.Root.Add(desDocDataElement1);

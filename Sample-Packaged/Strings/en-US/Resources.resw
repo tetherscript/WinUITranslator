@@ -118,75 +118,75 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aperture_tb.Text" xml:space="preserve">
-    <value>Aperture</value>
+    <Value>Aperture</Value>
     <comment>!</comment>
   </data>
   <data name="EnterYourNameHere_tb.Text" xml:space="preserve">
-    <value>Enter your name here</value>
+    <Value>Enter your name here</Value>
     <comment>@</comment>
   </data>
   <data name="EnterYourNameHere_short_tb.Text" xml:space="preserve">
-    <value>Enter your name here</value>
+    <Value>Enter your name here</Value>
     <comment>@@</comment>
   </data>
   <data name="MissingHintToken_tb.Text" xml:space="preserve">
-    <value>Missing a hint token!</value>
+    <Value>Missing a hint token!</Value>
     <comment></comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
-    <value>Close</value>
+    <Value>Close</Value>
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">
-    <value>Lock</value>
+    <Value>Lock</Value>
     <comment>@@</comment>
   </data>
   <data name="Zoom_rbs.Header" xml:space="preserve">
-    <value>Zoom</value>
+    <Value>Zoom</Value>
     <comment>@</comment>
   </data>
   <data name="Zoom100_rb.Content" xml:space="preserve">
-    <value>100%</value>
+    <Value>100%</Value>
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
-    <value>200%</value>
+    <Value>200%</Value>
     <comment>@</comment>
   </data>
   <data name="Browser_tgbtn.Content" xml:space="preserve">
-    <value>Image Browser</value>
+    <Value>Image Browser</Value>
     <comment>!</comment>
   </data>
   <data name="Connect_ts.Header" xml:space="preserve">
-    <value>Connection</value>
+    <Value>Connection</Value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OffContent" xml:space="preserve">
-    <value>Disconnected</value>
+    <Value>Disconnected</Value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OnContent" xml:space="preserve">
-    <value>Connected</value>
+    <Value>Connected</Value>
     <comment>@</comment>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <value>Loading {0}}, please wait...</value>
+    <Value>Loading {0}}, please wait...</Value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">
-    <value>Open the aperture for a shallower depth of field.</value>
+    <Value>Open the aperture for a shallower depth of field.</Value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">
-    <value>Open the aperture for a shallower depth of field.</value>
+    <Value>Open the aperture for a shallower depth of field.</Value>
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">
-    <value>Open the aperture for a shallower depth of field.</value>
+    <Value>Open the aperture for a shallower depth of field.</Value>
     <comment>!!</comment>
   </data>
   <data name="SettingsIcon" xml:space="preserve">
-    <value>settings1.ico</value>
+    <Value>settings1.ico</Value>
     <comment>en-US</comment>
   </data>
 </root>

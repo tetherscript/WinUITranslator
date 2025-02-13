@@ -31,7 +31,7 @@ public partial class TTranslatorEx
         //GET APIKEY
         if (!settings.TryGetValue("api_key", out string api_key_raw))
         {
-            //invalid key entry in settings
+            //invalid Key entry in settings
             Log(TLog.eLogItemType.err, 2, "Settings 'api_key' is missing.");
             return new TTranslatorResult(
                     false,
@@ -54,7 +54,7 @@ public partial class TTranslatorEx
         //GET HOST
         if (!settings.TryGetValue("host", out string host))
         {
-            //invalid key entry in settings
+            //invalid Key entry in settings
             Log(TLog.eLogItemType.err, 2, "Settings 'host' is missing.");
             return new TTranslatorResult(
                     false,
@@ -105,7 +105,7 @@ public partial class TTranslatorEx
         }
         else
         {
-            Log(TLog.eLogItemType.err, 2, "Invalid 'min-confidence' value.");
+            Log(TLog.eLogItemType.err, 2, "Invalid 'min-confidence' Value.");
             return new TTranslatorResult(
                      false,
                      textToTranslate,

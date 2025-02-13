@@ -120,7 +120,7 @@ namespace Translator
             await TCache.UpdateEntryAsync(SelectedPair.Key, SelectedPair.Value);
             _hasPendingChanges = false;
             SaveChangesCommand.NotifyCanExecuteChanged();
-            // Re-filter to reflect any possible key changes
+            // Re-filter to reflect any possible Key changes
             RefreshFilteredEntries(SearchText);
             if (_savedPairKey != null)
             {
@@ -134,15 +134,21 @@ namespace Translator
 
         public async void LoadCache()
         {
-            TUtils.CalcPaths(Target);
-            if (!Directory.Exists(Target)) return;
-            StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
-            TCache.Init(x);
-            await TCache.InitializeAsync();
-            //if (SearchText == "")
-            //{
-            RefreshFilteredEntries(SearchText);
-            //}
+            //TUtils.CalcPaths(Target);
+            //if (!Directory.Exists(Target)) return;
+            //StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
+            //TCache.Load(x);
+            //await TCache.InitializeAsync();
+            ////if (SearchText == "")
+            ////{
+            //RefreshFilteredEntries(SearchText);
+            ////}
+
+
+           // await TCacheEx.Load(TUtils.TargetTranslatorPath);
+
+            //RefreshFilteredEntries(SearchText);
+            
         }
 
         // The "dirty" flag indicating if the user has changed something

@@ -204,13 +204,8 @@ public partial class TTranslatorEx
         string fromCulture = "en-US";
         Log(TLog.eLogItemType.inf, 0, "fromCulture: " + fromCulture, null);
 
-
-        #region CACHE
-        StorageFolder x = await StorageFolder.GetFolderFromPathAsync(TUtils.TargetTranslatorPath);
-        TCache.Init(x);
-        TCache.InitializeAsync().Wait();
-        Log(TLog.eLogItemType.dbg, 0, "Cache initialized.", null);
-        #endregion
+        TCacheEx _cache = new();
+        await _cache.Init(TUtils.TargetTranslatorCachePath);
 
         #region TRANSLATE
         int _cacheHitCounter = 0;
@@ -276,7 +271,7 @@ public partial class TTranslatorEx
                     //get translation from cache or call api
                     string translatedText = string.Empty;
                     string cacheIndicator = string.Empty;
-                    string textToTranslate = item.Element("value").Value;
+                    string textToTranslate = item.Element("Value").Value;
                     string hintToken = item.Element("comment").Value;
 
                     //reject names with periods in it 'close.btn' or 'loading....';
@@ -295,7 +290,7 @@ public partial class TTranslatorEx
                     {
 
                         string cacheKey = toCulture + ":" + hintToken + ":" + textToTranslate;
-                        string cachedData = TCache.GetValue(cacheKey);
+                        string cachedData = _cache.GetValue(cacheKey);
                         if (cachedData != null)
                         {
                             translatedText = cachedData;
@@ -330,15 +325,15 @@ public partial class TTranslatorEx
                                 Log(TLog.eLogItemType.tra, 2, translatedText, translatorResult.Data);
                             }
 
-                            if ((profile != "loopback") && (saveToCache))
+                            if ((profile != "Loopback") && (saveToCache))
                             {
-                                await TCache.AddEntryAsync(cacheKey, translatedText);
+                                await _cache.AddOrUpdate(cacheKey, translatedText, string.Join      (Environment.NewLine + ucLogHelper.SepMedium + Environment.NewLine, translatorResult.Data));
                             }
                         }
                         var desDocDataElement = new XElement("data",
                             new XAttribute("name", item.Attribute("name").Value),
                             new XAttribute(XNamespace.Xml + "space", "preserve"),
-                            new XElement("value", translatedText),
+                            new XElement("Value", translatedText),
                             new XElement("comment", item.Element("comment").Value));
 
                         destDoc.Root.Add(desDocDataElement);
@@ -362,7 +357,7 @@ public partial class TTranslatorEx
                     var desDocDataElement1 = new XElement("data",
                         new XAttribute("name", item.Key.ToString()),
                         new XAttribute(XNamespace.Xml + "space", "preserve"),
-                        new XElement("value", item.Value.ToString()),
+                        new XElement("Value", item.Value.ToString()),
                         new XElement("comment", item.Culture.ToString()));
 
                     destDoc.Root.Add(desDocDataElement1);

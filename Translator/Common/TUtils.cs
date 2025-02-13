@@ -13,6 +13,7 @@ namespace Translator
         public static string TargetRootPath = string.Empty;
         public static string TargetTranslatorPath = string.Empty;
         public static string TargetTranslatorXamlElementsPath = string.Empty;
+        public static string TargetTranslatorCachePath = string.Empty;
         public static string TargetTranslatorTLocalizedGetsPath = string.Empty;
         public static string TargetTranslatorDetectedXamlElementsPath = string.Empty;
         public static string TargetTranslatorSpecialsPath = string.Empty;
@@ -43,6 +44,10 @@ namespace Translator
                     TargetRootPath = targetRootPath;
                     TargetTranslatorPath = Path.Combine(TargetRootPath, "Translator");
                     TargetTranslatorXamlElementsPath = Path.Combine(TargetRootPath, @"Translator\XamlElements.json");
+
+                    TargetTranslatorCachePath = Path.Combine(TargetRootPath, @"Translator\CacheEx.json");
+                    
+
                     TargetTranslatorTLocalizedGetsPath = Path.Combine(TargetRootPath, @"Translator\TLocalizedGets.json");
                     TargetTranslatorDetectedXamlElementsPath = Path.Combine(TargetRootPath, @"Translator\DetectedXamlElements.json");
                     TargetTranslatorSpecialsPath = Path.Combine(TargetRootPath, @"Translator\Specials.json");
@@ -70,6 +75,7 @@ namespace Translator
                 {
                     TargetTranslatorPath = "";
                     TargetTranslatorXamlElementsPath = "";
+                    TargetTranslatorCachePath = "";
                     TargetTranslatorTLocalizedGetsPath = "";
                     TargetTranslatorDetectedXamlElementsPath = "";
                     TargetTranslatorSpecialsPath = "";
@@ -156,7 +162,7 @@ namespace Translator
 
     public class InvBoolConv : IValueConverter
     {
-        // Convert from source to target (invert the value)
+        // Convert from source to target (invert the Value)
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is bool boolean)
@@ -175,7 +181,7 @@ namespace Translator
 
     public class BoolToOpacityConv : IValueConverter
     {
-        // Convert from source to target (invert the value)
+        // Convert from source to target (invert the Value)
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is bool boolean)

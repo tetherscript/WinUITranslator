@@ -414,7 +414,7 @@
                         <SymbolIconSource
                             Symbol="Edit" />
                     </TabViewItem.IconSource>
-                    <local:CacheEditorPage />
+                    <local:CacheEditorExPage />
                 </TabViewItem>
 
             </TabView.TabItems>

@@ -87,7 +87,7 @@ namespace TeeLocalized
             //If you have a way to log exceptions, this can be useful. If not, it's a pain in the IDE to break
             //on this exception every time.  Maybe a visual indicator ex: '>>1' is enough.
 
-            //use .Get() to specify a Resources.resw name and return a value which holds translated text.
+            //use .Get() to specify a Resources.resw name and return a Value which holds translated text.
             //you'll also need to specify a hint '@', '@@', '!', '!!' for the the translator app.
             name = name.Trim();
             hint = hint.Trim();
@@ -145,7 +145,7 @@ namespace TeeLocalized
                     }
                     if (translatedText == null)
                     {
-                        //did not find translated value, so show the hint + original text to indicate it hasn't been translated yet
+                        //did not find translated Value, so show the hint + original text to indicate it hasn't been translated yet
                         translatedText = hint + value;
                     }
                     result = translatedText;
@@ -154,7 +154,7 @@ namespace TeeLocalized
                 {
                     if (ThrowExceptionsOnErrors)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), "TLocalizer.Get() cannot get resource value: " + ex.Message);
+                        throw new ArgumentOutOfRangeException(nameof(value), "TLocalizer.Get() cannot get resource Value: " + ex.Message);
                     }
                     else
                     {
@@ -170,7 +170,7 @@ namespace TeeLocalized
 
         public static string GetSpecial(string name)
         {
-            //gets a non-translated value, like a localized icon filename, glyph or color
+            //gets a non-translated Value, like a localized icon filename, glyph or color
             //Just add these 'Specials' in the \Translator\Specials.json so they are included in the Resources.resw files'
             name = name.Trim();
             string result = string.Empty;
@@ -205,7 +205,7 @@ namespace TeeLocalized
                 {
                     if (ThrowExceptionsOnErrors)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(name), "TLocalizer.GetSpecial() cannot get resource value: " + ex.Message);
+                        throw new ArgumentOutOfRangeException(nameof(name), "TLocalizer.GetSpecial() cannot get resource Value: " + ex.Message);
                     }
                     else
                     {
@@ -352,10 +352,10 @@ namespace TeeLocalized
         //            {
         //                string propertyName = jsonReader.GetString();
 
-        //                // Move to the value
+        //                // Move to the Value
         //                if (!jsonReader.Read())
         //                {
-        //                    throw new FormatException("Unexpected end of JSON while reading a property value.");
+        //                    throw new FormatException("Unexpected end of JSON while reading a property Value.");
         //                }
 
         //                // Match property names

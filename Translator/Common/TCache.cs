@@ -13,10 +13,10 @@ namespace Translator
 
         public class Entry
         {
-            [JsonPropertyName("key")]
+            [JsonPropertyName("Key")]
             public string Key { get; set; }
 
-            [JsonPropertyName("value")]
+            [JsonPropertyName("Value")]
             public string Value { get; set; }
         }
 
@@ -55,7 +55,7 @@ namespace Translator
                             // Handle duplicates as needed
                             // For example, you can log a warning, skip, or overwrite
                             // Here, we'll skip duplicate entries
-                            System.Diagnostics.Debug.WriteLine($"Duplicate key '{entry.Key}' found in JSON. Skipping duplicate.");
+                            System.Diagnostics.Debug.WriteLine($"Duplicate Key '{entry.Key}' found in JSON. Skipping duplicate.");
                         }
                     }
                 }
@@ -73,13 +73,13 @@ namespace Translator
             if (string.IsNullOrWhiteSpace(key))
             {
                 return;
-                //throw new ArgumentException("Key cannot be null or whitespace.", nameof(key));
+                //throw new ArgumentException("Key cannot be null or whitespace.", nameof(Key));
             }
 
             if (_entries.ContainsKey(key))
             {
                 return;
-                //throw new ArgumentException($"An entry with key '{key}' already exists.");
+                //throw new ArgumentException($"An entry with Key '{Key}' already exists.");
             }
 
             _entries.Add(key, value);
@@ -106,7 +106,7 @@ namespace Translator
 
             if (!_entries.ContainsKey(key))
             {
-                throw new KeyNotFoundException($"No entry found with key '{key}'.");
+                throw new KeyNotFoundException($"No entry found with Key '{key}'.");
             }
 
             _entries[key] = newValue;

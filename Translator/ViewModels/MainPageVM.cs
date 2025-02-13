@@ -248,6 +248,7 @@ namespace Translator
             if (IsValidConfiguredPath)
             {
                 GetProfiles();
+                //TCacheEx.Load(TUtils.TargetTranslatorCachePath);
                 WeakReferenceMessenger.Default.Send(new TTargetChanged(value));
             }
         }
