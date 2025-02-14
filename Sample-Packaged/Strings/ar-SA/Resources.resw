@@ -174,7 +174,7 @@
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">
-    <Value>افتح فتحة العدسة للحصول على عمق ميدان أقل.</Value>
+    <Value>افتح الفتحة للحصول على عمق مجال أقل.</Value>
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Translator

@@ -358,7 +358,8 @@ namespace Translator
         private string _profile;
         partial void OnProfileChanged(string? oldValue, string newValue)
         {
-            prevSelectedProfile = oldValue;
+            if ((oldValue != null)) { prevSelectedProfile = oldValue; }
+            if ((newValue == null)) { return; }
             WeakReferenceMessenger.Default.Send(new TProfileChanged(newValue));
         }
 

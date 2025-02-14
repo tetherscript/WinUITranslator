@@ -24,7 +24,6 @@ namespace Translator
 
     }
 
-
     public partial class TCacheItemEx : ObservableObject
     {
         [ObservableProperty]
@@ -47,9 +46,6 @@ namespace Translator
             this.ProfileResult = profileResult;
         }
     }
-
-
-
 
     public class TCacheEx
     {
@@ -103,29 +99,16 @@ namespace Translator
             return null;
         }
 
-        public async Task RemoveEntryAsync(string key)
-        {
-            if (!string.IsNullOrWhiteSpace(key))
-            {
-                //if (_items.RemoveAll(item => item.Key == Key) > 0)
-                //{
-                //    await SaveAsync();
-                //}
-            }
-        }
-
         private async Task SaveAsync()
         {
             try
             {
-                //_items.Sort((a, b) => string.Compare(a.Key, b.Key));
                 string json = JsonSerializer.Serialize(_items, new JsonSerializerOptions { WriteIndented = true } );
                 await File.WriteAllTextAsync(_path, json, Encoding.UTF8);
-
             }
             catch (Exception)
             {
-                //System.Diagnostics.Debug.WriteLine($"Error saving database: {ex.Message}");
+
             }
 
         }

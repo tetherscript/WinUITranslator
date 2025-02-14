@@ -17,7 +17,6 @@ namespace Translator
             WeakReferenceMessenger.Default.Register<TProfileChanged>(this, (r, m) =>
             {
                 Profile = m.Value;
-
             });
 
             WeakReferenceMessenger.Default.Register<TTargetChanged>(this, (r, m) =>
