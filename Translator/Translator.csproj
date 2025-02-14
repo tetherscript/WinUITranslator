@@ -31,7 +31,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Common\ucLog.xaml" />
-    <None Remove="Views\CacheEditorPage.xaml" />
     <None Remove="Views\MainPage.xaml" />
     <None Remove="Views\ScanPage.xaml" />
     <None Remove="Views\TranslatePage.xaml" />
