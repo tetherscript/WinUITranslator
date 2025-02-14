@@ -17,14 +17,15 @@
 - You only need to include the TLocalized static class in your project.  It allows dynamic text translations, like for a 'Loading {0}, please wait...' status message.  It also allows the retrieval of non-translated resources, such as icon files, colors etc.
 - Your deployables do not require any third party packages or libraries.  All the Translator-required code is contained in the included ```TLocalized.cs``` which is very simple, short and reviewable.  In fact, if you don't use any dynamic translations, you don't even need to include that.
 - Trimming is supported.
+- Supports non-translateable resource items such as different icon and colors per culture.
 - You don't need to edit the .resw files.  Ever.
-- All translation changes are diff-able.
+- All translation settings and results are json/text files so you can include them in version control and see the changes to your app translation over time.  
 <br/>
 
 > [!NOTE]
-> You use the Translator app to translate your target app.  Here it is using OpenAI to translate the included ```Sample-Packaged``` app from en-US to ar-SA, de-DE, and fr-FR.
+> You use the Translator app to translate your target app.  Here it is using OpenAI GPT4-o-mini to translate the included ```Sample-Packaged``` app from en-US to ar-SA, de-DE, and fr-FR.  It has found that the en-US 'Connected' requires translation to ar-SA (Arabic), de-DE (Germani) and fr-FR (French).  The translation result for de-DE is expanded to show the OpenAI API response, including reasoning.  These translations are saved to a local cache file so that you don't need to re-translate these again.
 
-<img alt="image" src="https://github.com/user-attachments/assets/5e401a8b-3595-4df2-9aa4-a7699fe12fca" />
+![translate1](https://github.com/user-attachments/assets/5197a496-a259-43a9-a58f-f4897a228e40)
 
 ## Why Does this Exist?
 I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package tools, but realized that I really don't understand how the resources/translation/localization thing works.  I figured if I made my own tool that can meet the requirements listed below, I would understand.  I posted this as a public repository to share it, and see what ideas/insights other devs may have.  Now that AI is everywhere, I set out to use AI to do the translations, and it works really well.
