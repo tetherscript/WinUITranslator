@@ -70,6 +70,7 @@ namespace Translator
         [RelayCommand]
         private async Task Start()
         {
+            WeakReferenceMessenger.Default.Send(new TTargetLockChanged(true));
             IsScanning = true;
             WeakReferenceMessenger.Default.Send(new TClearLog(false));
             CalcState();
@@ -83,6 +84,7 @@ namespace Translator
             await Task.Delay(200);
             IsScanning = false;
             CalcState();
+            WeakReferenceMessenger.Default.Send(new TTargetLockChanged(false));
         }
 
     }

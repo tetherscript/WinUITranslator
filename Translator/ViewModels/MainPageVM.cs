@@ -41,10 +41,16 @@ namespace Translator
                 SaveLog(m.Value);
             });
 
-
             WeakReferenceMessenger.Default.Register<TShuttingDown>(this, (r, m) =>
             {
                 SaveSettings();
+
+            });
+
+            WeakReferenceMessenger.Default.Register<TTargetLockChanged>(this, (r, m) =>
+            {
+                IsTargetLocked = m.Value;
+                CalcState();
 
             });
 
@@ -140,6 +146,7 @@ namespace Translator
         {
 
             CanSelectTarget = (
+                (!IsTargetLocked) &&
                 (!IsAddingTarget) &&
                 (!IsRemovingTarget) &&
                 (!IsProfileCloning) &&
@@ -148,6 +155,7 @@ namespace Translator
             );
 
             CanAddTarget = (
+                (!IsTargetLocked) &&
                 (!IsAddingTarget) &&
                 (!IsAddingTarget) &&
                 (!IsProfileCloning) &&
@@ -156,6 +164,7 @@ namespace Translator
             );
 
             CanRemoveTarget = (
+                (!IsTargetLocked) &&
                 (!IsAddingTarget) &&
                 (!IsRemovingTarget) &&
                 (!IsProfileCloning) &&
@@ -164,6 +173,7 @@ namespace Translator
             );
 
             CanSelectProfile = (
+                (!IsTargetLocked) &&
                 (!IsAddingTarget) &&
                 (!IsRemovingTarget) &&
                 (!IsProfileCloning) &&
@@ -172,6 +182,7 @@ namespace Translator
             );
 
             CanProfileClone = (
+                (!IsTargetLocked) &&
                 (!IsProfileCloning) &&
                 (!IsProfileRenaming) &&
                 (!IsProfileDeleting) &&
@@ -179,6 +190,7 @@ namespace Translator
                 (!IsRemovingTarget)
             );
             CanProfileRename = (
+                (!IsTargetLocked) &&
                 (!IsProfileCloning) &&
                 (!IsProfileRenaming) &&
                 (!IsProfileDeleting) &&
@@ -186,6 +198,7 @@ namespace Translator
                 (!IsRemovingTarget)
             );
             CanProfileDelete = (
+                (!IsTargetLocked) &&
                 (!IsProfileCloning) &&
                 (!IsProfileRenaming) &&
                 (!IsProfileDeleting) &&
@@ -195,28 +208,13 @@ namespace Translator
             );
 
             CanToggleProfileSettings = (
+                (!IsTargetLocked) &&
                 (!IsProfileCloning) &&
                 (!IsProfileRenaming) &&
                 (!IsProfileDeleting) &&
                 (Profiles.Count > 1) &&
                 (!IsAddingTarget) &&
                 (!IsRemovingTarget)
-            );
-
-            CanSelectTarget = (
-                (!IsAddingTarget) &&
-                (!IsRemovingTarget) &&
-                (!IsProfileCloning) &&
-                (!IsProfileRenaming) &&
-                (!IsProfileDeleting)
-            );
-
-            CanSelectTarget = (
-                (!IsAddingTarget) &&
-                (!IsRemovingTarget) &&
-                (!IsProfileCloning) &&
-                (!IsProfileRenaming) &&
-                (!IsProfileDeleting)
             );
 
             CanShowLog = (
@@ -248,7 +246,6 @@ namespace Translator
             if (IsValidConfiguredPath)
             {
                 GetProfiles();
-                //TCacheEx.Load(TUtils.TargetTranslatorCachePath);
                 WeakReferenceMessenger.Default.Send(new TTargetChanged(value));
             }
         }
@@ -263,6 +260,9 @@ namespace Translator
         private bool _isValidConfiguredPath = false;
 
         public ObservableCollection<string> TargetList = new();
+
+        [ObservableProperty]
+        private bool _isTargetLocked;
 
         [ObservableProperty]
         private bool _isAddingTarget;
@@ -358,6 +358,11 @@ namespace Translator
         private string _profile;
         partial void OnProfileChanged(string? oldValue, string newValue)
         {
+            if (!_profiles.Contains(newValue))
+            {
+                return;
+            }
+
             if ((oldValue != null)) { prevSelectedProfile = oldValue; }
             if ((newValue == null)) { return; }
             WeakReferenceMessenger.Default.Send(new TProfileChanged(newValue));

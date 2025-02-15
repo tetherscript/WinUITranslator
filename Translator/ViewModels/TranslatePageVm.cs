@@ -17,11 +17,13 @@ namespace Translator
             WeakReferenceMessenger.Default.Register<TProfileChanged>(this, (r, m) =>
             {
                 Profile = m.Value;
+                CalcState();
             });
 
             WeakReferenceMessenger.Default.Register<TTargetChanged>(this, (r, m) =>
             {
                 Target = m.Value;
+                CalcState();
             });
 
             WeakReferenceMessenger.Default.Register<TShuttingDown>(this, (r, m) =>
@@ -43,6 +45,7 @@ namespace Translator
         public void CalcState()
         {
             CanTranslate = (
+                ((Target != null) && (Profile != null)) &&
                 !IsTranslating
             );
 
@@ -104,6 +107,8 @@ namespace Translator
         [RelayCommand]
         private async Task Translate()
         {
+            if ((Target == null) || (Profile == null)) { return; }
+            WeakReferenceMessenger.Default.Send(new TTargetLockChanged(true));
             IsTranslating = true;
             Progress = 0;
             WeakReferenceMessenger.Default.Send(new TClearLog(false));
@@ -120,6 +125,7 @@ namespace Translator
             {
                 WeakReferenceMessenger.Default.Send(new TCacheUdpated(false));
             }
+            WeakReferenceMessenger.Default.Send(new TTargetLockChanged(false));
         }
     }
 }

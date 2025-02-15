@@ -85,6 +85,7 @@ namespace Translator
                 SaveEdit(oldValue.Key, EditText).GetAwaiter().GetResult();
                 IsEditing = false;
                 EditText = "";
+                WeakReferenceMessenger.Default.Send(new TTargetLockChanged(false));
             }
             CalcState();
         }
@@ -177,6 +178,7 @@ namespace Translator
 
         public void EditSelected()
         {
+            WeakReferenceMessenger.Default.Send(new TTargetLockChanged(true));
             EditText = SelectedItem.Value;
             IsEditing = true;
             CalcState();

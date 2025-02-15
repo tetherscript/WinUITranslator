@@ -353,6 +353,7 @@
                     MaxWidth="150"
                     IsClosable="False"
                     BorderThickness="1"
+                    IsEnabled="{x:Bind Vm.IsTargetLocked, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Scan">
                     <TabViewItem.IconSource>
@@ -366,6 +367,7 @@
                     MaxWidth="150"
                     IsClosable="False"
                     BorderThickness="1"
+                    IsEnabled="{x:Bind Vm.IsTargetLocked, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Translate">
                     <TabViewItem.IconSource>
@@ -380,6 +382,7 @@
                     IsClosable="False"
                     Visibility="{x:Bind Vm.IsShowingProfileSettings, Mode=OneWay}"
                     BorderThickness="1"
+                    IsEnabled="{x:Bind Vm.IsTargetLocked, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Profile Test">
                     <TabViewItem.IconSource>
@@ -393,6 +396,7 @@
                     Margin="10, 0, 0, 0"
                     MaxWidth="150"
                     IsClosable="False"
+                    IsEnabled="{x:Bind Vm.IsTargetLocked, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
                     Visibility="{x:Bind Vm.IsShowingProfileSettings, Mode=OneWay}"
                     BorderThickness="1"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -408,6 +412,7 @@
                     MaxWidth="150"
                     IsClosable="False"
                     BorderThickness="1"
+                    IsEnabled="{x:Bind Vm.IsTargetLocked, Mode=OneWay, Converter={StaticResource InvBoolConv}}"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     Header="Cache Editor">
                     <TabViewItem.IconSource>

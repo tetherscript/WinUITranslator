@@ -105,6 +105,7 @@
                 VerticalAlignment="Center"
                 Text="-->" />
             <ComboBox
+                IsEnabled="{x:Bind Vm.CanTranslate, Mode=OneWay}"
                 ItemsSource="{x:Bind Vm.CultureList, Mode=OneWay}"
                 SelectedValue="{x:Bind Vm.ToCulture, Mode=TwoWay}"
                 SelectedIndex="0"
@@ -115,6 +116,7 @@
                 VerticalAlignment="Center"
                 Text="x" />
             <NumberBox
+                IsEnabled="{x:Bind Vm.CanTranslate, Mode=OneWay}"
                 x:Name="NumberBoxSpinButtonPlacementExample"
                 Minimum="1"
                 Maximum="100"

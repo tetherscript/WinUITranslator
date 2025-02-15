@@ -219,7 +219,7 @@ public partial class TTranslatorEx
             _data.Insert(0, "RESPONSE.CHOICES[0].MESSAGE.CONTENT" + Environment.NewLine + contentJson);
 
             // Deserialize to a list of LocalizedEntry
-            TContentGeneric content = JsonSerializer.Deserialize<TContentGeneric>(
+            TContentGeneric1 content = JsonSerializer.Deserialize<TContentGeneric1>(
                 contentJson,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );

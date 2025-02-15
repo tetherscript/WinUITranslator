@@ -74,4 +74,13 @@ namespace Translator
         }
     }
 
+    public class TTargetLockChanged : ValueChangedMessage<bool>
+    {
+        public TTargetLockChanged(bool value) : base(value)
+        {
+
+        }
+    }
+
+
 }

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -109,31 +110,62 @@ public partial class TTranslatorEx
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", api_key);
 
         //PREPARE PROMPT
-        string rawPrompt = hintTokenPrompt;
-        string a = textToTranslate.Replace("{{", "[[").Replace("}}", "]]").Encapsulate("'");
-        string formattedPrompt = String.Format(rawPrompt, fromCulture, toCulture, a);
-
-        string p = @"C:\1\test.json";
-        string rf =  await File.ReadAllTextAsync(p, Encoding.UTF8);
-
         //https://lmstudio.ai/docs/api/structured-output
-        string x = "You are a helpful AI Assistant";
+        string rawPrompt = hintTokenPrompt;
+        string formattedSysPrompt = String.Format(rawPrompt, fromCulture, toCulture);
+        string formattedUsrPrompt = "Translate " + textToTranslate.Replace("{{", "[[").Replace("}}", "]]").Encapsulate("'") + ".";
+        string formattedPrompt = formattedSysPrompt + Environment.NewLine + formattedUsrPrompt;
+        string jsonSchema = """
+        {
+            "type": "json_schema",
+            "json_schema": {
+                "name": "translation",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "originalText": {
+                            "type": "string"
+                        },
+                        "translatedText": {
+                            "type": "string"
+                        },
+                        "reasoning": {
+                            "type": "string",
+                            "description": "Your reasons for the translation."
+                        },
+                        "confidence": {
+                            "type": "integer",
+                            "description": "The confidence level of the translation, expressed as an integer from 1-100."
+                        }
+                    },
+                    "required": [
+                        "reasoning",
+                        "originalText",
+                        "translatedText",
+                        "confidence"
+                    ],
+                    "additionalProperties": false
+                }
+            }
+        }
+        """;
+        JsonNode responseFormatNode = JsonNode.Parse(jsonSchema);
+
+        //string sys = "You are a professional translator who translates from en-US to strict de-DE in the context of the text displayed on a photography software user interface.";
+        //string usr = "Translate 'Close'.";
+
         var requestBody = new
         {
-            model = model,
             messages = new[]
             {
-                //new { role = "tool", content = rf },
-                new { role = "system", content = x },
-                new { role = "user", content = formattedPrompt }
+                new { role = "system", content = formattedSysPrompt },
+                new { role = "user", content = formattedUsrPrompt }
             },
-            temperature = 0.0,      //keep it at zero so it is deterministic
-            response_format = rf,
-            //structured = rf
-           
+            model = model,
+            response_format = responseFormatNode,
+            temperature = 0.0,
         };
-
-        //COMPOSE AND SEND REQUEST
+         
         var requestContent = new StringContent(
             JsonSerializer.Serialize(requestBody),
             Encoding.UTF8,
@@ -143,10 +175,11 @@ public partial class TTranslatorEx
         var options = new JsonSerializerOptions
         {
             WriteIndented = true
+           
         };
         string jsonRequestBody = JsonSerializer.Serialize(requestBody, options);
-        _data.Add("REQUEST_BODY" + Environment.NewLine + jsonRequestBody);
 
+        _data.Add("REQUEST_BODY" + Environment.NewLine + jsonRequestBody);
 
         string jsonResponse = string.Empty;
         try
@@ -221,13 +254,13 @@ public partial class TTranslatorEx
             _data.Insert(0, "RESPONSE.CHOICES[0].MESSAGE.CONTENT" + Environment.NewLine + contentJson);
 
             // Deserialize to a list of LocalizedEntry
-            TContentGeneric content = JsonSerializer.Deserialize<TContentGeneric>(
+            TContentGeneric2 content = JsonSerializer.Deserialize<TContentGeneric2>(
                 contentJson,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );
 
             int translationConfidence = content.confidence;
-            string translatedText = content.translated.Trim();
+            string translatedText = content.translatedText.Trim();
             doctxt = root.GetRawText();
 
             //usage
@@ -249,13 +282,15 @@ public partial class TTranslatorEx
             string finish_reason = firstChoice.GetProperty("finish_reason").GetString();
             switch (finish_reason)
             {
+                
                 case "stop":
+                    _data.Insert(0, "REASONING" + Environment.NewLine + content.reasoning);
                     return new TTranslatorResult(
                     true,
                     textToTranslate,
                     translatedText,
                     0,
-                    "",
+                    content.reasoning,
                     _data);
                 case "length":
                     Log(TLog.eLogItemType.err, 2, "The model hit the maximum request body token limit (max_tokens). Increase max_tokens or reduce userContent length: " + formattedPrompt);

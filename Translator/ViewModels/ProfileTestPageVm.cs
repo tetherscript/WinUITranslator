@@ -115,6 +115,7 @@ namespace Translator
         [RelayCommand]
         private async Task Start()
         {
+            WeakReferenceMessenger.Default.Send(new TTargetLockChanged(true));
             IsTranslating = true;
             CalcState();
             Progress = 0;
@@ -127,6 +128,7 @@ namespace Translator
             await Task.Delay(200);
             IsTranslating = false;
             CalcState();
+            WeakReferenceMessenger.Default.Send(new TTargetLockChanged(false));
         }
 
         [RelayCommand]
