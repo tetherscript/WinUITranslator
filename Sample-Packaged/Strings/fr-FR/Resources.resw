@@ -118,71 +118,71 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aperture_tb.Text" xml:space="preserve">
-    <Value>Ouverture</Value>
+    <value>Ouverture</value>
     <comment>!</comment>
   </data>
   <data name="EnterYourNameHere_tb.Text" xml:space="preserve">
-    <Value>Entrez votre nom ici</Value>
+    <value>Entrez votre nom ici</value>
     <comment>@</comment>
   </data>
   <data name="EnterYourNameHere_short_tb.Text" xml:space="preserve">
-    <Value>Votre nom</Value>
+    <value>Votre nom</value>
     <comment>@@</comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
-    <Value>Fermer</Value>
+    <value>Fermer</value>
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">
-    <Value>Verrou</Value>
+    <value>Verrou</value>
     <comment>@@</comment>
   </data>
   <data name="Zoom_rbs.Header" xml:space="preserve">
-    <Value>Zoom</Value>
+    <value>Zoom</value>
     <comment>@</comment>
   </data>
   <data name="Zoom100_rb.Content" xml:space="preserve">
-    <Value>100 %</Value>
+    <value>100 %</value>
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
-    <Value>200 %</Value>
+    <value>200 %</value>
     <comment>@</comment>
   </data>
   <data name="Browser_tgbtn.Content" xml:space="preserve">
-    <Value>Navigateur d'images</Value>
+    <value>Navigateur d'images</value>
     <comment>!</comment>
   </data>
   <data name="Connect_ts.Header" xml:space="preserve">
-    <Value>Connexion</Value>
+    <value>Connexion</value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OffContent" xml:space="preserve">
-    <Value>Déconnecté</Value>
+    <value>Déconnecté</value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OnContent" xml:space="preserve">
-    <Value>Connecté</Value>
+    <value>Connecté</value>
     <comment>@</comment>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <Value>Chargement de {0}, veuillez patienter...</Value>
+    <value>Chargement de {0}, veuillez patienter...</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">
-    <Value>Ouvrez l'ouverture pour une profondeur de champ plus faible.</Value>
+    <value>Ouvrez l'ouverture pour une profondeur de champ plus faible.</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">
-    <Value>Ouvrez l'ouverture pour obtenir une profondeur de champ plus faible.</Value>
+    <value>Ouvrez l'ouverture pour obtenir une profondeur de champ plus faible.</value>
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">
-    <Value>Ouvrez l'ouverture pour une profondeur de champ plus faible.</Value>
+    <value>Ouvrez l'ouverture pour une profondeur de champ plus faible.</value>
     <comment>!!</comment>
   </data>
   <data name="SettingsIcon" xml:space="preserve">
-    <Value>settings1.ico</Value>
+    <value>settings1.ico</value>
     <comment>fr-FR</comment>
   </data>
 </root>

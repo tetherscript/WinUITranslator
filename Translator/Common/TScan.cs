@@ -351,7 +351,7 @@ namespace Translator
                 var dataElement = new XElement("data",
                     new XAttribute("name", item.Key),
                     new XAttribute(XNamespace.Xml + "space", "preserve"),
-                    new XElement("Value", valueVal),
+                    new XElement("value", valueVal),
                     new XElement("comment", valuePrefix)
                 );
                 doc.Root.Add(dataElement);
@@ -368,7 +368,7 @@ namespace Translator
                 var desDocDataElement1 = new XElement("data",
                     new XAttribute("name", item.Key.ToString()),
                     new XAttribute(XNamespace.Xml + "space", "preserve"),
-                    new XElement("Value", item.Value.ToString()),
+                    new XElement("value", item.Value.ToString()),
                     new XElement("comment", item.Culture.ToString()));
 
                 doc.Root.Add(desDocDataElement1);

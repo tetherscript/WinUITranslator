@@ -118,71 +118,71 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aperture_tb.Text" xml:space="preserve">
-    <Value>فتحة العدسة</Value>
+    <value>فتحة العدسة</value>
     <comment>!</comment>
   </data>
   <data name="EnterYourNameHere_tb.Text" xml:space="preserve">
-    <Value>أدخل اسمك هنا</Value>
+    <value>أدخل اسمك هنا</value>
     <comment>@</comment>
   </data>
   <data name="EnterYourNameHere_short_tb.Text" xml:space="preserve">
-    <Value>أدخل اسمك هنا</Value>
+    <value>أدخل اسمك هنا</value>
     <comment>@@</comment>
   </data>
   <data name="Close_btn.Content" xml:space="preserve">
-    <Value>إغلاق</Value>
+    <value>إغلاق</value>
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">
-    <Value>قفل</Value>
+    <value>قفل</value>
     <comment>@@</comment>
   </data>
   <data name="Zoom_rbs.Header" xml:space="preserve">
-    <Value>زوم</Value>
+    <value>زوم</value>
     <comment>@</comment>
   </data>
   <data name="Zoom100_rb.Content" xml:space="preserve">
-    <Value>100%</Value>
+    <value>100%</value>
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
-    <Value>٢٠٠٪</Value>
+    <value>٢٠٠٪</value>
     <comment>@</comment>
   </data>
   <data name="Browser_tgbtn.Content" xml:space="preserve">
-    <Value>متصفح الصور</Value>
+    <value>متصفح الصور</value>
     <comment>!</comment>
   </data>
   <data name="Connect_ts.Header" xml:space="preserve">
-    <Value>اتصال</Value>
+    <value>اتصال</value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OffContent" xml:space="preserve">
-    <Value>غير متصل</Value>
+    <value>غير متصل</value>
     <comment>@</comment>
   </data>
   <data name="Connect_ts.OnContent" xml:space="preserve">
-    <Value>متصل</Value>
+    <value>متصل</value>
     <comment>@</comment>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <Value>جارٍ التحميل {0}}، يرجى الانتظار...</Value>
+    <value>جارٍ التحميل {0}}، يرجى الانتظار...</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">
-    <Value>افتح فتحة العدسة للحصول على عمق ميدان أقل.</Value>
+    <value>افتح فتحة العدسة للحصول على عمق ميدان أقل.</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">
-    <Value>افتح فتحة العدسة للحصول على عمق ميدان أقل.</Value>
+    <value>افتح فتحة العدسة للحصول على عمق ميدان أقل.</value>
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">
-    <Value>افتح الفتحة لعمق مجال أقل.</Value>
+    <value>افتح الفتحة لعمق مجال أقل.</value>
     <comment>!!</comment>
   </data>
   <data name="SettingsIcon" xml:space="preserve">
-    <Value>settings2.ico</Value>
+    <value>settings2.ico</value>
     <comment>ar-SA</comment>
   </data>
 </root>

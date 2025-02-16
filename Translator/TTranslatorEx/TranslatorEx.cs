@@ -271,7 +271,7 @@ public partial class TTranslatorEx
                     //get translation from cache or call api
                     string translatedText = string.Empty;
                     string cacheIndicator = string.Empty;
-                    string textToTranslate = item.Element("Value").Value;
+                    string textToTranslate = item.Element("value").Value;
                     string hintToken = item.Element("comment").Value;
 
                     //reject names with periods in it 'close.btn' or 'loading....';
@@ -333,7 +333,7 @@ public partial class TTranslatorEx
                         var desDocDataElement = new XElement("data",
                             new XAttribute("name", item.Attribute("name").Value),
                             new XAttribute(XNamespace.Xml + "space", "preserve"),
-                            new XElement("Value", translatedText),
+                            new XElement("value", translatedText),
                             new XElement("comment", item.Element("comment").Value));
 
                         destDoc.Root.Add(desDocDataElement);
@@ -357,7 +357,7 @@ public partial class TTranslatorEx
                     var desDocDataElement1 = new XElement("data",
                         new XAttribute("name", item.Key.ToString()),
                         new XAttribute(XNamespace.Xml + "space", "preserve"),
-                        new XElement("Value", item.Value.ToString()),
+                        new XElement("value", item.Value.ToString()),
                         new XElement("comment", item.Culture.ToString()));
 
                     destDoc.Root.Add(desDocDataElement1);
