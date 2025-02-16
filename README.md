@@ -26,12 +26,12 @@
 > [!NOTE]
 > You use the Translator app to translate your target app.
 
-<br/><br/>
+<br/>
 
 Let's do a scan of the sample-packaged app.  It will find anything that requires translation.
 ![scan1](https://github.com/user-attachments/assets/426a7ec3-9380-4730-8cd7-2fc17694fc6c)
 
-<br/><br/>
+<br/>
 
 Now we'll translate the scan results from en-US to ar-SA, de-DE, and fr-FR using OpenAI GPT4-o-mini.  It has found that the en-US 'Connected' requires translation to ar-SA (Arabic), de-DE (Germani) and fr-FR (French).  The translation result for de-DE is expanded to show the OpenAI API response, including reasoning.  These translations are saved to a local cache file so that you don't need to re-translate these again.
 
