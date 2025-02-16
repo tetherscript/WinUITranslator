@@ -37,7 +37,7 @@ Now we'll translate the scan results from en-US to ar-SA, de-DE, and fr-FR using
 
 ![translate1](https://github.com/user-attachments/assets/9cff8603-0495-410f-85ca-8d270e07a76c)
 
-<br/><br/>
+<br/>
 
 > [!TIP]
 > Take a close look at the packaged and unpackaged sample apps.  It helps clarify the obscure and somewhat undocumented process of setting the language and testing with RTL languages.
