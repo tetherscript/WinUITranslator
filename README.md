@@ -24,14 +24,20 @@
 <br/>
 
 > [!NOTE]
-> You use the Translator app to translate your target app.  Here it is using OpenAI GPT4-o-mini to translate the included ```Sample-Packaged``` app from en-US to ar-SA, de-DE, and fr-FR.  It has found that the en-US 'Connected' requires translation to ar-SA (Arabic), de-DE (Germani) and fr-FR (French).  The translation result for de-DE is expanded to show the OpenAI API response, including reasoning.  These translations are saved to a local cache file so that you don't need to re-translate these again.
+> You use the Translator app to translate your target app.
 
-![translate1](https://github.com/user-attachments/assets/5197a496-a259-43a9-a58f-f4897a228e40)
+<br/><br/>
 
-## Why Does this Exist?
-I needed to translate several WinAppSDK Winui apps.  I tried some Nuget package tools, but realized that I really don't understand how the resources/translation/localization thing works.  I figured if I made my own tool that can meet the requirements listed below, I would understand.  I posted this as a public repository to share it, and see what ideas/insights other devs may have.  Now that AI is everywhere, I set out to use AI to do the translations, and it works really well.
+Let's do a scan of the sample-packaged app.  It will find anything that requires translation.
+![scan1](https://github.com/user-attachments/assets/426a7ec3-9380-4730-8cd7-2fc17694fc6c)
 
-This has greatly improved my dev-translate-test workflow.
+<br/><br/>
+
+Now we'll translate the scan results from en-US to ar-SA, de-DE, and fr-FR using OpenAI GPT4-o-mini.  It has found that the en-US 'Connected' requires translation to ar-SA (Arabic), de-DE (Germani) and fr-FR (French).  The translation result for de-DE is expanded to show the OpenAI API response, including reasoning.  These translations are saved to a local cache file so that you don't need to re-translate these again.
+
+![translate1](https://github.com/user-attachments/assets/9cff8603-0495-410f-85ca-8d270e07a76c)
+
+<br/><br/>
 
 > [!TIP]
 > Take a close look at the packaged and unpackaged sample apps.  It helps clarify the obscure and somewhat undocumented process of setting the language and testing with RTL languages.
