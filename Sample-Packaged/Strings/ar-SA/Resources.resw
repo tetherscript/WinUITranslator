@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aperture_tb.Text" xml:space="preserve">
-    <value>الفتحة ( aperture في اللغة الإنجليزية )</value>
+    <value>فتحة العدسة</value>
     <comment>!</comment>
   </data>
   <data name="EnterYourNameHere_tb.Text" xml:space="preserve">
@@ -142,7 +142,7 @@
     <comment>@</comment>
   </data>
   <data name="Zoom100_rb.Content" xml:space="preserve">
-    <value>100%</value>
+    <value>١٠٠٪</value>
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
@@ -170,11 +170,11 @@
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">
-    <value>افتح الفتحة للحصول على عمق ميدان أقل.</value>
+    <value>افتح فتحة العدسة للحصول على عمق ميدان أقل.</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">
-    <value>افتح الفتحة للحصول على عمق مجال أقل.</value>
+    <value>افتح فتحة العدسة للحصول على عمق ميدان أقل.</value>
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">
