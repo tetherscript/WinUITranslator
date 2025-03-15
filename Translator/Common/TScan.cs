@@ -277,6 +277,10 @@ namespace Translator
                     // If the element is in our dictionary, we check those text properties
                     if (elementTextProperties.TryGetValue(localName, out string[] textProps))
                     {
+                        if (element.FirstAttribute.Value == "Log_sc")
+                        {
+
+                        }
                         foreach (var prop in textProps)
                         {
                             // Look for an attribute like Content="Hello" or Text="Hello"
@@ -287,7 +291,7 @@ namespace Translator
                                 if (!string.IsNullOrWhiteSpace(value))
                                 {
                                     //don't map x:Bind's or Binding
-                                    if (!value.StartsWith("{x:Bind") || !value.StartsWith("{Binding"))
+                                    if (!value.StartsWith("{x:Bind") && !value.StartsWith("{Binding"))
                                     {
                                         // Combine x:Uid + "." + Property -> "MyButton.Content"
                                         string resourceKey = $"{uid}.{prop}";
