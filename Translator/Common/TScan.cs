@@ -93,7 +93,7 @@ namespace Translator
 
             Log(TLog.eLogItemType.inf, 0, "Scanning target project: " + targetRootPath);
 
-            var entriesMap = new Dictionary<string, string>();
+            var entriesMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             var xamlFiles = Directory.GetFiles(targetRootPath, "*.xaml", SearchOption.AllDirectories);
 
@@ -217,6 +217,10 @@ namespace Translator
                     }
                 }
                 Log(TLog.eLogItemType.inf, 2, $"Merge complete.");
+
+                //check for duplicate item.Key.lowercase()
+
+
             }
             catch (Exception ex)
             {
