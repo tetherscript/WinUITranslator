@@ -93,6 +93,7 @@
                         Grid.Row="0"
                         Foreground="{x:Bind TextColor, Mode=OneTime}"
                         Text="{x:Bind Message}"
+                        IsTextSelectionEnabled="True"
                         FontFamily="Courier New"
                         TextWrapping="Wrap" />
 

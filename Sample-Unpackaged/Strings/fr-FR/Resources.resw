@@ -166,7 +166,7 @@
     <comment>@</comment>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <value>Chargement de {0}}, veuillez patienter...</value>
+    <value>Chargement {0}, veuillez patienter...</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">
@@ -174,7 +174,7 @@
     <comment>@</comment>
   </data>
   <data name="OpenAperture_MoreContext" xml:space="preserve">
-    <value>Ouvrez l'ouverture pour obtenir une profondeur de champ plus faible.</value>
+    <value>Ouvrez l'ouverture pour une profondeur de champ plus faible.</value>
     <comment>!</comment>
   </data>
   <data name="OpenAperture_MoreContext_Constrained" xml:space="preserve">

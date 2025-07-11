@@ -14,21 +14,5 @@
   {
     "Key": "OpenAperture_MoreContext_Constrained",
     "Value": "!!Open the aperture for a shallower depth of field."
-  },
-  {
-    "Key": "Log",
-    "Value": "@Log"
-  },
-  {
-    "Key": "Help",
-    "Value": "@Help"
-  },
-  {
-    "Key": "LiveView",
-    "Value": "@Live View"
-  },
-  {
-    "Key": "ImageBrowser",
-    "Value": "@Image Browser"
   }
 ]

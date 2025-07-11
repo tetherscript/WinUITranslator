@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-    public class TCacheItem(string key, string value, string profileResult) : ObservableObject
+    public class TCacheItem(string key, string value, string resourceName, string profileResult) : ObservableObject
     {
 
         [JsonPropertyName("key")]
@@ -19,6 +19,10 @@ namespace Translator
         [JsonPropertyName("value")]
         public string value { get; set; } = value;
 
+        //resourceName is the name of the Resources.resw.name property for TLocalized.Get()'s but will be missing the xaml control type suffix ex '_Text' for a Button element.
+        [JsonPropertyName("resourceName")]
+        public string resourceName { get; set; } = resourceName;
+        
         [JsonPropertyName("profileResult")]
         public string profileResult { get; set; } = profileResult;
 
@@ -34,16 +38,27 @@ namespace Translator
         [property: JsonPropertyName("value")]
         private string _value;
 
+        //resourceName is the name of the Resources.resw.name property for TLocalized.Get()'s but will be missing the xaml control type suffix ex '_Text' for a Button element.
+        [ObservableProperty]
+        [property: JsonPropertyName("resourceName")]
+        private string _resourceName;
+
         [ObservableProperty]
         [property: JsonPropertyName("profileResult")]
         private string _profileResult;
 
+        [JsonIgnore]
+        [ObservableProperty]
+        private string _displayStr;
+
         [JsonConstructor]
-        public TCacheItemEx(string key, string value, string profileResult)
+        public TCacheItemEx(string key, string value, string resourceName, string profileResult)
         {
             this.Key = key;
             this.Value = value;
+            this.ResourceName = (resourceName == null) ? "" : resourceName; //handles earlier json that didn't have a resourceName field.
             this.ProfileResult = profileResult;
+            this.DisplayStr = this.ResourceName + Environment.NewLine +  this.Key;
         }
     }
 
@@ -67,11 +82,11 @@ namespace Translator
             }
         }
 
-        public async Task AddOrUpdate(string key, string value, string profileResult)
+        public async Task AddOrUpdate(string key, string value, string resourceName, string profileResult)
         {
             if (!string.IsNullOrWhiteSpace(key))
             {
-                TCacheItem newEntry = new TCacheItem(key, value, profileResult);
+                TCacheItem newEntry = new TCacheItem(key, value, resourceName, profileResult);
                 if (!_items.Any(e => e.key == newEntry.key))
                 {
                     _items.Add(newEntry);

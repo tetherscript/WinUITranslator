@@ -134,7 +134,7 @@
     <comment>@</comment>
   </data>
   <data name="Lock_cb.Content" xml:space="preserve">
-    <value>Sperre</value>
+    <value>Lock</value>
     <comment>@@</comment>
   </data>
   <data name="Zoom_rbs.Header" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>@</comment>
   </data>
   <data name="Zoom200_rb.Content" xml:space="preserve">
-    <value>200 %</value>
+    <value>200%</value>
     <comment>@</comment>
   </data>
   <data name="Browser_tgbtn.Content" xml:space="preserve">
@@ -166,7 +166,7 @@
     <comment>@</comment>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <value>Lade {0}}, bitte warten...</value>
+    <value>Lade {0}, bitte warten...</value>
     <comment>@</comment>
   </data>
   <data name="OpenAperture_Generic" xml:space="preserve">

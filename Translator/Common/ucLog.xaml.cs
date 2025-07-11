@@ -142,7 +142,7 @@ namespace Translator
             {
                 string searchText = SearchStr;
                 FilteredLogItems.SortDescriptions.Clear();
-                FilteredLogItems.SortDescriptions.Add(new SortDescription("TimeStamp", SortDirection.Ascending));
+                FilteredLogItems.SortDescriptions.Add(new SortDescription("TimeStamp", SortDirection.Descending));
                 List<string> typeFilter = [];
                 foreach (TLogItemExFilter item in LogFilters)
                 {

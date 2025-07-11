@@ -269,18 +269,18 @@ public partial class TTranslatorEx
                     }
 
                     //get translation from cache or call api
+                    string resourceName = string.Empty;
                     string translatedText = string.Empty;
                     string cacheIndicator = string.Empty;
                     string textToTranslate = item.Element("value").Value;
                     string hintToken = item.Element("comment").Value;
-
+                    XElement dataElement = new XElement(item);
+                    string nameValue = dataElement.Attribute("name")?.Value;
                     //reject names with periods in it 'close.btn' or 'loading....';
 
                     if (!TLocalized.IsValidHintToken(hintToken))
                     {
                         //if there's a x:Uid, only properties with hint token prefixes will be translated
-                        XElement dataElement = new XElement(item);
-                        string nameValue = dataElement.Attribute("name")?.Value;
                         if (!_unTranslateables.Contains(nameValue))
                         {
                             _unTranslateables.Add(nameValue);
@@ -302,6 +302,18 @@ public partial class TTranslatorEx
                             _cacheMissCounter++;
                             Log(TLog.eLogItemType.dbg, 2, "Cache miss: Translating...", null);
                             Log(TLog.eLogItemType.tra, 1, hintToken + textToTranslate, null);
+
+                            //get resourceName used for cache searching
+                            int index = nameValue.IndexOf('.');
+                            if (index >= 0)
+                            {
+                                resourceName = nameValue.Substring(0, index); // Trim at the period
+                            }
+                            else
+                            {
+                                resourceName = nameValue; // No period found, return original
+                            }
+
 
                             TTranslatorResult translatorResult;
                             textToTranslate = TUtils.EscapePlaceholders(textToTranslate);
@@ -327,7 +339,7 @@ public partial class TTranslatorEx
 
                             if ((profile != "Loopback") && (saveToCache))
                             {
-                                await _cache.AddOrUpdate(cacheKey, translatedText, string.Join      (Environment.NewLine + ucLogHelper.SepMedium + Environment.NewLine, translatorResult.Data));
+                                await _cache.AddOrUpdate(cacheKey, translatedText, resourceName, string.Join      (Environment.NewLine + ucLogHelper.SepMedium + Environment.NewLine, translatorResult.Data));
                             }
                         }
                         var desDocDataElement = new XElement("data",

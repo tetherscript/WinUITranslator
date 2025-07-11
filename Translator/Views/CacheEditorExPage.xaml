@@ -40,13 +40,17 @@
                         Height="Auto" />
                 </Grid.RowDefinitions>
 
+                <StackPanel>
+                    
                 <TextBlock
                     Grid.Column="0"
                     TextWrapping="Wrap"
                     VerticalAlignment="top"
-                    Text="{x:Bind Key, Mode=OneWay}"
+                    IsTextSelectionEnabled="True"
+                    Text="{x:Bind DisplayStr, Mode=OneWay}"
                     FontFamily="Courier New"
                     FontSize="16" />
+                </StackPanel>
 
                 <ToggleButton
                     x:Name="btnx"
@@ -76,6 +80,7 @@
                         Grid.Row="0"
                         HorizontalAlignment="Stretch"
                         TextWrapping="Wrap"
+                        IsTextSelectionEnabled="True"
                         Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         FontFamily="Courier New"
                         FontSize="16" />
@@ -84,6 +89,7 @@
                         Grid.Column="0"
                         Grid.Row="1"
                         Margin="0,10,0,0"
+                        
                         Visibility="{Binding IsChecked, ElementName=btnx, Converter={StaticResource BoolToVisibilityConv}}"
                         Text="{x:Bind ProfileResult, Mode=OneWay}"
                         FontFamily="Courier New"

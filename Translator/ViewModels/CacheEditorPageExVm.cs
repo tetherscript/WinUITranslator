@@ -36,6 +36,7 @@ namespace Translator
                 SaveSettings();
             });
 
+            FilteredItems = new AdvancedCollectionView(_items, true);
             LoadSettings();
             CalcState();
         }
@@ -154,7 +155,8 @@ namespace Translator
                 FilteredItems.ClearObservedFilterProperties();
                 FilteredItems.Filter = x =>
                 (
-                    ((TCacheItemEx)x).Key.Contains(searchText, StringComparison.CurrentCultureIgnoreCase)
+                    ((TCacheItemEx)x).Key.Contains(searchText, StringComparison.CurrentCultureIgnoreCase) ||
+                    ((TCacheItemEx)x).ResourceName.Contains(searchText, StringComparison.CurrentCultureIgnoreCase)
                 );
             }
         }
@@ -197,21 +199,32 @@ namespace Translator
                 {
                     List<TCacheItemEx> tmp;
                     tmp = JsonSerializer.Deserialize<List<TCacheItemEx>>(json);
-                    _items.Clear();
-                    foreach (var item in tmp)
+
+                    //if (FilteredItems == null)
+                    //{
+                    //    FilteredItems = new AdvancedCollectionView(_items, true);
+                    //}
+
+
+                    using (FilteredItems.DeferRefresh())
                     {
-                        _items.Add(item);
+                        _items.Clear();
+                        foreach (var item in tmp)
+                        {
+                            _items.Add(item);
+                        }
                     }
-                    if (FilteredItems == null)
-                    {
-                        FilteredItems = new AdvancedCollectionView(_items, true);
-                    }
+
                     if (_items.Count > 0)
                     {
                         SelectedItem = _items[0];
                     }
                     ApplyFilter();
                 }
+            }
+            else
+            {
+                _items.Clear();
             }
         }
 

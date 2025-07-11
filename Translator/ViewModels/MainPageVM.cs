@@ -246,6 +246,7 @@ namespace Translator
             if (IsValidConfiguredPath)
             {
                 GetProfiles();
+                LogItems.Clear();
                 WeakReferenceMessenger.Default.Send(new TTargetChanged(value));
             }
         }
@@ -661,7 +662,7 @@ namespace Translator
                 (((item.Data == null) || (item.Data.Count == 0)) ? "" : sep + Environment.NewLine + string.Join(Environment.NewLine + sep + Environment.NewLine, item.Data)) + Environment.NewLine + sep,
                 item.ItemType.ToString() + ":" + item.Message
             );
-            LogItems.Add(newItem);
+            LogItems.Insert(0, newItem);
         }
 
         public void SaveLog(TLog.eLogType mode)
