@@ -6,7 +6,7 @@
 > View the Wiki for the full documentation.
 
 > [!IMPORTANT]
-> - Requires Visual Studio 2022 with .Net 8 and WinAppSDK 1.6
+> - Requires Visual Studio 2022 with .Net 8 and WinAppSDK 1.6+
 
 - This Visual Studio 2022 solution contains a Translator app that translates your WinAppSDK WinUI project to the languages of your choice.  It will scan your project, create the necessary translations, and update your Resource.resw files.
 - An OpenAI profile is included.  You can translate an app for under $5 USD.
